@@ -211,21 +211,13 @@ class Landlord
 		}
     }
 
-    public function deleteClass(){
-        global $pdo;
+    public function deleteLandlord(){
 		try {
-
-			$sql = "DELETE FROM classes WHERE id=$id";
-
-			$statement = $pdo->prepare($sql);
-
-			return $statement->execute([
-				':name' => $this->getName(),
-				':description' => $this->getDescription(),
-				':class_code' => $this->getClassCode(),
-                ':teacher_id' => $this->getTeacherId()
+			$sql = 'UPDATE apt_landlords SET status=2 WHERE landlord_id=?';
+			$statement = $this->connection->prepare($sql);
+			$statement->execute([
+				$this->getId()
 			]);
-
 		} catch (Exception $e) {
 			error_log($e->getMessage());
 		}

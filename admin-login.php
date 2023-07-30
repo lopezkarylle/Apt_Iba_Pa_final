@@ -1,5 +1,5 @@
 <?php 
-include ("../../init.php");
+include ("init.php");
 use Models\Auth;
 //session_start();
 // if(isset($_SESSION["email"])){
@@ -12,7 +12,7 @@ use Models\Auth;
 
 <div class="container">
   <h3 style="font-weight: bold; text-align: center;">Admin Login</h3><hr><br><br>
-  <form method="POST">
+  <form method="POST" action="admin-login.php">
     <div class="form-group">
       <label for="email">Email:</label>
       <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" required>
@@ -46,11 +46,14 @@ try {
             //$data = $result->fetch_assoc();
             //$logged_user = $data['email'];
             $admin_email = $result['email'] ?? null;
-            $_SESSION['email'] = $admin_email;
+            //$_SESSION['email'] = $admin_email;
             //var_dump($admin_email);
             session_start();
-            //$_SESSION['email']=$email;
-            header('location:../../admin/index.php');
+            $_SESSION['email']=$admin_email;
+            //header('location:../../admin/index.php');
+            //var_dump($admin_email);
+            echo "<script>window.location.href='admin/index.php';</script>";
+            exit();
         }
     }
 }

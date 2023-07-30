@@ -1,30 +1,30 @@
 <?php
 
 include "../../init.php";
-use Models\Landlord;
+use Models\User;
 
-    $landlord_id = $_GET['landlord_id'];
-    $landlord = new Landlord('', '', '', '', '','','','','','','','','','','');
-    $landlord->setConnection($connection);
-    $landlord->getById($landlord_id);
+    $user_id = $_GET['user_id'];
+    $user = new User('', '', '', '', '','','','','','','','');
+    $user->setConnection($connection);
+    $user->getById($user_id);
 
-    $landlord_id = $landlord->getId();
-    $first_name = $landlord->getFirstName();
-    $last_name = $landlord->getLastName();
-    $contact_number = $landlord->getContactNumber();
-    $email = $landlord->getEmail();
-    $password = $landlord->getPassword();
-    $birthdate = $landlord->getBirthdate();
-    $street_address = $landlord->getStreetAddress();
-    $barangay = $landlord->getBarangay();
-    $city = $landlord->getCity();
-    $postal_code = $landlord->getPostalCode();
-    $picture_path = $landlord->getPicturePath();
+    $user_id = $user->getId();
+    $first_name = $user->getFirstName();
+    $last_name = $user->getLastName();
+    $contact_number = $user->getContactNumber();
+    $email = $user->getEmail();
+    $password = $user->getPassword();
+    $birthdate = $user->getBirthdate();
+    $street_address = $user->getStreetAddress();
+    $barangay = $user->getBarangay();
+    $city = $user->getCity();
+    $postal_code = $user->getPostalCode();
+    $picture_path = $user->getPicturePath();
 ?>
 
 <div class="container-fluid">
-	<form action="edit.php" method="POST" id="manage-tenant">
-		<input type="hidden" name="landlord_id" value="<?php echo isset($landlord_id) ? $landlord_id : '' ?>">
+	<form action="edit.php" method="POST" enctype="multipart/form-data">
+		<input type="hidden" name="user_id" value="<?php echo isset($user_id) ? $user_id : '' ?>">
 		<div class="row form-group">
             <div class="col-md-4">
 				<label for="" class="control-label">First Name</label>
@@ -72,20 +72,22 @@ use Models\Landlord;
 			</div>
 		</div>
         <div class="form-group row">
-			<div class="col-md-4">
-				<label for="" class="control-label">id_type</label>
-				<input type="text" class="form-control" name="id_type"  value="<?php echo isset($id_type) ? $id_type :'' ?>" required>
+            <div class="col-md-4">
+                <?php if (isset($picture_path)) { ?>hahaha
+				<img src="../../resources/images/users/<?php echo isset($picture_path) ? $picture_path :'' ?>" height="50" width="50" alt="wala">
 			</div>
 			<div class="col-md-4">
-				<label for="" class="control-label">id_picture_path</label>
-				<input type="text" class="form-control" name="id_picture_path"  value="<?php echo isset($id_picture_path) ? $id_picture_path :'' ?>" required>
+				<label for="" class="control-label">upload image</label>
+				<input type="file" class="form-control" name="new_picture" value="<?php echo isset($picture_path) ? $picture_path :'' ?>">
 			</div>
-			<div class="col-md-4">
-				<label for="" class="control-label">picture_path</label>
-				<input type="text" class="form-control" name="picture_path"  value="<?php echo isset($picture_path) ? $picture_path :'' ?>">
+                <?php } else { ?>hehehe
+            <div class="col-md-4">
+				<label for="new_picture" class="control-label">upload image</label>
+				<input type="file" class="form-control" name="new_picture" value="">
 			</div>
+                <?php } ?>
 		</div>
-        <button class="btn btn-sm btn-outline-danger delete_tenant" type="submit">Update</button>
+        <button class="btn btn-sm btn-outline-danger" type="submit">Update</button>
 	</form>
 </div>
 

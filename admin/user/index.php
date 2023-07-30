@@ -14,7 +14,7 @@ use Models\User;
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<title>Admin Dashboard</title>
+<title>Users</title>
 
 </head>
 <body>
@@ -22,11 +22,11 @@ use Models\User;
 
 <div class="container-fluid">
 <ul class="nav nav-pills nav-justified">
-  <li style="background-color: #FFF8DC"><a  href="../../admin/index.php">Dashboard</a></li>
-  <li style="background-color: #FAF0E6"><a  href="../admin/landlord/index.php">Manage Landlords</a></li>
+  <li style="background-color: #FFF8DC"><a  href="../index.php">Dashboard</a></li>
+  <li style="background-color: #FAF0E6"><a  href="../landlord/index.php">Manage Landlords</a></li>
   <li class="active" style="background-color: #FFFAF0"><a  href="index.php">Manage Users</a></li>
-  <li style="background-color: #FFFACD"><a  href="../admin/property/index.php">Manage Properties</a></li>
-  <li style="background-color: #FAFAF0"><a  href="../admin/application-request/index.php">Application Requests</a></li>
+  <li style="background-color: #FFFACD"><a  href="../property/index.php">Manage Properties</a></li>
+  <li style="background-color: #FAFAF0"><a  href="../application-request/index.php">Application Requests</a></li>
 </ul>
 </nav>
 
@@ -49,34 +49,30 @@ use Models\User;
 			<table class="table table-striped table-hover">
 				<thead>
 					<tr>
-						<th scope="col">ID</th>
                         <th scope="col">First Name</th>
                         <th scope="col">Last Name</th>
                         <th scope="col">Contact Number</th>
                         <th scope="col">Email</th>
-                        <th scope="col">City</th>
                         <th scope="col">Picture</th>
 						<th scope="col">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php
-                    $classes = new User('', '', '', '', '','','','','','','','','','','');
+                    $classes = new User('', '', '', '', '','','','','','','','');
                     $classes->setConnection($connection);
-                    $retrieveClasses = $classes->getLandlords();
+                    $retrieveClasses = $classes->getUsers();
                     foreach($retrieveClasses as $class){
                 ?>
             <tr>
-                <th scope="row"><?php echo $class['landlord_id']?></th>
                 <td><?php echo $class['first_name']?></td>
                 <td><?php echo $class['last_name']?></td>
                 <td><?php echo $class['contact_number']?></td>
 				<td><?php echo $class['email']?></td>
-                <td><?php echo $class['city']?></td>
                 <td><?php echo $class['picture_path']?></td>
 				<td class="text-center">
-					<a class="btn btn-sm btn-outline-primary edit" id="editBtn" type="button" href="view.php?landlord_id=<?php echo $class['landlord_id']?>" >Edit</a>
-					<button class="btn btn-sm btn-outline-danger delete_tenant" type="button" data-id="<?php echo $class['landlord_id'] ?>">Delete</button>
+					<a class="btn btn-sm btn-outline-primary" type="button" href="view.php?user_id=<?php echo $class['user_id']?>" >Edit</a>
+					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?user_id=<?php echo $class['user_id']?>">Delete</a>
 				</td>
             </tr>
             <?php } ?>

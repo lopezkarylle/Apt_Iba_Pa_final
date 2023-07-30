@@ -8,7 +8,8 @@ session_start();
 
 if(!isset($_SESSION["email"])){
   header("location:../index.php");
-}
+}else{
+
 ?>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -81,3 +82,4 @@ if(!isset($_SESSION["email"])){
   }
 </style>
 
+<?php } ?>
