@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php 
-include ("../init.php");
 use Models\User;
 use Models\Landlord;
-session_start(); 
 
-if(!isset($_SESSION["email"])){
-  header("location:../index.php");
-}else{
+include ("../init.php");
+
+session_start();
+
+if(!isset($_SESSION['user_id']) || $_SESSION['user_type'] != 3){
+    echo "<script>window.location.href='../landlord-login.php';</script>";
+    exit();
+}
 
 ?>
+<!DOCTYPE html>
+<html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="style.css">
@@ -82,4 +87,4 @@ if(!isset($_SESSION["email"])){
   }
 </style>
 
-<?php } ?>
+</html>

@@ -6,7 +6,7 @@ $user_id = $_GET['user_id']??null;
 try {
 	if (isset($user_id)) {
 
-        $user = new user('', '', '', '','','','','','','','');
+        $user = new user('', '', '', '','','');
         $user->setConnection($connection);
         $user->getById($user_id);
         $user->deleteUser();

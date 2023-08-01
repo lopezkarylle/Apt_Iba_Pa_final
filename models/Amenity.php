@@ -4,71 +4,43 @@ namespace Models;
 use PDO;
 use Exception;
 
-class Landlord 
+class Amenity 
 {
-    protected $user_id;
-	protected $first_name;
-	protected $last_name;
-	protected $contact_number;
-    protected $email;
-    protected $password;
-    protected $status;
+    protected $amenity_id;
+	protected $property_id;
+	protected $amenity_name;
+	protected $is_available;
 
     // Database Connection Object
 	protected $connection;
 
-	public function __construct($first_name, $last_name, $contact_number, $email, $password, $user_type, $status=1)
+	public function __construct($property_id, $amenity_name, $is_available)
 	{
-        $this->first_name = $first_name;
-        $this->last_name = $last_name;
-        $this->contact_number = $contact_number;
-        $this->email = $email;
-        $this->password = $password;
-        $this->user_type = $user_type;
-        $this->status = $status;
+        $this->property_id = $property_id;
+        $this->amenity_name = $amenity_name;
+        $this->is_available = $is_available;
 	}
 
     public function getId() {
-        return $this->user_id;
+        return $this->property_id;
     }
 
-    public function getFirstName() {
-        return $this->first_name;
+    public function getAmenityName() {
+        return $this->amenity_name;
     }
 
-    public function getLastName() {
-        return $this->last_name;
+    public function getAvailability() {
+        return $this->is_available;
     }
     
-    public function getContactNumber() {
-        return $this->contact_number;
-    }
-    
-    public function getEmail() {
-        return $this->email;
-    }
-
-    public function getPassword() {
-        return $this->password;
-    }
-    
-    public function getUserType() {
-        return $this->user_type;
-    }
-
-	public function getStatus(){
-		return $this->status;
-	}
-
-
 	public function setConnection($connection)
 	{
 		$this->connection = $connection;
 	}
 
-	public function getLandlords(){
+	public function getAmenities($property_id){
 		try {
-			$sql = "SELECT * FROM apt_users WHERE user_type=1 AND status=1";
+			$sql = "SELECT amenity_name, is_available FROM apt_property_amenities WHERE property_id=$property_id";
 			$data = $this->connection->query($sql)->fetchAll();
 			return $data;
 

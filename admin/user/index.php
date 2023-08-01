@@ -4,25 +4,23 @@ include "../../init.php";
 use Models\User;
 
 ?>
-
+<!DOCTYPE html>
+<html>
 <head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="style.css">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<title>Users</title>
-
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<title>Users</title>
 </head>
 <body>
 
-
 <div class="container-fluid">
 <ul class="nav nav-pills nav-justified">
-  <li style="background-color: #FFF8DC"><a  href="../index.php">Dashboard</a></li>
+  <li style="background-color: #FFF8DC"><a  href="../home.php">Dashboard</a></li>
   <li style="background-color: #FAF0E6"><a  href="../landlord/index.php">Manage Landlords</a></li>
   <li class="active" style="background-color: #FFFAF0"><a  href="index.php">Manage Users</a></li>
   <li style="background-color: #FFFACD"><a  href="../property/index.php">Manage Properties</a></li>
@@ -39,11 +37,6 @@ use Models\User;
 					<div class="col-sm-6">
 						<h2><b>Users</b></h2>
 					</div>
-					<div class="col-sm-6">	
-                        <form method="POST" action="add.php">
-                            <button class="btn btn-success" style="margin-top:10px;">Add New User</button>
-                        </form>				
-					</div>
 				</div>
 			</div>
 			<table class="table table-striped table-hover">
@@ -53,13 +46,12 @@ use Models\User;
                         <th scope="col">Last Name</th>
                         <th scope="col">Contact Number</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Picture</th>
 						<th scope="col">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php
-                    $classes = new User('', '', '', '', '','','','','','','','');
+                    $classes = new User('', '', '', '', '','','',);
                     $classes->setConnection($connection);
                     $retrieveClasses = $classes->getUsers();
                     foreach($retrieveClasses as $class){
@@ -69,7 +61,6 @@ use Models\User;
                 <td><?php echo $class['last_name']?></td>
                 <td><?php echo $class['contact_number']?></td>
 				<td><?php echo $class['email']?></td>
-                <td><?php echo $class['picture_path']?></td>
 				<td class="text-center">
 					<a class="btn btn-sm btn-outline-primary" type="button" href="view.php?user_id=<?php echo $class['user_id']?>" >Edit</a>
 					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?user_id=<?php echo $class['user_id']?>">Delete</a>

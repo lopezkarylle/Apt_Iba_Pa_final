@@ -12,30 +12,20 @@ class User
 	protected $contact_number;
     protected $email;
     protected $password;
-    protected $birthdate;
-    protected $street_address;
-    protected $barangay;
-    protected $city;
-    protected $postal_code;
-    protected $picture_path;
+    protected $user_type;
     protected $status;
 
     // Database Connection Object
 	protected $connection;
 
-	public function __construct($first_name, $last_name, $contact_number, $email, $password, $birthdate, $street_address, $barangay, $city, $postal_code, $picture_path, $status=1)
+	public function __construct($first_name, $last_name, $contact_number, $email, $password, $user_type, $status=1)
 	{
         $this->first_name = $first_name;
         $this->last_name = $last_name;
         $this->contact_number = $contact_number;
         $this->email = $email;
         $this->password = $password;
-        $this->birthdate = $birthdate;
-        $this->street_address = $street_address;
-        $this->barangay = $barangay;
-        $this->city = $city;
-        $this->postal_code = $postal_code;
-        $this->picture_path = $picture_path;
+        $this->user_type = $user_type;
         $this->status = $status;
 	}
 
@@ -63,8 +53,8 @@ class User
         return $this->password;
     }
     
-    public function getBirthdate() {
-        return $this->birthdate;
+    public function getUserType() {
+        return $this->user_type;
     }
     
     public function getStreetAddress() {
@@ -82,10 +72,6 @@ class User
     public function getPostalCode() {
         return $this->postal_code;
     }
-    
-    public function getPicturePath() {
-        return $this->picture_path;
-    }
 
 	public function getStatus(){
 		return $this->status;
@@ -99,7 +85,7 @@ class User
 
 	public function getUsers(){
 		try {
-			$sql = "SELECT * FROM apt_users WHERE status=1";
+			$sql = "SELECT * FROM apt_users WHERE user_type=2 AND status=1";
 			$data = $this->connection->query($sql)->fetchAll();
 			return $data;
 
@@ -110,7 +96,7 @@ class User
 
     public function getById($id){
         try {
-            $sql = 'SELECT * FROM apt_users WHERE user_id=:user_id';
+            $sql = 'SELECT * FROM apt_users WHERE user_id=:user_id AND user_type=2 AND status=1';
 			$statement = $this->connection->prepare($sql);
             
 			$statement->execute([
@@ -125,12 +111,7 @@ class User
             $this->contact_number = $row['contact_number'];
             $this->email = $row['email'];
             $this->password = $row['password'];
-            $this->birthdate = $row['birthdate'];
-            $this->street_address = $row['street_address'];
-            $this->barangay = $row['barangay'];
-            $this->city = $row['city'];
-            $this->postal_code = $row['postal_code'];
-            $this->picture_path = $row['picture_path'];
+            $this->user_type = $row['user_type'];
             $this->status = $row['status'];
 
 
@@ -142,7 +123,7 @@ class User
     public function addUser(){
         try {
 			//$encrypted_password = sha1($this->getPassword());
-			$sql = "INSERT INTO apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=?, birthdate=?, street_address=?, barangay=?, city=?, postal_code=?, picture_path=?, status=?"; 
+			$sql = "INSERT INTO apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=?, user_type=?, status=?"; 
 			$statement = $this->connection->prepare($sql);
 			return $statement->execute([
 				$this->getFirstName(),
@@ -150,12 +131,7 @@ class User
 				$this->getContactNumber(),
 				$this->getEmail(),
 				$this->getPassword(),
-				$this->getBirthdate(),
-				$this->getStreetAddress(),
-				$this->getBarangay(),
-				$this->getCity(),
-				$this->getPostalCode(),
-                $this->getPicturePath(),
+				$this->getUserType(),
                 $this->getStatus(),
 			]);
 
@@ -164,11 +140,9 @@ class User
 		}
     }
 
-    public function updateUser($first_name, $last_name, $contact_number, $email, $password, $birthdate, $street_address, $barangay, $city, $postal_code, $picture_path){
+    public function updateUser($first_name, $last_name, $contact_number, $email, $password){
 		try {
-
-			// $sql = "UPDATE apt_users SET first_name=:first_name, last_name=:last_name, contact_number=:contact_number, email=:email, password=:password, birthdate=:birthdate, street_address=:street_address, barangay=:barangay, city=:city, postal_code=:postal_code, id_type=:id_type, id_picture_path=:id_picture_path, picture_path=:picture_path WHERE user_id=$user_id AND status=1";
-            $sql = "UPDATE apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=?, birthdate=?, street_address=?, barangay=?, city=?, postal_code=?, picture_path=? WHERE user_id=? AND status=1";
+            $sql = "UPDATE apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=? WHERE user_id=? AND user_type=2 AND status=1";
             
             $statement = $this->connection->prepare($sql);
 
@@ -178,12 +152,6 @@ class User
 				$contact_number,
                 $email,
                 $password,
-                $birthdate,
-				$street_address,
-				$barangay,
-                $city,
-                $postal_code,
-                $picture_path,
                 $this->getId()
 			]);
 
@@ -194,7 +162,7 @@ class User
 
     public function deleteUser(){
 		try {
-			$sql = 'UPDATE apt_users SET status=2 WHERE user_id=?';
+			$sql = 'UPDATE apt_users SET status=2 WHERE user_id=? AND user_type=2';
 			$statement = $this->connection->prepare($sql);
 			$statement->execute([
 				$this->getId()

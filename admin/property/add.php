@@ -1,5 +1,6 @@
 <?php
-use Models\Landlord;
+
+use Models\Property;
 include "../../init.php";
 include ("../session.php");
 

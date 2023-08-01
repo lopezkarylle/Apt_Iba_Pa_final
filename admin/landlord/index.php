@@ -1,10 +1,10 @@
 <?php
-
-include "../../init.php";
 use Models\Landlord;
-
+include "../../init.php";
+include ("../session.php");
 ?>
-
+<!DOCTYPE html>
+<html>
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,7 +19,7 @@ use Models\Landlord;
 </head>
 <body>
 
-
+<nav>
 <div class="container-fluid">
 <ul class="nav nav-pills nav-justified">
   <li style="background-color: #FFF8DC"><a  href="../index.php">Dashboard</a></li>
@@ -41,7 +41,7 @@ use Models\Landlord;
 					</div>
 					<div class="col-sm-6">	
                         <form method="POST" action="add.php">
-                            <button class="btn btn-success" style="margin-top:10px;">Add New Class</button>
+                            <button class="btn btn-success" style="margin-top:10px;">Add New Landlord</button>
                         </form>				
 					</div>
 				</div>
@@ -53,13 +53,12 @@ use Models\Landlord;
                         <th scope="col">Last Name</th>
                         <th scope="col">Contact Number</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Picture</th>
 						<th scope="col">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php
-                    $classes = new Landlord('', '', '', '','','','','','','','','','','');
+                    $classes = new Landlord('', '', '', '','','','');
                     $classes->setConnection($connection);
                     $retrieveClasses = $classes->getLandlords();
                     foreach($retrieveClasses as $class){
@@ -69,10 +68,9 @@ use Models\Landlord;
                 <td><?php echo $class['last_name']?></td>
                 <td><?php echo $class['contact_number']?></td>
 				<td><?php echo $class['email']?></td>
-                <td><img src="<?php echo $class['id_picture_path']?>" alt="wala" height="50" width="50"</td>
 				<td class="text-center">
-					<a class="btn btn-sm btn-outline-primary" type="button" href="view.php?landlord_id=<?php echo $class['landlord_id']?>" >Edit</a>
-					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?landlord_id=<?php echo $class['landlord_id']?>">Delete</a>
+					<a class="btn btn-sm btn-outline-primary" type="button" href="view.php?user_id=<?php echo $class['user_id']?>" >Edit</a>
+					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?user_id=<?php echo $class['user_id']?>">Delete</a>
 				</td>
             </tr>
             <?php } ?>
