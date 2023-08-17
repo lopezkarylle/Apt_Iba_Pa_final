@@ -27,6 +27,7 @@ include ("../session.php");
   <li class="active" style="background-color: #FFFACD"><a  href="index.php">Manage Properties</a></li>
   <li style="background-color: #FAFAF0"><a  href="../application-request/index.php">Application Requests</a></li>
 </ul>
+<a href="../../logout.php">Logout</a>
 </nav>
 
 
@@ -53,20 +54,20 @@ include ("../session.php");
 				</thead>
 				<tbody>
 					<?php
-                    $classes = new Property('', '', '', '','','','','', '', '', '','','','');
-                    $classes->setConnection($connection);
-                    $retrieveClasses = $classes->getProperties();
-                    foreach($retrieveClasses as $class){
+                    $property = new Property('','', '', '', '','','','','', '', '', '','','','','','');
+                    $property->setConnection($connection);
+                    $properties = $property->getProperties();
+                    foreach($properties as $property){
                 ?>
             <tr>
-                <td><?php echo $class['property_name']?></td>
-                <td><?php echo $class['first_name'] .' '.$class['last_name']?></td>
-                <td><?php echo $class['property_number'] .' '. $class['street']?></td>
-				<td><?php echo $class['barangay']?></td>
-				<td><?php echo $class['city']?></td>
+                <td><?php echo $property['property_name']?></td>
+                <td><?php echo $property['first_name'] .' '.$property['last_name']?></td>
+                <td><?php echo $property['property_number'] .' '. $property['street']?></td>
+				<td><?php echo $property['barangay']?></td>
+				<td><?php echo $property['city']?></td>
 				<td class="text-center">
-					<a class="btn btn-sm btn-outline-primary" type="button" href="view.php?property_id=<?php echo $class['property_id']?>" >Edit</a>
-					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?property_id=<?php echo $class['property_id']?>">Delete</a>
+					<a class="btn btn-sm btn-outline-primary" type="button" href="view.php?property_id=<?php echo $property['property_id']?>" >Edit</a>
+					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?property_id=<?php echo $property['property_id']?>">Delete</a>
 				</td>
             </tr>
             <?php } ?>

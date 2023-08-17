@@ -7,7 +7,7 @@ $landlord_id = $_GET['landlord_id']??null;
 try {
 	if (isset($landlord_id)) {
 
-        $landlord = new Landlord('', '', '', '','','','');
+        $landlord = new Property('','', '', '', '','','','','', '', '', '','','','');
         $landlord->setConnection($connection);
         $landlord->getById($landlord_id);
         $landlord->deleteLandlord();

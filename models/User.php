@@ -12,19 +12,21 @@ class User
 	protected $contact_number;
     protected $email;
     protected $password;
+    protected $salt;
     protected $user_type;
     protected $status;
 
     // Database Connection Object
 	protected $connection;
 
-	public function __construct($first_name, $last_name, $contact_number, $email, $password, $user_type, $status=1)
+	public function __construct($first_name, $last_name, $contact_number, $email, $password, $salt, $user_type, $status=1)
 	{
         $this->first_name = $first_name;
         $this->last_name = $last_name;
         $this->contact_number = $contact_number;
         $this->email = $email;
         $this->password = $password;
+        $this->salt = $salt;
         $this->user_type = $user_type;
         $this->status = $status;
 	}
@@ -52,25 +54,13 @@ class User
     public function getPassword() {
         return $this->password;
     }
+
+    public function getSalt() {
+        return $this->salt;
+    }
     
     public function getUserType() {
         return $this->user_type;
-    }
-    
-    public function getStreetAddress() {
-        return $this->street_address;
-    }
-    
-    public function getBarangay() {
-        return $this->barangay;
-    }
-    
-    public function getCity() {
-        return $this->city;
-    }
-    
-    public function getPostalCode() {
-        return $this->postal_code;
     }
 
 	public function getStatus(){
@@ -94,13 +84,13 @@ class User
 		}
 	}
 
-    public function getById($id){
+    public function getById($user_id){
         try {
-            $sql = 'SELECT * FROM apt_users WHERE user_id=:user_id AND user_type=2 AND status=1';
+            $sql = 'SELECT * FROM apt_users WHERE user_id=? AND user_type=2 AND status=1';
 			$statement = $this->connection->prepare($sql);
             
 			$statement->execute([
-				':user_id' => $id
+				$user_id
 			]);
 
             $row = $statement->fetch();
@@ -111,6 +101,7 @@ class User
             $this->contact_number = $row['contact_number'];
             $this->email = $row['email'];
             $this->password = $row['password'];
+            $this->salt = $row['salt'];
             $this->user_type = $row['user_type'];
             $this->status = $row['status'];
 

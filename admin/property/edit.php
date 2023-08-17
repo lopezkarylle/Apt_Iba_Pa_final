@@ -1,26 +1,87 @@
 <?php 
 use Models\Property;
+use Models\Amenity;
+use Models\RoomAmenity;
+use Models\Image;
+use Models\Review;
 include "../../init.php";
 include ("../session.php");
 
 try {
-	if (isset($_POST['user_id'])) {
-        $user_id = $_POST['user_id'];
-        $first_name = $_POST['first_name'];
-        $last_name = $_POST['last_name'];
-        $contact_number = $_POST['contact_number'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+	if (isset($_POST['edit_property'])) {
+                $property_id = $_POST['property_id'];
+                $property_name = $_POST['property_name'];
+                $owner_id = $_POST['owner_id'];
+                $total_rooms = $_POST['total_rooms'];
+                $total_floors = $_POST['total_floors'];
+                $description = $_POST['description'];
+                $property_number = $_POST['property_number'];
+                $street = $_POST['street'];
+                $barangay = $_POST['barangay'];
+                $city = $_POST['city'];
 
-        $landlord = new Landlord('', '', '', '','','','');
-        $landlord->setConnection($connection);
-        $landlord->getById($user_id);
+                $property = new Property('','', '', '', '','','','','', '', '', '','','','');
+                $property->setConnection($connection);
+                $property->updateProperty($property_id, $property_name, $owner_id, $total_rooms, $total_floors, $description, $property_number, $street, $barangay, $city);
+                
+                header("Location: view.php?property_id=" . $property_id  . "#property_information");
+                exit();
+	} 
+        else if (isset($_POST['edit_amenities'])) {
+                if(isset($_POST["amenities"]) && is_array($_POST["amenities"])){
+                        $amenities = $_POST["amenities"];
+                } else {
+                        $amenities = array(); // No amenities selected, initialize an empty array.
+                }
+                $amenities_csv = implode(",", $amenities);
 
-        $landlord->updateLandlord($user_id, $first_name, $last_name, $contact_number, $email, $password);
+                $property_id = $_POST['property_id'];
+                $amenity = new Amenity('','','');
+                $amenity->setConnection($connection);
+                $amenity->updateAmenities($property_id, $amenities_csv);
+
+                header("Location: view.php?property_id=" . $property_id . "#property_amenities");
+                exit();
+        }
+        else if (isset($_POST['edit_room_amenities'])) {
+                if(isset($_POST["roomAmenities"]) && is_array($_POST["roomAmenities"])){
+                        $roomAmenities = $_POST["roomAmenities"];
+                } else {
+                        $roomAmenities = array(); // No amenities selected, initialize an empty array.
+                }
+                $roomAmenities_csv = implode(",", $roomAmenities);
+                //var_dump($roomAmenities_csv);
+                $property_id = $_POST['property_id']??null;
+                $room_id = $_POST['room_id']??null;
+                $roomAmenity = new RoomAmenity('','','');
+                $roomAmenity->setConnection($connection);
+                $roomAmenity->updateRoomAmenities($room_id ,$roomAmenities_csv);
+                header("Location: view.php?property_id=" . $property_id  . "#room_amenities");
+                exit();
+        }
+        else if (isset($_POST['delete_review'])) {
+                $review_id = $_POST['review_id']??null;
+                $property_id = $_POST['property_id']??null;
+                $review = new Review('','','');
+                $review->setConnection($connection);
+                $review->deleteReview($review_id ,$property_id);
+                header("Location: view.php?property_id=" . $property_id  . "#property_reviews");
+                exit();
+        }
+        else if (isset($_POST['delete_image'])) {
+                $image_id = $_POST['image_id']??null;
+                $property_id = $_POST['property_id']??null;
+                $image_path = $_POST['image_path']??null;
+                $image = new Image();
+                $image->setConnection($connection);
+                $img = $image->deleteImage($image_id, $property_id);
         
-        header("Location: view.php?user_id=" . $user_id);
-        exit();
-	}
+                unlink($image_path);
+        
+                header("Location: view.php?property_id=" . $property_id . "#property_images");
+                exit();
+        }
+                
 }
 
 catch (Exception $e) {

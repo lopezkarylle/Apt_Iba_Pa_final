@@ -21,11 +21,14 @@ class Property
     protected $postal_code;
     protected $latitude;
     protected $longitude;
+    protected $reservation_fee;
+    protected $advance_deposit;
+    protected $status;
 
     // Database Connection Object
 	protected $connection;
 
-	public function __construct($property_name, $owner_id, $total_rooms, $total_floors, $description, $property_number, $street, $region, $province, $city, $barangay, $postal_code, $latitude, $longitude)
+	public function __construct($property_name, $owner_id, $total_rooms, $total_floors, $description, $property_number, $street, $region, $province, $city, $barangay, $postal_code, $latitude, $longitude, $reservation_fee, $advance_deposit, $status)
 	{
         $this->property_name = $property_name;
         $this->owner_id = $owner_id;
@@ -41,6 +44,9 @@ class Property
         $this->postal_code = $postal_code;
         $this->latitude = $latitude;
         $this->longitude = $longitude;
+        $this->reservation_fee = $reservation_fee;
+        $this->advance_deposit = $advance_deposit;
+        $this->status = $status;
 	}
 
     public function getId() {
@@ -95,6 +101,15 @@ class Property
     public function getLongitude(){
 		return $this->longitude;
 	}
+    public function getReservation(){
+		return $this->reservation_fee;
+	}
+    public function getDeposit(){
+		return $this->advance_deposit;
+	}
+    public function getStatus(){
+		return $this->status;
+	}
 
 
 	public function setConnection($connection)
@@ -104,7 +119,8 @@ class Property
 
     public function getProperties(){
 		try {
-            $sql = "SELECT * FROM apt_properties INNER JOIN apt_users on apt_properties.owner_id=apt_users.user_id WHERE apt_users.user_type=1";
+            //status 1=active, 2=pending, 0=inactive
+            $sql = "SELECT * FROM apt_properties INNER JOIN apt_users on apt_properties.owner_id=apt_users.user_id WHERE apt_users.user_type=1 AND apt_properties.status=1";
 
             $data = $this->connection->query($sql)->fetchAll();
             return $data;
@@ -127,6 +143,69 @@ class Property
             error_log($e->getMessage());
         }
 	}
+
+    public function updateProperty($property_id, $property_name, $owner_id, $total_rooms, $total_floors, $description, $property_number, $street, $region, $province, $city, $barangay, $postal_code, $latitude, $longitude, $reservation_fee, $advance_deposit){
+		try {
+            $sql = "UPDATE apt_properties SET property_name=?, owner_id=?, total_rooms=?, total_floors=?, description=?, property_number=?, street=?, region=?, province=?, city=?, barangay=?, postal_code=?, latitude=?, longitude=?, reservation_fee=?, advance_deposit=? WHERE property_id=? AND status=1";
+            
+            $statement = $this->connection->prepare($sql);
+
+			$statement->execute([
+				$property_name, 
+                $owner_id, 
+                $total_rooms, 
+                $total_floors, 
+                $description, 
+                $property_number, 
+                $street, 
+                $region, 
+                $province, 
+                $city, 
+                $barangay, 
+                $postal_code, 
+                $latitude, 
+                $longitude, 
+                $reservation_fee, 
+                $advance_deposit,
+                $property_id
+			]);
+
+		} catch (Exception $e) {
+			error_log($e->getMessage());
+		}
+    }
+
+    public function addProperty(){
+        try {
+            //status 1=active, 2=pending, 0=inactive
+			$sql = "INSERT INTO apt_properties SET property_name=?, owner_id=?, total_rooms=?, total_floors=?, description=?, property_number=?, street=?, region=?, province=?, city=?, barangay=?, postal_code=?, latitude=?, longitude=?, reservation_fee=?, advance_deposit=?, status=?"; 
+			$statement = $this->connection->prepare($sql);
+			$statement->execute([
+				$this->getPropertyName(),
+				$this->getOwnerId(),
+				$this->getTotalRooms(),
+				$this->getTotalFloors(),
+				$this->getDescription(),
+				$this->getPropertyNumber(),
+                $this->getStreet(),
+                $this->getRegion(),
+				$this->getProvince(),
+				$this->getCity(),
+				$this->getBarangay(),
+				$this->getPostal(),
+				$this->getLatitude(),
+                $this->getLongitude(),
+                $this->getReservation(),
+                $this->getDeposit(),
+                $this->getStatus()
+			]);
+            $lastInsertedId = $this->connection->lastInsertId();
+            return $lastInsertedId;
+
+		} catch (Exception $e) {
+			error_log($e->getMessage());
+		}
+    }
     // public function getById($id){
     //     try {
     //         $sql = 'SELECT * FROM apt_properties WHERE user_id=:user_id AND user_type=1 AND status=1';

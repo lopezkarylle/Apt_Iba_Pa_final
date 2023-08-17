@@ -3,13 +3,13 @@ use Models\Landlord;
 include "../../init.php";
 include ("../session.php");
 
-$landlord_id = $_GET['landlord_id']??null;
+$user_id = $_GET['user_id']??null;
 try {
-	if (isset($landlord_id)) {
+	if (isset($user_id)) {
 
         $landlord = new Landlord('', '', '', '','','','');
         $landlord->setConnection($connection);
-        $landlord->getById($landlord_id);
+        $landlord->getById($user_id);
         $landlord->deleteLandlord();
 
         header("Location: index.php");

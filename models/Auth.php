@@ -6,6 +6,7 @@ class Auth
 {
     protected $email;
     protected $password;
+    protected $salt;
 
     public function __construct(){
 
@@ -16,25 +17,40 @@ class Auth
 		$this->connection = $connection;
 	}
 
-    public function landlordLogin($email, $password){
-        //$encrypted_password = sha1($password);
-        $sql = 'SELECT * FROM apt_users WHERE email=? AND password=? AND status=1 AND user_type!=2';
-		$statement = $this->connection->prepare($sql);
-		$statement->execute([
-				$email,
-                $password
-		]);
-        $row = $statement->fetch();
-        return $row;
+    public function registerUser($first_name, $last_name, $contact_number, $email, $password, $salt){
+        try {
+            $sql = "INSERT INTO apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=?, salt=?, user_type=?, status=?"; 
+            $statement = $this->connection->prepare($sql);
+            $success = $statement->execute([
+                $first_name, 
+                $last_name, 
+                $contact_number, 
+                $email, 
+                $password, 
+                $salt,
+                2, // user-tenant type
+                1 // active
+            ]);
+    
+            $lastInsertedId = null;
+            if ($success) {
+                $lastInsertedId = $this->connection->lastInsertId();
+            }
+    
+            return [
+                'statement' => $statement,
+                'lastInsertedId' => $lastInsertedId
+            ];
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
     }
 
-    public function userLogin($email, $password){
-        //$encrypted_password = sha1($password);
-        $sql = 'SELECT * FROM apt_users WHERE email=? AND password=? AND user_type=2';
+    public function login($email){
+        $sql = 'SELECT * FROM apt_users WHERE email=? AND status=1';
 		$statement = $this->connection->prepare($sql);
 		$statement->execute([
-				$email,
-                $password
+				$email
 		]);
         $row = $statement->fetch();
         return $row;

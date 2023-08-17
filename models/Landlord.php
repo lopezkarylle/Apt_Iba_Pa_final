@@ -12,6 +12,7 @@ class Landlord
 	protected $contact_number;
     protected $email;
     protected $password;
+	protected $user_type;
     protected $status;
 
     // Database Connection Object

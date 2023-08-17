@@ -40,6 +40,7 @@ include ("../session.php");
   <li style="background-color: #FFFACD"><a  href="../property/index.php">Manage Properties</a></li>
   <li style="background-color: #FAFAF0"><a  href="../application-request/index.php">Application Requests</a></li>
 </ul>
+<a href="../../logout.php">Logout</a>
 </nav>
 
 <div class="container-fluid">

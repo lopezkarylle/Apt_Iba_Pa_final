@@ -30,12 +30,13 @@ if(!isset($_SESSION['user_id']) || $_SESSION['user_type'] != 3){
 <body
 <div class="container-fluid">
   <ul class="nav nav-pills nav-justified">
-    <li class="active" style="background-color: #FFF8DC"><a  href="admin/index.php">Dashboard</a></li>
+    <li class="active" style="background-color: #FFF8DC"><a  href="index.php">Dashboard</a></li>
     <li style="background-color: #FAF0E6"><a  href="../admin/landlord/index.php">Manage Landlords</a></li>
     <li style="background-color: #FFFAF0"><a  href="../admin/user/index.php">Manage Users</a></li>
     <li style="background-color: #FFFACD"><a  href="../admin/property/index.php">Manage Properties</a></li>
     <li style="background-color: #FAFAF0"><a  href="../admin/application-request/index.php">Application Requests</a></li>
   </ul>
+  <a href="../../logout.php">Logout</a>
   </nav>
 
   

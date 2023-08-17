@@ -20,12 +20,13 @@ use Models\User;
 
 <div class="container-fluid">
 <ul class="nav nav-pills nav-justified">
-  <li style="background-color: #FFF8DC"><a  href="../home.php">Dashboard</a></li>
+  <li style="background-color: #FFF8DC"><a  href="../index.php">Dashboard</a></li>
   <li style="background-color: #FAF0E6"><a  href="../landlord/index.php">Manage Landlords</a></li>
   <li class="active" style="background-color: #FFFAF0"><a  href="index.php">Manage Users</a></li>
   <li style="background-color: #FFFACD"><a  href="../property/index.php">Manage Properties</a></li>
   <li style="background-color: #FAFAF0"><a  href="../application-request/index.php">Application Requests</a></li>
 </ul>
+<a href="../../logout.php">Logout</a>
 </nav>
 
 

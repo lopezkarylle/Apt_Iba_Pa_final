@@ -4,7 +4,7 @@ include "../../init.php";
 include ("../session.php");
 
 ?>
-
+<!-- NOT OFFICIALLY INCLUDED -->
 <div class="container-fluid">
 	<form action="add.php" method="POST">
 		<div class="row form-group">
