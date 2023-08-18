@@ -1,23 +1,25 @@
 <?php
-
-include "../../init.php";
 use Models\User;
-
+include "../../init.php";
+include ("../session.php");
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-	<title>Users</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<title>Admin Dashboard</title>
+
 </head>
 <body>
 
+<nav>
 <div class="container-fluid">
 <ul class="nav nav-pills nav-justified">
   <li style="background-color: #FFF8DC"><a  href="../index.php">Dashboard</a></li>
@@ -36,7 +38,12 @@ use Models\User;
 			<div class="table-title">
 				<div class="row">
 					<div class="col-sm-6">
-						<h2><b>Users</b></h2>
+						<h2><b>Landlords</b></h2>
+					</div>
+					<div class="col-sm-6">	
+                        <form method="POST" action="add.php">
+                            <button class="btn btn-success" style="margin-top:10px;">Add New User</button>
+                        </form>				
 					</div>
 				</div>
 			</div>
@@ -52,19 +59,19 @@ use Models\User;
 				</thead>
 				<tbody>
 					<?php
-                    $classes = new User('', '', '', '', '','','',);
-                    $classes->setConnection($connection);
-                    $retrieveClasses = $classes->getUsers();
-                    foreach($retrieveClasses as $class){
+                    $users = new User('','','','','','','','');
+                    $users->setConnection($connection);
+                    $getUsers = $users->getUsers();
+                    foreach($getUsers as $user){
                 ?>
             <tr>
-                <td><?php echo $class['first_name']?></td>
-                <td><?php echo $class['last_name']?></td>
-                <td><?php echo $class['contact_number']?></td>
-				<td><?php echo $class['email']?></td>
+                <td><?php echo $user['first_name']?></td>
+                <td><?php echo $user['last_name']?></td>
+                <td><?php echo $user['contact_number']?></td>
+				<td><?php echo $user['email']?></td>
 				<td class="text-center">
-					<a class="btn btn-sm btn-outline-primary" type="button" href="view.php?user_id=<?php echo $class['user_id']?>" >Edit</a>
-					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?user_id=<?php echo $class['user_id']?>">Delete</a>
+					<a class="btn btn-sm btn-outline-primary" type="button" href="edit.php?user_id=<?php echo $user['user_id']?>" >Edit</a>
+					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?user_id=<?php echo $user['user_id']?>">Delete</a>
 				</td>
             </tr>
             <?php } ?>

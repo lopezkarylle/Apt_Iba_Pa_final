@@ -24,8 +24,8 @@ use Models\User;
 <div class="container-fluid">
 <ul class="nav nav-pills nav-justified">
   <li style="background-color: #FFF8DC"><a  href="../index.php">Dashboard</a></li>
-  <li class="active" style="background-color: #FAF0E6"><a  href="index.php">Manage Landlords</a></li>
-  <li style="background-color: #FFFAF0"><a  href="../user/index.php">Manage Users</a></li>
+  <li style="background-color: #FAF0E6"><a  href="../landlord/index.php">Manage Landlords</a></li>
+  <li class="active" style="background-color: #FFFAF0"><a  href="index.php">Manage Users</a></li>
   <li style="background-color: #FFFACD"><a  href="../property/index.php">Manage Properties</a></li>
   <li style="background-color: #FAFAF0"><a  href="../application-request/index.php">Application Requests</a></li>
 </ul>
@@ -55,7 +55,7 @@ use Models\User;
         <input type="password" id="confpass" name="confpass" required><br>
         <span id="confpass-error" style="color: red;"></span><br>
         
-        <input type="submit" value="Add User" id="submit" disabled>
+        <input type="submit" value="Add Landlord" id="submit" disabled>
     </form>
     <script src="email-validation.js"></script>
 	<script src="contact-validate.js"></script>
@@ -81,10 +81,10 @@ try {
 
         $landlord = new User('','','','','','','','');
         $landlord->setConnection($connection);
-        $landlord = $landlord->addLandlord($first_name, $last_name, $contact_number, $email, $hashedPassword, $salt);
+        $landlord = $landlord->addUser($first_name, $last_name, $contact_number, $email, $hashedPassword, $salt);
 
         if($landlord != NULL){
-            echo '<script>alert("Added Landlord Successfully")</script>';
+            echo '<script>alert("Added User Successfully")</script>';
             exit();
         }
         else {

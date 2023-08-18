@@ -8,8 +8,8 @@ include ("../init.php");
 
 session_start();
 
-if(!isset($_SESSION['user_id']) || $_SESSION['user_type'] != 3){
-    echo "<script>window.location.href='../landlord-login.php';</script>";
+if(!isset($_SESSION['user_id']) || $_SESSION['user_type'] != 0){
+    echo "<script>window.location.href='../login.php';</script>";
     exit();
 }
 
@@ -36,7 +36,7 @@ if(!isset($_SESSION['user_id']) || $_SESSION['user_type'] != 3){
     <li style="background-color: #FFFACD"><a  href="../admin/property/index.php">Manage Properties</a></li>
     <li style="background-color: #FAFAF0"><a  href="../admin/application-request/index.php">Application Requests</a></li>
   </ul>
-  <a href="../../logout.php">Logout</a>
+  <a href="../logout.php">Logout</a>
   </nav>
 
   

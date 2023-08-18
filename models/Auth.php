@@ -19,7 +19,7 @@ class Auth
 
     public function registerUser($first_name, $last_name, $contact_number, $email, $password, $salt){
         try {
-            $sql = "INSERT INTO apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=?, salt=?, user_type=?, status=?"; 
+            $sql = "INSERT INTO apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=?, salt=?, user_type=2, status=1"; 
             $statement = $this->connection->prepare($sql);
             $success = $statement->execute([
                 $first_name, 
@@ -28,8 +28,6 @@ class Auth
                 $email, 
                 $password, 
                 $salt,
-                2, // user-tenant type
-                1 // active
             ]);
     
             $lastInsertedId = null;

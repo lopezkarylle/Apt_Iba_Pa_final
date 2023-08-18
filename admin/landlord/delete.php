@@ -1,5 +1,5 @@
 <?php 
-use Models\Landlord;
+use Models\User;
 include "../../init.php";
 include ("../session.php");
 
@@ -7,10 +7,10 @@ $user_id = $_GET['user_id']??null;
 try {
 	if (isset($user_id)) {
 
-        $landlord = new Landlord('', '', '', '','','','');
+        $landlord = new User('', '', '', '','','','');
         $landlord->setConnection($connection);
         $landlord->getById($user_id);
-        $landlord->deleteLandlord();
+        $landlord->deleteUser();
 
         header("Location: index.php");
         exit();

@@ -121,7 +121,6 @@ class Property
 		try {
             //status 1=active, 2=pending, 0=inactive
             $sql = "SELECT * FROM apt_properties INNER JOIN apt_users on apt_properties.owner_id=apt_users.user_id WHERE apt_users.user_type=1 AND apt_properties.status=1";
-
             $data = $this->connection->query($sql)->fetchAll();
             return $data;
         } catch (Exception $e) {

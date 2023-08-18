@@ -114,14 +114,17 @@ try {
     
       if ((hash_equals($hashedPassword, $checkPassword)) && $user_auth != NULL && $user_auth['user_type'] == 1) {
           $_SESSION['user_id'] = $user_auth['user_id'];
+          $_SESSION['user_type'] = $user_auth['user_type'];
           header('location:landlord/index.php');
           exit();
       } elseif ((hash_equals($hashedPassword, $checkPassword)) && $user_auth != NULL && $user_auth['user_type'] == 2) {
         $_SESSION['user_id'] = $user_auth['user_id'];
+        $_SESSION['user_type'] = $user_auth['user_type'];
         header('location:index.php');
         exit();
       } elseif ((hash_equals($hashedPassword, $checkPassword)) && $user_auth != NULL && $user_auth['user_type'] == 0) {
         $_SESSION['user_id'] = $user_auth['user_id'];
+        $_SESSION['user_type'] = $user_auth['user_type'];
         header('location:admin/index.php');
         exit();
       } else {

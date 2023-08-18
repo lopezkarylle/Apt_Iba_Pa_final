@@ -84,9 +84,20 @@ class User
 		}
 	}
 
+    public function getLandlords(){
+		try {
+			$sql = "SELECT * FROM apt_users WHERE user_type=1 AND status=1";
+			$data = $this->connection->query($sql)->fetchAll();
+			return $data;
+
+		} catch (Exception $e) {
+			error_log($e->getMessage());
+		}
+	}
+
     public function getById($user_id){
         try {
-            $sql = 'SELECT * FROM apt_users WHERE user_id=? AND user_type=2 AND status=1';
+            $sql = 'SELECT * FROM apt_users WHERE user_id=? AND status=1';
 			$statement = $this->connection->prepare($sql);
             
 			$statement->execute([
@@ -102,28 +113,23 @@ class User
             $this->email = $row['email'];
             $this->password = $row['password'];
             $this->salt = $row['salt'];
-            $this->user_type = $row['user_type'];
-            $this->status = $row['status'];
-
-
         } catch (Exception $e) {
 			error_log($e->getMessage());
 		}
     }
 
-    public function addUser(){
+    public function addLandlord($first_name, $last_name, $contact_number, $email, $hashedPassword, $salt){
         try {
 			//$encrypted_password = sha1($this->getPassword());
-			$sql = "INSERT INTO apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=?, user_type=?, status=?"; 
+			$sql = "INSERT INTO apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=?, salt=?, user_type=1, status=1"; 
 			$statement = $this->connection->prepare($sql);
 			return $statement->execute([
-				$this->getFirstName(),
-				$this->getLastName(),
-				$this->getContactNumber(),
-				$this->getEmail(),
-				$this->getPassword(),
-				$this->getUserType(),
-                $this->getStatus(),
+				$first_name, 
+                $last_name, 
+                $contact_number, 
+                $email, 
+                $hashedPassword, 
+                $salt
 			]);
 
 		} catch (Exception $e) {
@@ -131,9 +137,28 @@ class User
 		}
     }
 
-    public function updateUser($first_name, $last_name, $contact_number, $email, $password){
+    public function addUser($first_name, $last_name, $contact_number, $email, $hashedPassword, $salt){
+        try {
+			//$encrypted_password = sha1($this->getPassword());
+			$sql = "INSERT INTO apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=?, salt=?, user_type=2, status=1"; 
+			$statement = $this->connection->prepare($sql);
+			return $statement->execute([
+				$first_name, 
+                $last_name, 
+                $contact_number, 
+                $email, 
+                $hashedPassword, 
+                $salt
+			]);
+
+		} catch (Exception $e) {
+			error_log($e->getMessage());
+		}
+    }
+
+    public function updateUser($user_id, $first_name, $last_name, $contact_number, $email, $password, $salt){
 		try {
-            $sql = "UPDATE apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=? WHERE user_id=? AND user_type=2 AND status=1";
+            $sql = "UPDATE apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=?, salt=? WHERE user_id=? AND status=1";
             
             $statement = $this->connection->prepare($sql);
 
@@ -143,7 +168,8 @@ class User
 				$contact_number,
                 $email,
                 $password,
-                $this->getId()
+                $salt,
+                $user_id
 			]);
 
 		} catch (Exception $e) {
@@ -153,7 +179,7 @@ class User
 
     public function deleteUser(){
 		try {
-			$sql = 'UPDATE apt_users SET status=2 WHERE user_id=? AND user_type=2';
+			$sql = 'UPDATE apt_users SET status=2 WHERE user_id=?';
 			$statement = $this->connection->prepare($sql);
 			$statement->execute([
 				$this->getId()

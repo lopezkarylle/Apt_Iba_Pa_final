@@ -1,5 +1,5 @@
 <?php
-use Models\Landlord;
+use Models\User;
 include "../../init.php";
 include ("../session.php");
 ?>
@@ -59,19 +59,19 @@ include ("../session.php");
 				</thead>
 				<tbody>
 					<?php
-                    $classes = new Landlord('', '', '', '','','','');
-                    $classes->setConnection($connection);
-                    $retrieveClasses = $classes->getLandlords();
-                    foreach($retrieveClasses as $class){
+                    $landlords = new User('','','','','','','','');
+                    $landlords->setConnection($connection);
+                    $getLandlords = $landlords->getLandlords();
+                    foreach($getLandlords as $landlords){
                 ?>
             <tr>
-                <td><?php echo $class['first_name']?></td>
-                <td><?php echo $class['last_name']?></td>
-                <td><?php echo $class['contact_number']?></td>
-				<td><?php echo $class['email']?></td>
+                <td><?php echo $landlords['first_name']?></td>
+                <td><?php echo $landlords['last_name']?></td>
+                <td><?php echo $landlords['contact_number']?></td>
+				<td><?php echo $landlords['email']?></td>
 				<td class="text-center">
-					<a class="btn btn-sm btn-outline-primary" type="button" href="view.php?user_id=<?php echo $class['user_id']?>" >Edit</a>
-					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?user_id=<?php echo $class['user_id']?>">Delete</a>
+					<a class="btn btn-sm btn-outline-primary" type="button" href="edit.php?user_id=<?php echo $landlords['user_id']?>" >Edit</a>
+					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?user_id=<?php echo $landlords['user_id']?>">Delete</a>
 				</td>
             </tr>
             <?php } ?>
