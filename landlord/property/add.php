@@ -23,9 +23,6 @@ $owner_id = 4; //change to session variable $_SESSION['user_id']
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-<script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
-<link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
-
 <title>Add Property</title>
 </head>
 <body>
@@ -45,16 +42,23 @@ $owner_id = 4; //change to session variable $_SESSION['user_id']
         <input type="hidden" name="owner_id" value="<?= $owner_id ?>">
 		<div class="row form-group">
             <div class="col-md-4">
+				<label for="property_type" class="control-label">Property Type</label>
+				<select name="property_type" class="form-control form-control-md" id="property_type" required>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Dormitory">Dormitory</option>
+                </select>
+			</div>
+            <div class="col-md-4">
 				<label for="property_name" class="control-label">Property Name</label>
-				<input type="text" class="form-control" name="property_name" required>
+				<input type="text" class="form-control" id="property_name" name="property_name" required>
 			</div>
             <div class="col-md-4">
 				<label for="property_number" class="control-label">Lot Number</label>
-				<input type="text" class="form-control" name="property_number" required>
+				<input type="text" class="form-control" id="property_number" name="property_number" required>
 			</div>
             <div class="col-md-4">
 				<label for="street" class="control-label">Street</label>
-				<input type="text" class="form-control" name="street" required>
+				<input type="text" class="form-control" id="street" name="street" required>
 			</div>
             <div class="col-md-4">
 				<label for="region" class="control-label">Region</label>
@@ -78,21 +82,21 @@ $owner_id = 4; //change to session variable $_SESSION['user_id']
 			</div>
             <div class="col-md-4">
 				<label for="postal_code" class="control-label">Postal Code</label>
-				<input type="text" class="form-control" name="postal_code" required>
+				<input type="text" class="form-control" name="postal_code" id="postal_code" required>
 			</div>
 		</div>
 		<div class="form-group row">
             <div class="col-md-4">
 				<label for="total_floors" class="control-label">How many floors in total?</label>
-				<input type="text" class="form-control" name="total_floors" required>
+				<input type="number" min="0" class="form-control" id="total_floors" name="total_floors" required>
 			</div>
             <div class="col-md-4">
 				<label for="total_rooms" class="control-label">How many rooms in total?</label>
-				<input type="text" class="form-control" name="total_rooms" required>
+				<input type="text" class="form-control" id="total_rooms" name="total_rooms" required>
 			</div>
             <div class="col-md-4">
 				<label for="description" class="control-label">Describe your property.</label>
-				<textarea type="text" class="form-control" name="description" required></textarea>
+				<textarea type="text" class="form-control" id="description" name="description" required></textarea>
 			</div>
 		</div>
         <div class="form-group row">
@@ -112,7 +116,7 @@ $owner_id = 4; //change to session variable $_SESSION['user_id']
                 <input type="hidden" name="rooms[]" value="">
                 <div class="room-fields">
                 <label for="total_beds">Type of room</label>
-                <select name="total_beds[]" required>
+                <select name="total_beds[]" id="total_beds" required>
                     <option value="" selected disabled>Select Room</option>
                     <option value="1">Room for one</option>
                     <option value="2">Room for two</option>
@@ -125,10 +129,10 @@ $owner_id = 4; //change to session variable $_SESSION['user_id']
                 </select>
                 <br>
                 <label for="monthly_rent">Rate per person</label>
-                <input type="text" name="monthly_rent[]" required>
+                <input type="text" id="monthly_rent" name="monthly_rent[]" required>
                 <br>
                 <label for="furnished_type">Furnished type</label>
-                <select name="furnished_type[]" required>
+                <select name="furnished_type[]" id="furnished_type" required>
                     <option value="" selected disabled>Select Furnished Type</option>
                     <option value="Furnished">Furnished</option>
                     <option value="Semi-furnished">Semi-furnished</option>
@@ -150,14 +154,14 @@ $owner_id = 4; //change to session variable $_SESSION['user_id']
         <div class="form-group row">
             <h3>House Rules</h3>
             <div class="col-md-4">
-				<label for="reservation_fee" class="control-label">Do you allow short-term stay?</label>
+				<label for="short_term" class="control-label">Do you allow short-term stay?</label>
 				<input type="radio" name="short_term" value="1" checked>
                 <label for="html">Yes</label><br>
                 <input type="radio" name="short_term" value="0">
                 <label for="css">No</label><br>
 			</div>
             <div class="col-md-4">
-				<label for="advance_deposit" class="control-label">Minimum stay allowed</label>
+				<label for="min_weeks" class="control-label">Minimum stay allowed</label>
 				<select name="min_weeks" id="min_weeks" required>
                     <option value="" selected disabled>Select minimum no. of week</option>
                     <option value="1">1 Week</option>
@@ -171,14 +175,14 @@ $owner_id = 4; //change to session variable $_SESSION['user_id']
                 </select>
 			</div>
             <div class="col-md-4">
-                <label for="reservation_fee" class="control-label">Do you allow coed or mixed-gender?</label>
+                <label for="mix_gender" class="control-label">Do you allow coed or mixed-gender?</label>
 				<input type="radio" name="mix_gender" value="1" checked>
                 <label for="html">Yes</label><br>
                 <input type="radio" name="mix_gender" value="0">
                 <label for="css">No</label><br>
 			</div>
             <div class="col-md-4">
-                <label for="reservation_fee" class="control-label">Do you have curfew?</label>
+                <label for="curfew" class="control-label">Do you have curfew?</label>
 				<input type="radio" name="curfew" value="1" id="withCurfew" checked>
                 <label for="html">Yes</label><br>
                 <input type="radio" name="curfew" value="0" id="withoutCurfew">
@@ -207,21 +211,21 @@ $owner_id = 4; //change to session variable $_SESSION['user_id']
                 </select>
 			</div>
             <div class="col-md-4">
-                <label for="reservation_fee" class="control-label">Do you allow cooking?</label>
+                <label for="cooking" class="control-label">Do you allow cooking?</label>
 				<input type="radio" name="cooking" value="1"checked>
                 <label for="html">Yes</label><br>
                 <input type="radio" name="cooking" value="0">
                 <label for="css">No</label><br>
 			</div>
             <div class="col-md-4">
-                <label for="reservation_fee" class="control-label">Do you allow pets?</label>
+                <label for="pets" class="control-label">Do you allow pets?</label>
 				<input type="radio" name="pets" value="1" checked>
                 <label for="html">Yes</label><br>
                 <input type="radio" name="pets" value="0">
                 <label for="css">No</label><br>
 			</div>
             <div class="col-md-4">
-                <label for="reservation_fee" class="control-label">Do you allow visitors?</label>
+                <label for="visitors" class="control-label">Do you allow visitors?</label>
 				<input type="radio" name="visitors" value="1" checked>
                 <label for="html">Yes</label><br>
                 <input type="radio" name="visitors" value="0">
@@ -231,11 +235,11 @@ $owner_id = 4; //change to session variable $_SESSION['user_id']
         <div class="form-group row">
             <div class="col-md-4">
 				<label for="reservation_fee" class="control-label">Reservation fee</label>
-				<input type="text" class="form-control" name="reservation_fee" required>
+				<input type="text" class="form-control" name="reservation_fee" id="reservation_fee" required>
 			</div>
             <div class="col-md-4">
 				<label for="advance_deposit" class="control-label">Advance deposit</label>
-				<input type="text" class="form-control" name="advance_deposit" required>
+				<input type="text" class="form-control" name="advance_deposit" id="advance_deposit" required>
 			</div>
 		</div>
         <div class="form-group row">
@@ -246,16 +250,18 @@ $owner_id = 4; //change to session variable $_SESSION['user_id']
                         <input type="hidden" name="longitude" value="120.5950306751359">
                 </div>
 		</div>
-        <button class="btn btn-sm btn-outline-danger" type="submit">Add</button>
+        <button class="btn btn-sm btn-outline-danger" id="submit-button" type="submit" disabled>Add</button>
 	</form>
 </div>
+<script src="form-validate.js"></script>
+<script src="ph-address-selector.js"></script>
+<script src="geo.js"></script>
+<script src="room.js"></script>
+<script src="map.js"></script>
+<script src="rules.js"></script>
+
 </body>
 
-<script src="js/ph-address-selector.js"></script>
-<script src="js/geo.js"></script>
-<script src="js/room.js"></script>
-<script src="js/map.js"></script>
-<script src="js/rules.js"></script>
 <style>
     .marker {
     background-image: url('mapbox-icon.png');
@@ -278,58 +284,86 @@ $owner_id = 4; //change to session variable $_SESSION['user_id']
 
 <?php 
 try {
-    if(isset($_POST['property_name'])){
-        //add to properties table but status=2=pending
-        $property = new Property($_POST['property_name'], $_POST['owner_id'], $_POST['total_rooms'],$_POST['total_floors'],$_POST['description'],$_POST['property_number'],$_POST['street'],$_POST['region_text'],$_POST['province_text'],$_POST['city_text'],$_POST['barangay_text'],$_POST['postal_code'],$_POST['latitude'],$_POST['longitude'],$_POST['reservation_fee'],$_POST['advance_deposit'],2);
-        $property->setConnection($connection);
-        $property_id = $property->addProperty();
-
-        //add to application requests table but status=2=pending
-        $request = new Request($owner_id, $property_id, 2);
-        $request->setConnection($connection);
-        $request->addRequest();
-
-        //add to property amenities table but status=2=pending
-        $amenities = $_POST['amenities'];
-        $amenities_csv = implode(",", $amenities);
-
-        $property_amenities = new Amenity($property_id, $amenities_csv, 2);
-        $property_amenities->setConnection($connection);
-        $property_amenities->addAmenities();
-
-        //add to property rules table but status=2=pending
-        $rules = new Rule($property_id, $_POST['short_term'], $_POST['min_weeks'], $_POST['mix_gender'], $_POST['curfew'], $_POST['from_curfew'], $_POST['to_curfew'], $_POST['cooking'], $_POST['pets'], $_POST['visitors'],2);
-        $rules->setConnection($connection);
-        $rules->addRules();
-
-        //add to rooms table but status=2=pending
-        $beds = $_POST['total_beds']; 
-        $rent = $_POST['monthly_rent']; 
-        $type = $_POST['furnished_type']; 
-        $occupied_beds = 0;
-
-        $selected_amenities = $_POST['selected_amenities'];
-        $amenities = json_decode($selected_amenities, true); 
-
-            for ($x = 0; $x < (count($beds)); $x++) {
-                $total_beds = $beds[$x];
-                $monthly_rent = $rent[$x];
-                $furnished_type = $type[$x];
-                
-                $room = new Room($property_id, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, 2);
-                $room->setConnection($connection);
-                $room_id = $room->addRoom();
-
-                $room_amenities = $amenities[$x];
-                $room_amenities_csv = implode(",", $room_amenities);
-
-                $room_amenities = new RoomAmenity($room_id, $room_amenities_csv, 2);
-                $room_amenities->setConnection($connection);
-                $room_amenities->addRoomAmenities();
+    if(isset($_POST['property_type'], $_POST['property_name'], $_POST['owner_id'], $_POST['total_rooms'],$_POST['total_floors'],$_POST['description'],$_POST['property_number'],$_POST['street'],$_POST['region_text'],$_POST['province_text'],$_POST['city_text'],$_POST['barangay_text'],$_POST['postal_code'],$_POST['latitude'],$_POST['longitude'],$_POST['reservation_fee'],$_POST['advance_deposit'])){
+        $property_type = $_POST['property_type']; 
+        $property_name = ucfirst($_POST['property_name']); 
+        $owner_id = $_POST['owner_id']; 
+        $total_rooms = $_POST['total_rooms'];
+        $total_floors = $_POST['total_floors'];
+        $description = $_POST['description'];
+        $property_number = $_POST['property_number'];
+        $street = ucfirst($_POST['street']);
+        $region_text = $_POST['region_text'];
+        $province_text = $_POST['province_text'];
+        $city_text = $_POST['city_text'];
+        $barangay_text = $_POST['barangay_text'];
+        $postal_code = $_POST['postal_code'];
+        $latitude = $_POST['latitude'];
+        $longitude = $_POST['longitude'];
+        $reservation_fee = $_POST['reservation_fee'];
+        $advance_deposit = $_POST['advance_deposit'];
+        $status = 2;
+        $lowest_rate = 0;
+        $rent = $_POST['monthly_rent'];
+        foreach($rent as $rate){
+            if($rate>$lowest_rate){
+                $lowest_rate = $rate;
             }
+        }
+        //add to properties table but status=2=pending
+        
+        $property = new Property();
+        $property->setConnection($connection);
+        $property_id = $property->addProperty($property_type, $property_name, $owner_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$postal_code,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit,$status);
 
-        echo "<script>window.location.href='index.php?success=1';</script>";
-        exit();
+        // //add to application requests table but status=2=pending
+        // $request = new Request($owner_id, $property_id, 2);
+        // $request->setConnection($connection);
+        // $request->addRequest();
+
+        // //add to property amenities table but status=2=pending
+        // $amenities = $_POST['amenities'];
+        // $amenities_csv = implode(",", $amenities);
+
+        // $property_amenities = new Amenity($property_id, $amenities_csv, 2);
+        // $property_amenities->setConnection($connection);
+        // $property_amenities->addAmenities();
+
+        // //add to property rules table but status=2=pending
+        // $rules = new Rule($property_id, $_POST['short_term'], $_POST['min_weeks'], $_POST['mix_gender'], $_POST['curfew'], $_POST['from_curfew'], $_POST['to_curfew'], $_POST['cooking'], $_POST['pets'], $_POST['visitors'],2);
+        // $rules->setConnection($connection);
+        // $rules->addRules();
+
+        // //add to rooms table but status=2=pending
+        // $beds = $_POST['total_beds']; 
+        // $rent = $_POST['monthly_rent']; 
+        // $type = $_POST['furnished_type']; 
+        // $occupied_beds = 0;
+
+        // $selected_amenities = $_POST['selected_amenities'];
+        // $amenities = json_decode($selected_amenities, true); 
+
+        //     for ($x = 0; $x < (count($beds)); $x++) {
+        //         $total_beds = $beds[$x];
+        //         $monthly_rent = $rent[$x];
+        //         $furnished_type = $type[$x];
+                
+        //         $room = new Room($property_id, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, 2);
+        //         $room->setConnection($connection);
+        //         $room_id = $room->addRoom();
+
+        //         $room_amenities = $amenities[$x];
+        //         $room_amenities_csv = implode(",", $room_amenities);
+
+        //         $room_amenities = new RoomAmenity($room_id, $room_amenities_csv, 2);
+        //         $room_amenities->setConnection($connection);
+        //         $room_amenities->addRoomAmenities();
+        //     }
+
+        // echo "<script>window.location.href='index.php?success=1';</script>";
+        // exit();
+    } else {
+        echo "<script>alert('Failed to add property. Please check your inputs.</script>";
     }
 } catch (Exception $e) {
     echo "<script>window.location.href='index.php?error='" . $e->getMessage() . ";</script>";

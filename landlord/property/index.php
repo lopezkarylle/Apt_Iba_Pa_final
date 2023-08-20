@@ -2,7 +2,7 @@
 use Models\Property;
 include ("../../init.php");
 
-$property = new Property('','', '', '', '','','','','', '', '', '','','','','','');
+$property = new Property('','','', '', '', '','','','','', '', '', '','','','','','');
 $property->setConnection($connection);
 $properties = $property->getProperties();
 

@@ -7,6 +7,7 @@ use Exception;
 class Property 
 {
     protected $property_id;
+    protected $property_type;
 	protected $property_name;
 	protected $owner_id;
 	protected $total_rooms;
@@ -21,6 +22,7 @@ class Property
     protected $postal_code;
     protected $latitude;
     protected $longitude;
+    protected $lowest;
     protected $reservation_fee;
     protected $advance_deposit;
     protected $status;
@@ -28,25 +30,9 @@ class Property
     // Database Connection Object
 	protected $connection;
 
-	public function __construct($property_name, $owner_id, $total_rooms, $total_floors, $description, $property_number, $street, $region, $province, $city, $barangay, $postal_code, $latitude, $longitude, $reservation_fee, $advance_deposit, $status)
+	public function __construct()
 	{
-        $this->property_name = $property_name;
-        $this->owner_id = $owner_id;
-        $this->total_rooms = $total_rooms;
-        $this->total_floors = $total_floors;
-        $this->description = $description;
-        $this->property_number = $property_number;
-        $this->street = $street;
-        $this->region = $region;
-        $this->province = $province;
-        $this->city = $city;
-        $this->barangay = $barangay;
-        $this->postal_code = $postal_code;
-        $this->latitude = $latitude;
-        $this->longitude = $longitude;
-        $this->reservation_fee = $reservation_fee;
-        $this->advance_deposit = $advance_deposit;
-        $this->status = $status;
+
 	}
 
     public function getId() {
@@ -55,6 +41,10 @@ class Property
 
     public function getPropertyName() {
         return $this->property_name;
+    }
+
+    public function getPropertyType() {
+        return $this->property_type;
     }
 
     public function getOwnerId() {
@@ -143,13 +133,14 @@ class Property
         }
 	}
 
-    public function updateProperty($property_id, $property_name, $owner_id, $total_rooms, $total_floors, $description, $property_number, $street, $region, $province, $city, $barangay, $postal_code, $latitude, $longitude, $reservation_fee, $advance_deposit){
+    public function updateProperty($property_id, $property_type, $property_name, $owner_id, $total_rooms, $total_floors, $description, $property_number, $street, $region, $province, $city, $barangay, $postal_code, $latitude, $longitude, $reservation_fee, $advance_deposit){
 		try {
             $sql = "UPDATE apt_properties SET property_name=?, owner_id=?, total_rooms=?, total_floors=?, description=?, property_number=?, street=?, region=?, province=?, city=?, barangay=?, postal_code=?, latitude=?, longitude=?, reservation_fee=?, advance_deposit=? WHERE property_id=? AND status=1";
             
             $statement = $this->connection->prepare($sql);
 
 			$statement->execute([
+                $property_type,
 				$property_name, 
                 $owner_id, 
                 $total_rooms, 
@@ -174,29 +165,31 @@ class Property
 		}
     }
 
-    public function addProperty(){
+    public function addProperty($property_type, $property_name, $owner_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$postal_code,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit, $status){
         try {
             //status 1=active, 2=pending, 0=inactive
-			$sql = "INSERT INTO apt_properties SET property_name=?, owner_id=?, total_rooms=?, total_floors=?, description=?, property_number=?, street=?, region=?, province=?, city=?, barangay=?, postal_code=?, latitude=?, longitude=?, reservation_fee=?, advance_deposit=?, status=?"; 
+			$sql = "INSERT INTO apt_properties SET property_type=?, property_name=?, owner_id=?, total_rooms=?, total_floors=?, description=?, property_number=?, street=?, region=?, province=?, city=?, barangay=?, postal_code=?, latitude=?, longitude=?, lowest_rate=?,reservation_fee=?, advance_deposit=?, status=?"; 
 			$statement = $this->connection->prepare($sql);
 			$statement->execute([
-				$this->getPropertyName(),
-				$this->getOwnerId(),
-				$this->getTotalRooms(),
-				$this->getTotalFloors(),
-				$this->getDescription(),
-				$this->getPropertyNumber(),
-                $this->getStreet(),
-                $this->getRegion(),
-				$this->getProvince(),
-				$this->getCity(),
-				$this->getBarangay(),
-				$this->getPostal(),
-				$this->getLatitude(),
-                $this->getLongitude(),
-                $this->getReservation(),
-                $this->getDeposit(),
-                $this->getStatus()
+                $property_type, 
+                $property_name, 
+                $owner_id, 
+                $total_rooms,
+                $total_floors,
+                $description,
+                $property_number,
+                $street,
+                $region_text,
+                $province_text,
+                $city_text,
+                $barangay_text,
+                $postal_code,
+                $latitude,
+                $longitude,
+                $lowest_rate,
+                $reservation_fee,
+                $advance_deposit,
+                $status
 			]);
             $lastInsertedId = $this->connection->lastInsertId();
             return $lastInsertedId;

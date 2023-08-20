@@ -12,13 +12,14 @@ class Landlord
 	protected $contact_number;
     protected $email;
     protected $password;
+	protected $salt;
 	protected $user_type;
     protected $status;
 
     // Database Connection Object
 	protected $connection;
 
-	public function __construct($first_name, $last_name, $contact_number, $email, $password, $user_type, $status=1)
+	public function __construct($first_name, $last_name, $contact_number, $email, $password, $salt, $user_type, $status=1)
 	{
         $this->first_name = $first_name;
         $this->last_name = $last_name;

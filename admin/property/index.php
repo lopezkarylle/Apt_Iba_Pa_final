@@ -54,7 +54,7 @@ include ("../session.php");
 				</thead>
 				<tbody>
 					<?php
-                    $property = new Property('','', '', '', '','','','','', '', '', '','','','','','');
+                    $property = new Property('','', '', '', '','','','','', '', '', '','','','','','','');
                     $property->setConnection($connection);
                     $properties = $property->getProperties();
                     foreach($properties as $property){

@@ -102,7 +102,7 @@ if(isset($_POST['set_appointment'])){
 <nav>
   <ul class="nav nav-pills nav-justified">
     <li style="background-color: #FFF8DC"><a  href="index.php">Dashboard</a></li>
-    <li class="active" style="background-color: #FAF0E6"><a  href="properties.php">Accommodations</a></li>
+    <li class="active" style="background-color: #FAF0E6"><a  href="accommodations.php">Accommodations</a></li>
     <li style="background-color: #FFFAF0"><a  href="about.php">About Us</a></li>
     <?php if (isset($user_id)){ ?>
         <li style="background-color: #FAFAF0"><a  href="../../logout.php">Logout</a></li>
