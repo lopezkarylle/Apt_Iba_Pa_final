@@ -7,6 +7,7 @@ include ("../session.php");
 try {
 	if (isset($_POST['add_image'])) {
         $property_id = $_POST['property_id'];
+        $title = $_POST['title'] ?? '';
         $imageData = $_FILES["images"];
 
         // Loop through the uploaded images
@@ -22,7 +23,7 @@ try {
 
             $images = new Image();
             $images->setConnection($connection);
-            $insert = $images->addImage($property_id, $targetFilePath, 1);
+            $insert = $images->addImage($property_id, $imageName, $title, 1);
             //var_dump($insert);
             if($insert){ 
                 $statusMsg = "Images are uploaded successfully."; 

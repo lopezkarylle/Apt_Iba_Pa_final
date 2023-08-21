@@ -10,23 +10,17 @@ class User
 	protected $first_name;
 	protected $last_name;
 	protected $contact_number;
-    protected $email;
-    protected $password;
-    protected $salt;
     protected $user_type;
     protected $status;
 
     // Database Connection Object
 	protected $connection;
 
-	public function __construct($first_name, $last_name, $contact_number, $email, $password, $salt, $user_type, $status=1)
+	public function __construct($first_name, $last_name, $contact_number,$user_type, $status=1)
 	{
         $this->first_name = $first_name;
         $this->last_name = $last_name;
         $this->contact_number = $contact_number;
-        $this->email = $email;
-        $this->password = $password;
-        $this->salt = $salt;
         $this->user_type = $user_type;
         $this->status = $status;
 	}
@@ -46,19 +40,7 @@ class User
     public function getContactNumber() {
         return $this->contact_number;
     }
-    
-    public function getEmail() {
-        return $this->email;
-    }
 
-    public function getPassword() {
-        return $this->password;
-    }
-
-    public function getSalt() {
-        return $this->salt;
-    }
-    
     public function getUserType() {
         return $this->user_type;
     }
@@ -73,9 +55,25 @@ class User
 		$this->connection = $connection;
 	}
 
-	public function getUsers(){
+    public function registerUserInfo($user_id, $first_name, $last_name, $contact_number){
+        try {
+            $sql = "INSERT INTO apt_user_information SET user_id=?, first_name=?, last_name=?, contact_number=?, user_type=2, status=1"; 
+            $statement = $this->connection->prepare($sql);
+            return $statement->execute([
+                $user_id,
+                $first_name, 
+                $last_name, 
+                $contact_number, 
+            ]);
+    
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+    }
+
+    public function getLandlords(){
 		try {
-			$sql = "SELECT * FROM apt_users WHERE user_type=2 AND status=1";
+			$sql = "SELECT apt_user_information.*, apt_users.*, apt_user_images.image_name, apt_user_images.image_path FROM apt_user_information JOIN apt_users ON apt_user_information.user_id=apt_users.user_id LEFT JOIN apt_user_images ON apt_user_information.user_id=apt_user_images.user_id WHERE apt_user_information.user_type=1 AND apt_user_information.status=1";
 			$data = $this->connection->query($sql)->fetchAll();
 			return $data;
 
@@ -84,9 +82,9 @@ class User
 		}
 	}
 
-    public function getLandlords(){
+    public function getUsers(){
 		try {
-			$sql = "SELECT * FROM apt_users WHERE user_type=1 AND status=1";
+			$sql = "SELECT apt_user_information.*, apt_users.*, apt_user_images.image_name, apt_user_images.image_path FROM apt_user_information JOIN apt_users ON apt_user_information.user_id=apt_users.user_id LEFT JOIN apt_user_images ON apt_user_information.user_id=apt_user_images.user_id WHERE apt_user_information.user_type=2 AND apt_user_information.status=1";
 			$data = $this->connection->query($sql)->fetchAll();
 			return $data;
 
@@ -97,39 +95,29 @@ class User
 
     public function getById($user_id){
         try {
-            $sql = 'SELECT * FROM apt_users WHERE user_id=? AND status=1';
+            $sql = 'SELECT apt_user_information.*, apt_users.*, apt_user_images.image_name, apt_user_images.image_path FROM apt_user_information JOIN apt_users ON apt_user_information.user_id=apt_users.user_id LEFT JOIN  apt_user_images ON apt_user_information.user_id=apt_user_images.user_id WHERE apt_user_information.user_id=? AND apt_user_information.status=1';
 			$statement = $this->connection->prepare($sql);
             
 			$statement->execute([
 				$user_id
 			]);
 
-            $row = $statement->fetch();
-            
-			$this->user_id = $row['user_id'];
-            $this->first_name = $row['first_name'];
-            $this->last_name = $row['last_name'];
-            $this->contact_number = $row['contact_number'];
-            $this->email = $row['email'];
-            $this->password = $row['password'];
-            $this->salt = $row['salt'];
+            return $row = $statement->fetch();
+
         } catch (Exception $e) {
 			error_log($e->getMessage());
 		}
     }
 
-    public function addLandlord($first_name, $last_name, $contact_number, $email, $hashedPassword, $salt){
+    public function addLandlord($user_id, $first_name, $last_name, $contact_number){
         try {
-			//$encrypted_password = sha1($this->getPassword());
-			$sql = "INSERT INTO apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=?, salt=?, user_type=1, status=1"; 
+			$sql = "INSERT INTO apt_user_information SET user_id=?, first_name=?, last_name=?, contact_number=?, user_type=1, status=1"; 
 			$statement = $this->connection->prepare($sql);
 			return $statement->execute([
+                $user_id,
 				$first_name, 
                 $last_name, 
                 $contact_number, 
-                $email, 
-                $hashedPassword, 
-                $salt
 			]);
 
 		} catch (Exception $e) {
@@ -137,18 +125,15 @@ class User
 		}
     }
 
-    public function addUser($first_name, $last_name, $contact_number, $email, $hashedPassword, $salt){
+    public function addUser($user_id, $first_name, $last_name, $contact_number){
         try {
-			//$encrypted_password = sha1($this->getPassword());
-			$sql = "INSERT INTO apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=?, salt=?, user_type=2, status=1"; 
+			$sql = "INSERT INTO apt_user_information SET user_id=?, first_name=?, last_name=?, contact_number=?, user_type=2, status=1"; 
 			$statement = $this->connection->prepare($sql);
 			return $statement->execute([
+                $user_id,
 				$first_name, 
                 $last_name, 
                 $contact_number, 
-                $email, 
-                $hashedPassword, 
-                $salt
 			]);
 
 		} catch (Exception $e) {
@@ -156,9 +141,9 @@ class User
 		}
     }
 
-    public function updateUser($user_id, $first_name, $last_name, $contact_number, $email, $password, $salt){
+    public function updateUser($user_id, $first_name, $last_name, $contact_number){
 		try {
-            $sql = "UPDATE apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=?, salt=? WHERE user_id=? AND status=1";
+            $sql = "UPDATE apt_user_information SET first_name=?, last_name=?, contact_number=? WHERE user_id=? AND status=1";
             
             $statement = $this->connection->prepare($sql);
 
@@ -166,9 +151,6 @@ class User
 				$first_name,
 				$last_name,
 				$contact_number,
-                $email,
-                $password,
-                $salt,
                 $user_id
 			]);
 
@@ -177,12 +159,12 @@ class User
 		}
     }
 
-    public function deleteUser(){
+    public function deleteUser($user_id){
 		try {
-			$sql = 'UPDATE apt_users SET status=2 WHERE user_id=?';
+			$sql = 'UPDATE apt_user_information SET status=0 WHERE user_id=?';
 			$statement = $this->connection->prepare($sql);
 			$statement->execute([
-				$this->getId()
+				$user_id
 			]);
 		} catch (Exception $e) {
 			error_log($e->getMessage());

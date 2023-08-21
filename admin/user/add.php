@@ -3,6 +3,7 @@ include "../../init.php";
 include ("../session.php");
 use Models\Auth;
 use Models\User;
+use Models\UserImage;
 
 ?>
 
@@ -54,6 +55,9 @@ use Models\User;
         <label for="confpass">Confirm Password:</label>
         <input type="password" id="confpass" name="confpass" required><br>
         <span id="confpass-error" style="color: red;"></span><br>
+
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image"><br>
         
         <input type="submit" value="Add Landlord" id="submit" disabled>
     </form>
@@ -65,25 +69,53 @@ use Models\User;
 
 <?php
 try {
-    if(isset($_POST['first_name'], $_POST['last_name'], $_POST['contact_number'], $_POST['email'], $_POST['password'])){
-		
-        $email = new Auth();
-        $email->setConnection($connection);
-        $email = $email->login($_POST['email']);
+    if(isset($_POST['first_name'], $_POST['last_name'], $_POST['contact_number'], $_POST['email'], $_POST['password'],)){
         
-        $first_name = $_POST['first_name'];
-        $last_name = $_POST['last_name'];
-        $contact_number = $_POST['contact_number'];
         $email = $_POST['email'];
         $password = $_POST['password'];
         $salt = bin2hex(random_bytes(16));
         $hashedPassword = hash('sha256', $password . $salt);
 
-        $landlord = new User('','','','','','','','');
-        $landlord->setConnection($connection);
-        $landlord = $landlord->addUser($first_name, $last_name, $contact_number, $email, $hashedPassword, $salt);
+        $user_auth = new Auth();
+        $user_auth->setConnection($connection);
+        $user_auth = $user_auth->registerUser($email, $hashedPassword, $salt);
+        
+        $user_id = $user_auth['lastInsertedId'];
+        $first_name = ucfirst($_POST['first_name']);
+        $last_name = ucfirst($_POST['last_name']);
+        $contact_number = $_POST['contact_number'];
 
-        if($landlord != NULL){
+        if(isset($_FILES['image'])){
+            $image_name = $_FILES['image']['name'];
+            $temp_name = $_FILES['image']['tmp_name'];
+
+            if (!is_uploaded_file($temp_name)) {
+            echo 'The file was not uploaded correctly.';
+            exit;
+            }
+
+            $uploadDirectory = "../../resources/images/users/";
+            $targetFilePath = $uploadDirectory . basename($image_name);
+
+            // Check if the file name already exists
+            if (file_exists($targetFilePath)) {
+              // Generate a new file name
+              $image_name = uniqid() . '_' . $image_name;
+              $targetFilePath = $uploadDirectory . basename($image_name);
+            }
+
+            move_uploaded_file($temp_name, $targetFilePath);
+
+            $image = new UserImage();
+            $image->setConnection($connection);
+            $image->addImage($user_id, $image_name, $uploadDirectory);
+        }
+        
+        $user = new User('','','','','');
+        $user->setConnection($connection);
+        $user = $user->addUser($user_id, $first_name, $last_name, $contact_number);
+
+        if($user != NULL){
             echo '<script>alert("Added User Successfully")</script>';
             exit();
         }

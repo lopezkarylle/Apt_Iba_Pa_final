@@ -6,10 +6,11 @@ use Models\RoomAmenity;
 use Models\Image;
 use Models\Review;
 include "../../init.php";
-include ("../session.php");
+//include ("../session.php");
 
     $property_id = $_GET['property_id'];
-    $property = new Property('','', '', '', '','','','','', '', '', '','','','');
+	//$property_id = 1;
+    $property = new Property();
     $property->setConnection($connection);
     $details = $property->getPropertyDetails($property_id);
 
@@ -24,16 +25,18 @@ include ("../session.php");
 	$province = $details['province'];
 	$city = $details['city'];
 	$barangay = $details['barangay'];
-	$postal_code = $details['street'];
+	$postal_code = $details['postal_code'];
 	$latitude = $details['latitude'];
 	$longitude = $details['longitude'];
+	$reservation = $details['reservation_fee'];
+	$deposit = $details['advance_deposit'];
 	$first_name = $details['first_name'];
 	$last_name = $details['last_name'];
 
 	$amenity = new Amenity('','','');
 	$amenity->setConnection($connection);
 	$amenities = $amenity->getAmenities($property_id);
-
+	
 	if($amenities){
 		$amenities_csv = $amenities['amenity_name'];
 		$amenities_array = explode(",", $amenities_csv);
@@ -42,7 +45,7 @@ include ("../session.php");
 		$amenities_array = array();
 	}
 
-	$room = new Room('','','','','','','');
+	$room = new Room('','','','','','');
 	$room->setConnection($connection);
 	$rooms = $room->getRooms($property_id);
 
@@ -64,6 +67,8 @@ include ("../session.php");
 <body>
 <nav>
 <div class="container-fluid">
+<nav>
+<div class="container-fluid">
 <ul class="nav nav-pills nav-justified">
   <li style="background-color: #FFF8DC"><a  href="../index.php">Dashboard</a></li>
   <li style="background-color: #FAF0E6"><a  href="../landlord/index.php">Manage Landlords</a></li>
@@ -78,47 +83,77 @@ include ("../session.php");
 <div class="container-fluid" id="property_information">
 	<form action="edit.php" method="POST">
 		<input type="hidden" name="property_id" value="<?php echo isset($property_id) ? $property_id : '' ?>">
-		<h2><?php echo isset($property_name) ? $property_name :'' ?></h2>
+		<input type="hidden" name="owner_id" value="<?= $owner_id ?>">
 		<div class="row form-group">
             <div class="col-md-4">
-				<label for="" class="control-label">Property Name</label>
-				<input type="text" class="form-control" name="property_name"  value="<?php echo isset($property_name) ? $property_name :'' ?>" required>
+				<label for="property_name" class="control-label">Property Name</label>
+				<input type="text" class="form-control" value="<?php echo isset($property_name) ? $property_name : '' ?>" name="property_name" required>
 			</div>
-		    <div class="col-md-4">
-				<label for="" class="control-label">Landlord</label>
-				<input type="text" class="form-control" name="owner_id"  value="<?php echo isset($owner_id) ? $owner_id :'' ?>" required>
-			</div>
-		</div>
-		<div class="row form-group">
             <div class="col-md-4">
-				<label for="" class="control-label">Total Rooms</label>
-				<input type="text" class="form-control" name="total_rooms"  value="<?php echo isset($total_rooms) ? $total_rooms :'' ?>" required>
+				<label for="property_number" class="control-label">Lot Number</label>
+				<input type="text" class="form-control" value="<?php echo isset($property_number) ? $property_number : '' ?>" name="property_number" required>
 			</div>
-		    <div class="col-md-4">
-				<label for="" class="control-label">Total Floors</label>
-				<input type="text" class="form-control" name="total_floors"  value="<?php echo isset($total_floors) ? $total_floors :'' ?>" required>
+            <div class="col-md-4">
+				<label for="street" class="control-label">Street</label>
+				<input type="text" class="form-control" value="<?php echo isset($street) ? $street : '' ?>" name="street" required>
 			</div>
-			<div class="col-md-4">
-				<label for="" class="control-label">Description</label>
-				<input type="text" class="form-control" name="description"  value="<?php echo isset($description) ? $description :'' ?>" required>
+            <div class="col-md-4">
+				<label for="region" class="control-label">Region - <?php echo isset($region) ? $region : '' ?></label>
+				<select name="region" class="form-control form-control-md" id="region" required></select>
+                <input type="hidden" class="form-control form-control-md" name="region_text" id="region-text" value="<?php echo isset($region) ? $region : '' ?>" required>
+			</div>
+            <div class="col-md-4">
+				<label for="province" class="control-label">Province - <?php echo isset($province) ? $province : '' ?></label>
+				<select name="province" class="form-control form-control-md" id="province" required></select>
+                <input type="hidden" class="form-control form-control-md" name="province_text" id="province-text" value="<?php echo isset($province) ? $province : '' ?>" required>
+			</div>
+            <div class="col-md-4">
+				<label for="city" class="control-label">City / Municipality - <?php echo isset($city) ? $city : '' ?></label>
+				<select name="city" class="form-control form-control-md" id="city" required></select>
+                <input type="hidden" class="form-control form-control-md" name="city_text" id="city-text" value="<?php echo isset($city) ? $city : '' ?>" required>
+			</div>
+            <div class="col-md-4">
+				<label for="barangay" class="control-label">Barangay - <?php echo isset($barangay) ? $barangay : '' ?></label>
+				<select name="barangay" class="form-control form-control-md" id="barangay" required></select>
+                <input type="hidden" class="form-control form-control-md" name="barangay_text" id="barangay-text" value="<?php echo isset($barangay) ? $barangay : '' ?>" required>
+			</div>
+            <div class="col-md-4">
+				<label for="postal_code" class="control-label">Postal Code</label>
+				<input type="text" class="form-control" value="<?php echo isset($postal_code) ? $postal_code : '' ?>" name="postal_code" required>
 			</div>
 		</div>
 		<div class="form-group row">
-			<div class="col-md-4">
-				<label for="" class="control-label">#</label>
-				<input type="text" class="form-control" name="property_number"  value="<?php echo isset($property_number) ? $property_number :'' ?>" required>
+            <div class="col-md-4">
+				<label for="total_floors" class="control-label">How many floors in total?</label>
+				<input type="text" class="form-control" name="total_floors" value="<?php echo isset($total_floors) ? $total_floors : '' ?>" required>
+			</div>
+            <div class="col-md-4">
+				<label for="total_rooms" class="control-label">How many rooms in total?</label>
+				<input type="text" class="form-control" value="<?php echo isset($total_rooms) ? $total_rooms : '' ?>" name="total_rooms" required>
+			</div>
+            <div class="col-md-4">
+				<label for="description" class="control-label">Describe your property.</label>
+				<textarea type="text" class="form-control" name="description" required><?php echo isset($description) ? $description : '' ?></textarea>
+			</div>
+		</div>
+		<div class="form-group row">
+            <div class="col-md-4">
+				<label for="latitude" class="control-label">Latitude</label>
+				<input type="text" class="form-control" name="latitude" value="<?php echo isset($latitude) ? $latitude : '' ?>" required>
+			</div>
+            <div class="col-md-4">
+				<label for="longitude" class="control-label">Longitude</label>
+				<input type="text" class="form-control" value="<?php echo isset($longitude) ? $longitude : '' ?>" name="longitude" required>
+			</div>
+            <div class="col-md-4">
+				<label for="reservation" class="control-label">Reservation Fee</label>
+				<textarea type="text" class="form-control" name="reservation" required><?php echo isset($reservation) ? $reservation : '' ?></textarea>
 			</div>
 			<div class="col-md-4">
-				<label for="" class="control-label">Street</label>
-				<input type="text" class="form-control" name="street"  value="<?php echo isset($street) ? $street :'' ?>" required>
+				<label for="deposit" class="control-label">Advance Deposit</label>
+				<textarea type="text" class="form-control" name="deposit" required><?php echo isset($deposit) ? $deposit : '' ?></textarea>
 			</div>
-			<div class="col-md-4">
-				<label for="" class="control-label">Barangay</label>
-				<input type="text" class="form-control" name="barangay"  value="<?php echo isset($barangay) ? $barangay :'' ?>" required>
-			</div>
-			<div class="col-md-4">
-				<label for="" class="control-label">City</label>
-				<input type="text" class="form-control" name="city"  value="<?php echo isset($city) ? $city :'' ?>" required>
+		</div>
 			</div>
 		</div>
         <button class="btn btn-sm btn-outline-danger" name="edit_property" type="submit">Update</button>
@@ -170,7 +205,7 @@ include ("../session.php");
 		<div class="row form-group">
             <div class="col-md-4">
 			<?php 
-			$availableAmenities = array("aircon","cushion","drinking_water","refrigerator","electric fan","wifi");
+			$availableAmenities = array("aircon","cushion","drinking water","refrigerator","electric fan","wifi");
 			
 			foreach($availableAmenities as $roomAmenity) {
 				$is_available = in_array($roomAmenity, $roomAmenities_array);
@@ -187,7 +222,7 @@ include ("../session.php");
 
 
 <!-- View and Edit Images -->
-<div name="amenities_checkbox" class="container-fluid" id="property_images">
+<div name="property_images" class="container-fluid" id="property_images">
 <h2>Images</h2>
 		<div class="row form-group">
             <div class="col-md-4">
@@ -201,7 +236,7 @@ include ("../session.php");
 				<img src="../../resources/images/properties/<?= $img['image_path']?>" height="200" width="200" alt="property photo">
 				<input type="hidden" name="image_id" value="<?= $img['image_id']?>">
 				<input type="hidden" name="property_id" value="<?php echo isset($property_id) ? $property_id : '' ?>">
-				<input type="hidden" name="image_path" value="<?= $img['image_path']?>">
+				<input type="hidden" name="image_path" value="../../resources/images/properties/<?= $img['image_path']?>">
 				<input type="submit" name="delete_image" value="Delete">
 				
 				<?php }?>
@@ -214,10 +249,11 @@ include ("../session.php");
 		</div>
         <button class="btn btn-sm btn-outline-danger" name="add_image" id="add_image" type="submit">Upload Images</button>
 	</form>
+    <a class="btn btn-sm btn-outline-primary" type="button" href="view-gallery.php?property_id=<?php echo $property_id?>">View Gallery</a>
 </div>
 
 <!-- View and Edit Reviews -->
-<div name="amenities_checkbox" class="container-fluid" id="property_reviews">
+<div name="property_reviews" class="container-fluid" id="property_reviews">
 <h2>Reviews</h2>
 		<div class="row form-group">
             <div class="col-md-4">
@@ -238,10 +274,17 @@ include ("../session.php");
 			</div>
 		</div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="ph-address-selector.js"></script>
+<script src="geo.js"></script>
+<script src="room.js"></script>
+<script src="map.js"></script>
+<script src="rules.js"></script>
 </body>
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
 <!-- <script>
 $(document).ready(function() {

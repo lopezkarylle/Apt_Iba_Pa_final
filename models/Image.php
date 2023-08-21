@@ -18,14 +18,15 @@ class Image
 		$this->connection = $connection;
 	}
 
-    public function addImage($property_id, $targetFilePath, $status){
+    public function addImage($property_id, $targetFilePath, $title, $status){
         //$encrypted_password = sha1($password);
-        $sql = 'INSERT INTO apt_property_images SET property_id=:property_id, image_path=:image_path, status=:status';
+        $sql = 'INSERT INTO apt_property_images SET property_id=?, image_path=?, title=?, status=?';
 		$statement = $this->connection->prepare($sql);
 		return $statement->execute([
-            ':property_id' => $property_id,
-            ':image_path' => $targetFilePath,
-            ':status' => $status,
+            $property_id,
+            $targetFilePath,
+            $title,
+            $status,
         ]);
     }
 

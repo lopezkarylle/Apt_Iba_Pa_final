@@ -5,7 +5,7 @@ use Models\RoomAmenity;
 use Models\Image;
 use Models\Review;
 include "../../init.php";
-include ("../session.php");
+//include ("../session.php");
 
 try {
 	if (isset($_POST['edit_property'])) {
@@ -17,12 +17,20 @@ try {
                 $description = $_POST['description'];
                 $property_number = $_POST['property_number'];
                 $street = $_POST['street'];
-                $barangay = $_POST['barangay'];
-                $city = $_POST['city'];
+                $region = $_POST['region_text'];
+                $province = $_POST['province_text'];
+                $city = $_POST['city_text'];
+                $barangay = $_POST['barangay_text'];
+                $postal = $_POST['postal'];
+                $latitude = $_POST['latitude'];
+                $longitude = $_POST['longitude'];
+                $reservation = $_POST['reservation'];
+                $deposit = $_POST['deposit'];
+                $status = 1;
 
-                $property = new Property('','', '', '', '','','','','', '', '', '','','','');
+                $property = new Property('','','','', '', '', '','','','','', '', '', '','','','');
                 $property->setConnection($connection);
-                $property->updateProperty($property_id, $property_name, $owner_id, $total_rooms, $total_floors, $description, $property_number, $street, $barangay, $city);
+                $property->updateProperty($property_id, $property_name, $owner_id, $total_rooms, $total_floors, $description, $property_number, $street, $region, $province, $city, $barangay, $postal, $latitude, $longitude, $reservation, $deposit, $status);
                 
                 header("Location: view.php?property_id=" . $property_id  . "#property_information");
                 exit();

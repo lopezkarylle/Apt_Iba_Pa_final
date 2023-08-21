@@ -1,5 +1,6 @@
 <?php 
 use Models\Auth;
+use Models\User;
 
 include ("init.php");
 include ("session.php");
@@ -14,7 +15,7 @@ $error_message = $_GET['error'] ?? NULL;
 <head>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-<title>Apt Iba Pa</title>
+<title>Login | Apt Iba Pa</title>
 </head>
 
 <body>
@@ -100,7 +101,6 @@ try {
     if(isset($_POST['email'], $_POST['password'])){
     $email = $_POST['email'];
     $password = $_POST['password'];
-    //var_dump($email, $password);
     
     $user_auth = new Auth();
     $user_auth->setConnection($connection);
@@ -108,36 +108,40 @@ try {
     
     if($user_auth){
       $salt = $user_auth['salt'];
-
       $hashedPassword = $user_auth['password'];
       $checkPassword = hash('sha256', $password . $salt);
     
-      if ((hash_equals($hashedPassword, $checkPassword)) && $user_auth != NULL && $user_auth['user_type'] == 1) {
-          $_SESSION['user_id'] = $user_auth['user_id'];
-          $_SESSION['user_type'] = $user_auth['user_type'];
-          header('location:landlord/index.php');
-          exit();
-      } elseif ((hash_equals($hashedPassword, $checkPassword)) && $user_auth != NULL && $user_auth['user_type'] == 2) {
-        $_SESSION['user_id'] = $user_auth['user_id'];
-        $_SESSION['user_type'] = $user_auth['user_type'];
-        header('location:index.php');
-        exit();
-      } elseif ((hash_equals($hashedPassword, $checkPassword)) && $user_auth != NULL && $user_auth['user_type'] == 0) {
-        $_SESSION['user_id'] = $user_auth['user_id'];
-        $_SESSION['user_type'] = $user_auth['user_type'];
-        header('location:admin/index.php');
-        exit();
-      } else {
-              // echo '<script>alert("Wrong credentials!")</script>';
-              $error_message = "Invalid email or password.";
-              header('location:login.php?error=' . $error_message);
-          }
-    } else {
-     $error_message = "Invalid email or password.";
-     header('location:login.php?error=' . $error_message);
-  }
+        if ((hash_equals($hashedPassword, $checkPassword))) {
+            $user_id = $user_auth['user_id'];
+            $_SESSION['user_id'] = $user_id;
+            $user = new User('','','','','');
+            $user->setConnection($connection);
+            $user = $user->getById($user_id);    
+
+            if($user != NULL && $user['user_type'] == 1) {
+                $_SESSION['user_type'] = $user['user_type'];
+                header('location:landlord/index.php');
+                exit();
+            } elseif ($user != NULL && $user['user_type'] == 2) {
+              $_SESSION['user_type'] = $user['user_type'];
+              header('location:index.php');
+              exit();
+            } elseif ($user != NULL && $user['user_type'] == 0) {
+              $_SESSION['user_type'] = $user['user_type'];
+              header('location:admin/index.php');
+              exit();
+            } else {
+                $error_message = "Your account is not verified. Please contact the admin.";
+                header('location:login.php?error=' . $error_message);
+            }
+            
+        } else {
+        $error_message = "Invalid email or password.";
+        header('location:login.php?error=' . $error_message);
+        }
     
     }
+}
 }
 
 catch (Exception $e) {

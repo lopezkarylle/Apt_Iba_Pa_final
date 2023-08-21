@@ -1,6 +1,7 @@
 <?php 
 include ("init.php");
 use Models\Auth;
+use Models\User;
 session_start();
 
 $last_page = isset($_POST['last_page'])
@@ -21,31 +22,40 @@ $last_page = isset($_POST['last_page'])
 </head>
 
 <body>
+<div class="container-fluid">
+
+<div class="container">
+    <h3 style="font-weight: bold; text-align: center;">Create an account</h3><hr><br><br>
     <form id="registration-form" action="register.php" method="POST">
         <label for="first_name">First Name:</label>
-        <input type="text" id="first_name" name="first_name" required><br>
+        <input type="text" class="form-control" id="first_name" name="first_name" required><br>
         
         <label for="last_name">Last Name:</label>
-        <input type="text" id="last_name" name="last_name" required><br>
+        <input type="text" class="form-control" id="last_name" name="last_name" required><br>
 
         <label for="contact_number">Contact Number:</label>
-        <input type="text" id="contact_number" name="contact_number" required>
+        <input type="text" class="form-control" id="contact_number" name="contact_number" required>
         <span id="contact-error" style="color: red;"></span><br>
 
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><span id="email-exist" style="color: red;"></span><br>
+        <input type="email" class="form-control" id="email" name="email" required><span id="email-exist" style="color: red;"></span><br>
         <span id="email-error" style="color: red;"></span><br>
 
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br>
+        <input type="password" class="form-control" id="password" name="password" required><br>
         <span id="password-error" style="color: red;"></span><br>
 
         <label for="confpass">Confirm Password:</label>
-        <input type="password" id="confpass" name="confpass" required><br>
+        <input type="password" class="form-control" id="confpass" name="confpass" required><br>
         <span id="confpass-error" style="color: red;"></span><br>
         
-        <input type="submit" value="Add User" id="submit" disabled>
+        <input type="submit" class="btn btn-primary btn-block" value="Add User" id="submit" disabled>
+
+        <div class="form-group">
+            Already have an account? <a href="login.php">Login</a> 
+        </div>
     </form>
+</div>
     <script src="email-validation.js"></script>
 	<script src="contact-validate.js"></script>
     <script src="form-validate.js"></script>
@@ -55,24 +65,33 @@ $last_page = isset($_POST['last_page'])
 <?php
 try {
     if(isset($_POST['first_name'], $_POST['last_name'], $_POST['contact_number'], $_POST['email'], $_POST['password'])){
-        $first_name = $_POST['first_name'];
-        $last_name = $_POST['last_name'];
+        $first_name = ucfirst($_POST['first_name']);
+        $last_name = ucfirst($_POST['last_name']);
         $contact_number = $_POST['contact_number'];
         $email = $_POST['email'];
         $password = $_POST['password'];
         $salt = bin2hex(random_bytes(16));
         $hashedPassword = hash('sha256', $password . $salt);
 
-        $register_user = new Auth('','');
+        $register_user = new Auth();
         $register_user->setConnection($connection);
-        $register_user = $register_user->registerUser($first_name, $last_name, $contact_number, $email, $hashedPassword, $salt);
+        $register_user = $register_user->registerUser($email, $hashedPassword, $salt);
         
         $user_auth = $register_user['statement'] ?? null;
         $user_id = $register_user['lastInsertedId'] ?? null;
+
+        $register_info = new User('','','','','','');
+        $register_info->setConnection($connection);
+        $register_info->registerUserInfo($user_id, $first_name, $last_name, $contact_number);
+
         $_SESSION['user_id'] = $user_id;
 
+        // if($user_auth != NULL && $user_id != NULL){
+        //     header('location:' . $last_page);
+        //     exit();
+        // }
         if($user_auth != NULL && $user_id != NULL){
-            header('location:' . $last_page);
+            header('location:index.php');
             exit();
         }
         else {

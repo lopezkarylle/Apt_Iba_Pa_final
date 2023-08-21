@@ -39,11 +39,17 @@ include ("../session.php");
 					<div class="col-sm-6">
 						<h2><b>Properties</b></h2>
 					</div>
+                    <div class="col-sm-6">	
+                        <form method="POST" action="add.php">
+                            <button class="btn btn-success" style="margin-top:10px;">Add New Property</button>
+                        </form>				
+					</div>
 				</div>
 			</div>
 			<table class="table table-striped table-hover">
 				<thead>
 					<tr>
+                        <th scope="col">Property Type</th>
                         <th scope="col">Property Name</th>
                         <th scope="col">Landlord</th>
                         <th scope="col">Street Address</th>
@@ -54,12 +60,13 @@ include ("../session.php");
 				</thead>
 				<tbody>
 					<?php
-                    $property = new Property('','', '', '', '','','','','', '', '', '','','','','','','');
+                    $property = new Property();
                     $property->setConnection($connection);
                     $properties = $property->getProperties();
                     foreach($properties as $property){
                 ?>
             <tr>
+                <td><?php echo $property['property_type']?></td>
                 <td><?php echo $property['property_name']?></td>
                 <td><?php echo $property['first_name'] .' '.$property['last_name']?></td>
                 <td><?php echo $property['property_number'] .' '. $property['street']?></td>

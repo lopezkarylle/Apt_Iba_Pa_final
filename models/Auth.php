@@ -7,6 +7,7 @@ class Auth
     protected $email;
     protected $password;
     protected $salt;
+    protected $status;
 
     public function __construct(){
 
@@ -17,16 +18,13 @@ class Auth
 		$this->connection = $connection;
 	}
 
-    public function registerUser($first_name, $last_name, $contact_number, $email, $password, $salt){
+    public function registerUser($email, $hashedPassword, $salt){
         try {
-            $sql = "INSERT INTO apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=?, salt=?, user_type=2, status=1"; 
+            $sql = "INSERT INTO apt_users SET email=?, password=?, salt=?, status=1"; 
             $statement = $this->connection->prepare($sql);
             $success = $statement->execute([
-                $first_name, 
-                $last_name, 
-                $contact_number, 
                 $email, 
-                $password, 
+                $hashedPassword, 
                 $salt,
             ]);
     
@@ -45,12 +43,59 @@ class Auth
     }
 
     public function login($email){
-        $sql = 'SELECT * FROM apt_users WHERE email=? AND status=1';
-		$statement = $this->connection->prepare($sql);
-		$statement->execute([
-				$email
-		]);
-        $row = $statement->fetch();
-        return $row;
+        try{
+            $sql = 'SELECT * FROM apt_users WHERE email=? AND status=1';
+            $statement = $this->connection->prepare($sql);
+            $statement->execute([
+                    $email
+            ]);
+            $row = $statement->fetch();
+            return $row;
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+    }
+
+    public function getAccount($user_id){
+        try{
+            $sql = 'SELECT * FROM apt_users WHERE user_id=? AND status=1';
+            $statement = $this->connection->prepare($sql);
+            $statement->execute([
+                    $user_id
+            ]);
+            $row = $statement->fetch();
+            return $row;
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+    }
+
+    public function updateAccount($user_id, $email, $password, $salt){
+        try{
+            $sql = "UPDATE apt_users SET email=?, password=?, salt=? WHERE user_id=? AND status=1";
+            
+            $statement = $this->connection->prepare($sql);
+
+			$statement->execute([
+                $email,
+                $password,
+                $salt,
+                $user_id
+			]);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+    }
+
+    public function deleteAccount($user_id){
+		try {
+			$sql = 'UPDATE apt_users SET status=0 WHERE user_id=?';
+			$statement = $this->connection->prepare($sql);
+			$statement->execute([
+				$user_id
+			]);
+		} catch (Exception $e) {
+			error_log($e->getMessage());
+		}
     }
 }

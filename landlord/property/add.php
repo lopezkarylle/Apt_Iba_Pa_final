@@ -7,9 +7,9 @@ use Models\Room;
 use Models\RoomAmenity;
 use Models\Request;
 include "../../init.php";
-//include ("../../session.php");
+include ("../../session.php");
 
-$owner_id = 4; //change to session variable $_SESSION['user_id']
+$landlord_id = $_SESSION['user_id'];
 ?>
 
 <!DOCTYPE html>
@@ -37,10 +37,11 @@ $owner_id = 4; //change to session variable $_SESSION['user_id']
   </ul>
   <a href="../../logout.php">Logout</a>
 </nav>
+
 <div class="container-fluid">
 	<form action="add.php" method="POST" id="property-form">
-        <input type="hidden" name="owner_id" value="<?= $owner_id ?>">
 		<div class="row form-group">
+            <input type="hidden" name="landlord_id" value="<?php echo $landlord_id?>">
             <div class="col-md-4">
 				<label for="property_type" class="control-label">Property Type</label>
 				<select name="property_type" class="form-control form-control-md" id="property_type" required>
@@ -284,10 +285,10 @@ $owner_id = 4; //change to session variable $_SESSION['user_id']
 
 <?php 
 try {
-    if(isset($_POST['property_type'], $_POST['property_name'], $_POST['owner_id'], $_POST['total_rooms'],$_POST['total_floors'],$_POST['description'],$_POST['property_number'],$_POST['street'],$_POST['region_text'],$_POST['province_text'],$_POST['city_text'],$_POST['barangay_text'],$_POST['postal_code'],$_POST['latitude'],$_POST['longitude'],$_POST['reservation_fee'],$_POST['advance_deposit'])){
+    if(isset($_POST['property_type'], $_POST['property_name'], $_POST['landlord_id'], $_POST['total_rooms'],$_POST['total_floors'],$_POST['description'],$_POST['property_number'],$_POST['street'],$_POST['region_text'],$_POST['province_text'],$_POST['city_text'],$_POST['barangay_text'],$_POST['postal_code'],$_POST['latitude'],$_POST['longitude'],$_POST['reservation_fee'],$_POST['advance_deposit'])){
         $property_type = $_POST['property_type']; 
         $property_name = ucfirst($_POST['property_name']); 
-        $owner_id = $_POST['owner_id']; 
+        $landlord_id = $_POST['landlord_id']; 
         $total_rooms = $_POST['total_rooms'];
         $total_floors = $_POST['total_floors'];
         $description = $_POST['description'];
@@ -302,11 +303,11 @@ try {
         $longitude = $_POST['longitude'];
         $reservation_fee = $_POST['reservation_fee'];
         $advance_deposit = $_POST['advance_deposit'];
-        $status = 2;
+        $status = 1;
         $lowest_rate = 0;
         $rent = $_POST['monthly_rent'];
         foreach($rent as $rate){
-            if($rate>$lowest_rate){
+            if((intval($rate))>=(intval($lowest_rate))){
                 $lowest_rate = $rate;
             }
         }
@@ -314,54 +315,52 @@ try {
         
         $property = new Property();
         $property->setConnection($connection);
-        $property_id = $property->addProperty($property_type, $property_name, $owner_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$postal_code,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit,$status);
+        $property_id = $property->addProperty($property_type, $property_name, $landlord_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$postal_code,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit,$status);
 
-        // //add to application requests table but status=2=pending
-        // $request = new Request($owner_id, $property_id, 2);
-        // $request->setConnection($connection);
-        // $request->addRequest();
+        //add to property amenities table but status=2=pending
+        $amenities = $_POST['amenities'];
+        $amenities_csv = implode(",", $amenities);
+        $status = 2;
 
-        // //add to property amenities table but status=2=pending
-        // $amenities = $_POST['amenities'];
-        // $amenities_csv = implode(",", $amenities);
+        $property_amenities = new Amenity($property_id, $amenities_csv, $status);
+        $property_amenities->setConnection($connection);
+        $property_amenities->addAmenities();
 
-        // $property_amenities = new Amenity($property_id, $amenities_csv, 2);
-        // $property_amenities->setConnection($connection);
-        // $property_amenities->addAmenities();
+        //add to property rules table but status=2=pending
+        $status = 1;
+        $rules = new Rule($property_id, $_POST['short_term'], $_POST['min_weeks'], $_POST['mix_gender'], $_POST['curfew'], $_POST['from_curfew'], $_POST['to_curfew'], $_POST['cooking'], $_POST['pets'], $_POST['visitors'],$status);
+        $rules->setConnection($connection);
+        $rules->addRules();
 
-        // //add to property rules table but status=2=pending
-        // $rules = new Rule($property_id, $_POST['short_term'], $_POST['min_weeks'], $_POST['mix_gender'], $_POST['curfew'], $_POST['from_curfew'], $_POST['to_curfew'], $_POST['cooking'], $_POST['pets'], $_POST['visitors'],2);
-        // $rules->setConnection($connection);
-        // $rules->addRules();
+        //add to rooms table but status=2=pending
+        $beds = $_POST['total_beds']; 
+        $rent = $_POST['monthly_rent']; 
+        $type = $_POST['furnished_type']; 
+        $occupied_beds = 0;
 
-        // //add to rooms table but status=2=pending
-        // $beds = $_POST['total_beds']; 
-        // $rent = $_POST['monthly_rent']; 
-        // $type = $_POST['furnished_type']; 
-        // $occupied_beds = 0;
+        $selected_amenities = $_POST['selected_amenities'];
+        $amenities = json_decode($selected_amenities, true); 
 
-        // $selected_amenities = $_POST['selected_amenities'];
-        // $amenities = json_decode($selected_amenities, true); 
-
-        //     for ($x = 0; $x < (count($beds)); $x++) {
-        //         $total_beds = $beds[$x];
-        //         $monthly_rent = $rent[$x];
-        //         $furnished_type = $type[$x];
+            for ($x = 0; $x < (count($beds)); $x++) {
+                $total_beds = $beds[$x];
+                $monthly_rent = $rent[$x];
+                $furnished_type = $type[$x];
+                $status = 1;
                 
-        //         $room = new Room($property_id, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, 2);
-        //         $room->setConnection($connection);
-        //         $room_id = $room->addRoom();
+                $room = new Room($property_id, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, $status);
+                $room->setConnection($connection);
+                $room_id = $room->addRoom();
 
-        //         $room_amenities = $amenities[$x];
-        //         $room_amenities_csv = implode(",", $room_amenities);
+                $room_amenities = $amenities[$x];
+                $room_amenities_csv = implode(",", $room_amenities);
 
-        //         $room_amenities = new RoomAmenity($room_id, $room_amenities_csv, 2);
-        //         $room_amenities->setConnection($connection);
-        //         $room_amenities->addRoomAmenities();
-        //     }
+                $room_amenities = new RoomAmenity($room_id, $room_amenities_csv, $status);
+                $room_amenities->setConnection($connection);
+                $room_amenities->addRoomAmenities();
+            }
 
-        // echo "<script>window.location.href='index.php?success=1';</script>";
-        // exit();
+        echo "<script>window.location.href='index.php?success=1';</script>";
+        exit();
     } else {
         echo "<script>alert('Failed to add property. Please check your inputs.</script>";
     }

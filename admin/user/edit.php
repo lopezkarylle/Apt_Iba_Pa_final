@@ -1,29 +1,35 @@
 <?php 
-use Models\User;
 include "../../init.php";
 include ("../session.php");
- 
-    try {
-        if ((isset($_GET['user_id']))) {
-            $user_id = $_GET['user_id'];
+use Models\Auth;
+use Models\User;
+use Models\UserImage;
 
-            $landlord = new User('','','','','','','','');
-            $landlord->setConnection($connection);
-            $landlord->getById($user_id);
+try {
+    if ((isset($_GET['user_id']))) {
+        $user_id = $_GET['user_id'];
 
-            $user_id = $landlord->getId();
-            $first_name = $landlord->getFirstName();
-            $last_name = $landlord->getLastName();
-            $contact_number = $landlord->getContactNumber();
-            $email = $landlord->getEmail();
-            $password = $landlord->getPassword();
-            $salt = $landlord->getSalt();
-        }
+        $user = new User('','','','','');
+        $user->setConnection($connection);
+        $user = $user->getById($user_id);
+        
+        $user_id = $user['user_id'];
+        $first_name = $user['first_name'];
+        $last_name = $user['last_name'];
+        $contact_number = $user['contact_number'];
+
+        $email = $user['email'];
+        $password = $user['password'];
+        $salt = $user['salt'];
+
+        $user_image_name = $user['image_name'] ?? NULL;
+        $user_image_path = $user['image_path'] ?? NULL;
     }
-    catch (Exception $e) {
-        echo "<script>window.location.href='index.php?error='" . $e->getMessage() . ";</script>";
-            exit();
-    }  
+}
+catch (Exception $e) {
+    echo "<script>window.location.href='index.php?error='" . $e->getMessage() . ";</script>";
+        exit();
+}  
 ?>
 
 <!DOCTYPE html>
@@ -55,9 +61,16 @@ include ("../session.php");
 </nav>
 
 <div class="container-fluid">
-	<form action="edit.php" method="POST">
+	<form action="edit.php" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="user_id" value="<?php echo isset($user_id) ? $user_id : '' ?>">
 		<div class="row form-group">
+            <div class="col-md-4">
+                <?php if(isset($user_image_name)){?>
+                <input type="hidden" name="user_image_name" value="<?php echo $user_image_name ?>">
+                <img src="<?php echo $user_image_path . $user_image_name ?>" height="100" width="100">
+                <?php } ?>
+                <input type="file" id="image" name="image"/>
+            </div>
             <div class="col-md-4">
 				<label for="" class="control-label">First Name</label>
 				<input type="text" class="form-control" name="first_name"  value="<?php echo isset($first_name) ? $first_name :'' ?>" required>
@@ -102,33 +115,67 @@ include ("../session.php");
 
 <?php
 try {
-	if ((isset($_POST['update_user']))&& (isset($_POST['user_id']))) {
+	if ((isset($_POST['update_user'])) && (isset($_POST['user_id']))) {
         
-        $user_id = $_POST['user_id'];
-        //var_dump($user_id);
-        $update = new User('','','','','','','','');
-        $update->setConnection($connection);
-        $update->getById($user_id);
-    
-        $password = $update->getPassword();
-        $salt = $update->getSalt();
-
         $user_id = $_POST['user_id'];
         $first_name = $_POST['first_name'];
         $last_name = $_POST['last_name'];
         $contact_number = $_POST['contact_number'];
         $email = $_POST['email'];
         
+        $update = new User('','','','','');
+        $update->setConnection($connection);
+        $update->updateUser($user_id, $first_name, $last_name, $contact_number);
+        
+        $account = new Auth();
+        $account->setConnection($connection);
+        $account_details = $account->getAccount($user_id);
+
+        $password = $account_details['password'];
+        $salt = $account_details['salt'];
+
         if(isset($_POST['new_password']) && $_POST['new_password']!='')
         {
             $new_password = $_POST['new_password'];
+
             $salt = bin2hex(random_bytes(16));
-            $password = hash('sha256', $password . $salt);
-        }else{
-            $password = $password;
+            $password = hash('sha256', $new_password . $salt);
+        }
+
+        $account->updateAccount($user_id, $email, $password, $salt);
+
+        if(isset($_FILES['image'])){
+            $image_name = $_FILES['image']['name'];
+            $temp_name = $_FILES['image']['tmp_name'];
+            
+            $image = new UserImage();
+            $image->setConnection($connection);
+
+            if (!is_uploaded_file($temp_name)) {
+            echo 'The file was not uploaded correctly.';
+            exit;
+            }
+
+            $uploadDirectory = "../../resources/images/users/";
+            $targetFilePath = $uploadDirectory . basename($image_name);
+
+            // Check if the file name already exists
+            if (file_exists($targetFilePath)) {
+              // Generate a new file name
+              $image_name = uniqid() . '_' . $image_name;
+              $targetFilePath = $uploadDirectory . basename($image_name);
+            }
+
+            move_uploaded_file($temp_name, $targetFilePath);
+
+            if(!isset($_POST['user_image_name'])){
+                $image->addImage($user_id, $image_name, $uploadDirectory);
+            } else {
+                $image->updateImage($user_id, $image_name, $uploadDirectory);
+            }
+            
         }
         
-        $update->updateUser($user_id, $first_name, $last_name, $contact_number, $email, $password, $salt);
         echo "<script>window.location.href='edit.php?user_id=$user_id';</script>";
         exit();
 	}

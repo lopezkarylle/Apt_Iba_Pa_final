@@ -1,6 +1,6 @@
 <?php
-include "../../init.php";
-include ("../session.php");
+include "init.php";
+include ("session.php");
 use Models\Auth;
 // Simulate email checking
 // Replace this with your actual database query or validation logic

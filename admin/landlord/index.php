@@ -59,9 +59,10 @@ include ("../session.php");
 				</thead>
 				<tbody>
 					<?php
-                    $landlords = new User('','','','','','','','');
+                    $landlords = new User('','','','','');
                     $landlords->setConnection($connection);
                     $getLandlords = $landlords->getLandlords();
+                    
                     foreach($getLandlords as $landlords){
                 ?>
             <tr>
@@ -70,7 +71,7 @@ include ("../session.php");
                 <td><?php echo $landlords['contact_number']?></td>
 				<td><?php echo $landlords['email']?></td>
 				<td class="text-center">
-					<a class="btn btn-sm btn-outline-primary" type="button" href="edit.php?user_id=<?php echo $landlords['user_id']?>" >Edit</a>
+					<a class="btn btn-sm btn-outline-primary" type="button" href="edit.php?user_id=<?php echo $landlords['user_id']?>" >View</a>
 					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?user_id=<?php echo $landlords['user_id']?>">Delete</a>
 				</td>
             </tr>

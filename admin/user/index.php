@@ -59,9 +59,10 @@ include ("../session.php");
 				</thead>
 				<tbody>
 					<?php
-                    $users = new User('','','','','','','','');
+                    $users = new User('','','','','');
                     $users->setConnection($connection);
                     $getUsers = $users->getUsers();
+                    
                     foreach($getUsers as $user){
                 ?>
             <tr>
@@ -70,7 +71,7 @@ include ("../session.php");
                 <td><?php echo $user['contact_number']?></td>
 				<td><?php echo $user['email']?></td>
 				<td class="text-center">
-					<a class="btn btn-sm btn-outline-primary" type="button" href="edit.php?user_id=<?php echo $user['user_id']?>" >Edit</a>
+					<a class="btn btn-sm btn-outline-primary" type="button" href="edit.php?user_id=<?php echo $user['user_id']?>" >View</a>
 					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?user_id=<?php echo $user['user_id']?>">Delete</a>
 				</td>
             </tr>

@@ -119,8 +119,6 @@
     });
   
   hiddenInput.value = JSON.stringify(groupedArrays);
-
-    alert("Selected values: " + hiddenInput.value);
   });
 </script>
 </body>
