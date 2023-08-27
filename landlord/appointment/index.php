@@ -2,7 +2,7 @@
 use Models\Appointment;
 include "../../init.php";
 //include ("../../session.php");
-$user_id = 4; //change on session
+$user_id = 26; //change on session
 $checkDate = new Appointment('', '', '', '','');
 $checkDate->setConnection($connection);
 $checkDate = $checkDate->checkAppointments();
@@ -76,7 +76,7 @@ foreach($checkDate as $update){
                         <th scope="col">Property</th>
                         <th scope="col">Full Name</th>
 						<th scope="col">Contact Number</th>
-                        <th scope="col">Date of Vsit</th>
+                        <th scope="col">Date of Visit</th>
                         <th scope="col">Time of Visit</th>
 						<th scope="col">Action</th>
 					</tr>
@@ -86,6 +86,7 @@ foreach($checkDate as $update){
                     $appointment = new Appointment('', '', '', '','');
                     $appointment->setConnection($connection);
                     $retrieveAppointment = $appointment->getPropertyAppointments($user_id);
+                    
                     foreach($retrieveAppointment as $app){
                 ?>
             <tr>

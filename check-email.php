@@ -2,8 +2,7 @@
 include "init.php";
 include ("session.php");
 use Models\Auth;
-// Simulate email checking
-// Replace this with your actual database query or validation logic
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $requestData = json_decode(file_get_contents("php://input"), true);
     $email = $requestData["email"];

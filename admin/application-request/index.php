@@ -2,6 +2,8 @@
 
 include "../../init.php";
 use Models\User;
+use Models\Request;
+use Models\Property;
 
 ?>
 <!DOCTYPE html>
@@ -22,10 +24,11 @@ use Models\User;
 <ul class="nav nav-pills nav-justified">
   <li style="background-color: #FFF8DC"><a  href="../index.php">Dashboard</a></li>
   <li style="background-color: #FAF0E6"><a  href="../landlord/index.php">Manage Landlords</a></li>
-  <li class="active" style="background-color: #FFFAF0"><a  href="index.php">Manage Users</a></li>
+  <li style="background-color: #FFFAF0"><a  href="../user/index.php">Manage Users</a></li>
   <li style="background-color: #FFFACD"><a  href="../property/index.php">Manage Properties</a></li>
-  <li style="background-color: #FAFAF0"><a  href="../application-request/index.php">Application Requests</a></li>
+  <li class="active" style="background-color: #FAFAF0"><a  href="index.php">Application Requests</a></li>
 </ul>
+<a href="../../logout.php">Logout</a>
 </nav>
 
 
@@ -42,28 +45,35 @@ use Models\User;
 			<table class="table table-striped table-hover">
 				<thead>
 					<tr>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
+                        <th scope="col">Application Id</th>
+                        <th scope="col">Name of Applicant</th>
+                        <th scope="col">Property</th>
+                        <th scope="col">Type of Property</th>
                         <th scope="col">Contact Number</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Status</th>
 						<th scope="col">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php
-                    $classes = new User('', '', '', '', '','','',);
-                    $classes->setConnection($connection);
-                    $retrieveClasses = $classes->getUsers();
-                    foreach($retrieveClasses as $class){
+                    $requests = new Request();
+                    $requests->setConnection($connection);
+                    $requests = $requests->getAllRequests();
+                    foreach($requests as $request){
+                        $full_name = $request['first_name'] . ' ' . $request['last_name']
                 ?>
             <tr>
-                <td><?php echo $class['first_name']?></td>
-                <td><?php echo $class['last_name']?></td>
-                <td><?php echo $class['contact_number']?></td>
-				<td><?php echo $class['email']?></td>
+                <td><?php echo $request['application_id']?></td>
+                <td><?php echo $full_name?></td>
+                <td><?php echo $request['property_name']?></td>
+                <td><?php echo $request['property_type']?></td>
+                <td><?php echo $request['contact_number']?></td>
+                <td><?php echo $request['email']?></td>
+				<td><?php echo $request['status']?></td>
 				<td class="text-center">
-					<a class="btn btn-sm btn-outline-primary" type="button" href="view.php?user_id=<?php echo $class['user_id']?>" >Edit</a>
-					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?user_id=<?php echo $class['user_id']?>">Delete</a>
+					<a class="btn btn-sm btn-outline-primary" type="button" href="view.php?application_id=<?php echo $request['application_id']?>" >View</a>
+					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?application_id=<?php echo $request['application_id']?>">Delete</a>
 				</td>
             </tr>
             <?php } ?>

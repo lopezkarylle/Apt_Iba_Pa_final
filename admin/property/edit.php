@@ -9,6 +9,7 @@ include "../../init.php";
 
 try {
 	if (isset($_POST['edit_property'])) {
+                $property_type = $_POST['property_type'];
                 $property_id = $_POST['property_id'];
                 $property_name = $_POST['property_name'];
                 $owner_id = $_POST['owner_id'];
@@ -30,7 +31,7 @@ try {
 
                 $property = new Property('','','','', '', '', '','','','','', '', '', '','','','');
                 $property->setConnection($connection);
-                $property->updateProperty($property_id, $property_name, $owner_id, $total_rooms, $total_floors, $description, $property_number, $street, $region, $province, $city, $barangay, $postal, $latitude, $longitude, $reservation, $deposit, $status);
+                $property->updateProperty($property_type, $property_name, $landlord_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$postal_code,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit, $status);
                 
                 header("Location: view.php?property_id=" . $property_id  . "#property_information");
                 exit();

@@ -49,7 +49,7 @@ $last_page = isset($_POST['last_page'])
         <input type="password" class="form-control" id="confpass" name="confpass" required><br>
         <span id="confpass-error" style="color: red;"></span><br>
         
-        <input type="submit" class="btn btn-primary btn-block" value="Add User" id="submit" disabled>
+        <input type="submit" class="btn btn-primary btn-block" value="Register" id="submit" disabled>
 
         <div class="form-group">
             Already have an account? <a href="login.php">Login</a> 

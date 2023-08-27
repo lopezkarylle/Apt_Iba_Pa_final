@@ -7,9 +7,10 @@ use Models\Room;
 use Models\RoomAmenity;
 use Models\Request;
 use Models\User;
+use Models\Image;
 
 include "../../init.php";
-//include ("../../session.php");
+include ("../session.php");
 
 $landlords = new User('','','','','','');
 $landlords->setConnection($connection);
@@ -44,7 +45,7 @@ $landlords = $landlords->getLandlords();
 </nav>
 
 <div class="container-fluid">
-	<form action="add.php" method="POST" id="property-form">
+	<form action="add.php" method="POST" id="property-form" enctype="multipart/form-data">
 		<div class="row form-group">
             <div class="col-md-4">
 				<label for="landlord_id" class="control-label">Assign Landlord</label>
@@ -105,10 +106,6 @@ $landlords = $landlords->getLandlords();
 				<input type="number" min="0" class="form-control" id="total_floors" name="total_floors" required>
 			</div>
             <div class="col-md-4">
-				<label for="total_rooms" class="control-label">How many rooms in total?</label>
-				<input type="text" class="form-control" id="total_rooms" name="total_rooms" required>
-			</div>
-            <div class="col-md-4">
 				<label for="description" class="control-label">Describe your property.</label>
 				<textarea type="text" class="form-control" id="description" name="description" required></textarea>
 			</div>
@@ -129,8 +126,8 @@ $landlords = $landlords->getLandlords();
             <div id="room-container">
                 <input type="hidden" name="rooms[]" value="">
                 <div class="room-fields">
-                <label for="total_beds">Type of room</label>
-                <select name="total_beds[]" id="total_beds" required>
+                <label for="room_type">Type of room</label>
+                <select name="room_type[]" id="room_type" required>
                     <option value="" selected disabled>Select Room</option>
                     <option value="1">Room for one</option>
                     <option value="2">Room for two</option>
@@ -141,6 +138,9 @@ $landlords = $landlords->getLandlords();
                     <option value="7">Room for seven</option>
                     <option value="8">Room for eight</option>
                 </select>
+                <br>
+                <label for="total_rooms">Number of room/s</label>
+                <input type="text" id="total_rooms" name="total_rooms[]" required>
                 <br>
                 <label for="monthly_rent">Rate per person</label>
                 <input type="text" id="monthly_rent" name="monthly_rent[]" required>
@@ -155,7 +155,7 @@ $landlords = $landlords->getLandlords();
                 <br>
                 <label class="control-label">Amenities:</label>
                 <?php 
-                $roomAmenities = array("aircon","cushion","drinking water","refrigerator","electric fan","wifi");
+                $roomAmenities = array("aircon","cabinet", "cushion","drinking water", "electric fan", "refrigerator","tv","wifi");
                 foreach($roomAmenities as $amenity){?>
                 <input type="checkbox" id="room_amenities" name="room_amenities[][<?=$amenity?>]" value="<?=$amenity?>">
                 <label for="room_amenities"><?=$amenity?></label><br>
@@ -257,6 +257,13 @@ $landlords = $landlords->getLandlords();
 			</div>
 		</div>
         <div class="form-group row">
+            <label for="images" class="control-label">Upload at least 5 images</label>
+            <input type="file" class="form-control" name="images[]" id="image" multiple><br>
+            <button class="btn btn-sm btn-outline-primary" id="add_titles" type="button">Add Image Titles</button>
+            <div id="image_titles_container"></div>
+            <div id="image_previews_container"></div>
+        </div>
+        <div class="form-group row">
                 <div class="col-md-4">
                         <label for="" class="control-label">Locate your property</label>
                         <!-- <div id='map' style='width: 400px; height: 300px;'></div> -->
@@ -267,6 +274,37 @@ $landlords = $landlords->getLandlords();
         <button class="btn btn-sm btn-outline-danger" id="submit-button" type="submit">Add</button>
 	</form>
 </div>
+<!-- <script src="form-validate.js"></script> -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const addTitlesButton = document.getElementById("add_titles");
+        const imageTitlesContainer = document.getElementById("image_titles_container");
+        const imagePreviewsContainer = document.getElementById("image_previews_container");
+
+        addTitlesButton.addEventListener("click", function() {
+            const selectedImages = document.getElementById("image").files;
+            imageTitlesContainer.innerHTML = ""; // Clear previous titles
+            imagePreviewsContainer.innerHTML = ""; // Clear previous image previews
+
+            for (let i = 0; i < selectedImages.length; i++) {
+                const input = document.createElement("input");
+                input.type = "text";
+                input.name = "image_title[]";
+                input.placeholder = "Insert caption for image " + (i + 1);
+                input.className = "form-control mb-2"; // Add some margin between inputs
+                imageTitlesContainer.appendChild(input);
+
+                // Create an image preview
+                const imagePreview = document.createElement("img");
+                imagePreview.src = URL.createObjectURL(selectedImages[i]);
+                imagePreview.className = "img-thumbnail";
+                imagePreview.height = "50";
+                imagePreview.width = "50";
+                imagePreviewsContainer.appendChild(imagePreview);
+            }
+        });
+    });
+</script>
 <!-- <script src="form-validate.js"></script> -->
 <script src="ph-address-selector.js"></script>
 <script src="geo.js"></script>
@@ -298,11 +336,10 @@ $landlords = $landlords->getLandlords();
 
 <?php 
 try {
-    if(isset($_POST['property_type'], $_POST['property_name'], $_POST['landlord_id'], $_POST['total_rooms'],$_POST['total_floors'],$_POST['description'],$_POST['property_number'],$_POST['street'],$_POST['region_text'],$_POST['province_text'],$_POST['city_text'],$_POST['barangay_text'],$_POST['postal_code'],$_POST['latitude'],$_POST['longitude'],$_POST['reservation_fee'],$_POST['advance_deposit'])){
+    if(isset($_POST['property_type'], $_POST['property_name'], $_POST['landlord_id'],$_POST['total_floors'],$_POST['description'],$_POST['property_number'],$_POST['street'],$_POST['region_text'],$_POST['province_text'],$_POST['city_text'],$_POST['barangay_text'],$_POST['postal_code'],$_POST['latitude'],$_POST['longitude'],$_POST['reservation_fee'],$_POST['advance_deposit'])){
         $property_type = $_POST['property_type']; 
         $property_name = ucfirst($_POST['property_name']); 
         $landlord_id = $_POST['landlord_id']; 
-        $total_rooms = $_POST['total_rooms'];
         $total_floors = $_POST['total_floors'];
         $description = $_POST['description'];
         $property_number = $_POST['property_number'];
@@ -324,29 +361,31 @@ try {
                 $lowest_rate = $rate;
             }
         }
+        $room_count = $_POST['total_rooms'];
+        $total_rooms = array_sum($room_count);
         //add to properties table but status=2=pending
         
         $property = new Property();
         $property->setConnection($connection);
-        $property_id = $property->addProperty($property_type, $property_name, $landlord_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$postal_code,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit, $status);
+        $property_id = $property->addProperty($property_type, $property_name, $landlord_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$postal_code,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit,$status);
 
         //add to property amenities table but status=2=pending
         $amenities = $_POST['amenities'];
         $amenities_csv = implode(",", $amenities);
-        $status = 1;
 
         $property_amenities = new Amenity($property_id, $amenities_csv, $status);
         $property_amenities->setConnection($connection);
         $property_amenities->addAmenities();
 
         //add to property rules table but status=2=pending
-        $status = 1;
         $rules = new Rule($property_id, $_POST['short_term'], $_POST['min_weeks'], $_POST['mix_gender'], $_POST['curfew'], $_POST['from_curfew'], $_POST['to_curfew'], $_POST['cooking'], $_POST['pets'], $_POST['visitors'],$status);
         $rules->setConnection($connection);
         $rules->addRules();
 
         //add to rooms table but status=2=pending
-        $beds = $_POST['total_beds']; 
+        $room_type = $_POST['room_type']; 
+        $total_rooms = $_POST['total_rooms']; 
+        //$beds = $_POST['total_beds']; 
         $rent = $_POST['monthly_rent']; 
         $type = $_POST['furnished_type']; 
         $occupied_beds = 0;
@@ -354,23 +393,52 @@ try {
         $selected_amenities = $_POST['selected_amenities'];
         $amenities = json_decode($selected_amenities, true); 
 
-            for ($x = 0; $x < (count($beds)); $x++) {
-                $total_beds = $beds[$x];
-                $monthly_rent = $rent[$x];
+            for ($x = 0; $x < (count($room_type)); $x++) {
+                $bed_count = $room_type[$x];
+                $room_total = $total_rooms[$x];
+                $total_beds = intval($bed_count) * intval($room_total);
                 $furnished_type = $type[$x];
-                $status = 1;
+                $monthly_rent = $rent[$x];
+    
                 
-                $room = new Room($property_id, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, $status);
+                $room = new Room();
                 $room->setConnection($connection);
-                $room_id = $room->addRoom();
+                $room_id = $room->addRoom($property_id, $bed_count, $room_total, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, $status);
 
                 $room_amenities = $amenities[$x];
                 $room_amenities_csv = implode(",", $room_amenities);
-
+                
                 $room_amenities = new RoomAmenity($room_id, $room_amenities_csv, $status);
                 $room_amenities->setConnection($connection);
                 $room_amenities->addRoomAmenities();
             }
+
+            $imageData = $_FILES["images"] ?? NULL;
+
+    // Loop through the uploaded images
+        if(isset($imageData)){
+            for ($i = 0; $i < count($imageData['name']); $i++) {
+                // Get the image properties
+                $imageName = $imageData['name'][$i];
+                $imageTmpName = $imageData['tmp_name'][$i];
+                $title = $_POST['image_title'][$i];
+            
+                // Move the uploaded image to a directory on the server
+                $uploadDirectory = "../../resources/images/properties/";
+                $targetFilePath = $uploadDirectory . basename($imageName);
+                move_uploaded_file($imageTmpName, $targetFilePath);
+            
+                $images = new Image();
+                $images->setConnection($connection);
+                $insert = $images->addImage($property_id, $imageName, $title, $status);
+                //var_dump($insert);
+                if($insert){ 
+                    $statusMsg = "Images are uploaded successfully."; 
+                }else{ 
+                    $statusMsg = "Sorry, there was an error uploading your file."; 
+                } 
+            }
+        }
 
         echo "<script>window.location.href='index.php?success=1';</script>";
         exit();

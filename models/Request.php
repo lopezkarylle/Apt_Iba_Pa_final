@@ -14,24 +14,12 @@ class Request
     // Database Connection Object
 	protected $connection;
 
-	public function __construct($user_id,$property_id,$status)
+	public function __construct()
 	{
-		$this->user_id = $user_id;
-		$this->$property_id = $property_id;
-		$this->status = $status;
 	}
 
     public function getId() {
         return $this->application_id;
-    }
-	public function getUserId() {
-        return $this->user_id;
-    }
-	public function getPropertyId() {
-        return $this->$property_id;
-    }
-    public function getStatus() {
-        return $this->status;
     }
 
 	public function setConnection($connection)
@@ -39,16 +27,34 @@ class Request
 		$this->connection = $connection;
 	}
 
-	// public function getAmenities($property_id){
-	// 	try {
-	// 		$sql = "SELECT amenity_name FROM apt_property_amenities WHERE property_id=$property_id";
-	// 		$data = $this->connection->query($sql)->fetch();
-	// 		return $data;
+	public function getAllRequests(){
+		try {
+			$sql = "SELECT apt_application_requests.*, apt_user_information.first_name, apt_user_information.last_name, apt_user_information.contact_number, apt_properties.property_type, apt_properties.property_name, apt_users.email FROM apt_application_requests JOIN apt_user_information ON apt_application_requests.user_id=apt_user_information.user_id JOIN apt_users ON apt_users.user_id=apt_application_requests.user_id JOIN apt_properties ON apt_properties.property_id=apt_application_requests.property_id";
+			$data = $this->connection->query($sql)->fetchAll();
+			return $data;
 
-	// 	} catch (Exception $e) {
-	// 		error_log($e->getMessage());
-	// 	}
-	// }
+		} catch (Exception $e) {
+			error_log($e->getMessage());
+		}
+	}
+
+    	public function getRequest($application_id){
+		try {
+			$sql = "SELECT * FROM apt_application_requests 
+            JOIN apt_user_information ON apt_application_requests.user_id=apt_user_information.user_id 
+            JOIN apt_users ON apt_users.user_id=apt_application_requests.user_id 
+            JOIN apt_properties ON apt_properties.property_id=apt_application_requests.property_id 
+            JOIN apt_property_details ON apt_property_details.property_id=apt_application_requests.property_id 
+            JOIN apt_property_locations ON apt_property_locations.property_id=apt_application_requests.property_id 
+            JOIN apt_property_amenities ON apt_property_amenities.property_id=apt_application_requests.property_id 
+            JOIN apt_property_rules ON apt_property_rules.property_id=apt_application_requests.property_id WHERE application_id=$application_id";
+			$data = $this->connection->query($sql)->fetchAll();
+			return $data;
+
+		} catch (Exception $e) {
+			error_log($e->getMessage());
+		}
+	}
 
 	// public function updateAmenities($property_id, $amenities_csv){
 	// 	try {
@@ -63,15 +69,15 @@ class Request
 	// 	}
     // }
 
-	public function addRequest(){
+	public function addRequest($user_id, $property_id, $status){
         try {
             //status 1=active, 2=pending, 0=inactive
 			$sql = "INSERT INTO apt_application_requests SET user_id=?, property_id=?, status=?"; 
 			$statement = $this->connection->prepare($sql);
 			return $statement->execute([
-				$this->getUserId(),
-				$this->getPropertyId(),
-                $this->getStatus()
+				$user_id, 
+                $property_id, 
+                $status
 			]);
 		} catch (Exception $e) {
 			error_log($e->getMessage());

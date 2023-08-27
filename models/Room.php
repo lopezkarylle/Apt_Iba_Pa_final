@@ -8,6 +8,8 @@ class Room
 {
     protected $room_id;
 	protected $property_id;
+    protected $room_type;
+    protected $total_rooms;
 	protected $total_beds;
 	protected $occupied_beds;
     protected $furnished_type;
@@ -17,14 +19,9 @@ class Room
     // Database Connection Object
 	protected $connection;
 
-	public function __construct($property_id, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, $status)
+	public function __construct()
 	{
-        $this->property_id = $property_id;
-        $this->total_beds = $total_beds;
-        $this->occupied_beds = $occupied_beds;
-        $this->furnished_type = $furnished_type;
-        $this->monthly_rent = $monthly_rent;
-        $this->status = $status;
+
 	}
 
     public function getId() {
@@ -97,18 +94,20 @@ class Room
 		}
     }
 
-    public function addRoom(){
+    public function addRoom($property_id, $room_type, $total_rooms, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, $status){
         try {
 			//$encrypted_password = sha1($this->getPassword());
-			$sql = "INSERT INTO apt_rooms SET property_id=?, total_beds=?, occupied_beds=?, furnished_type=?, monthly_rent=?, status=?"; 
+			$sql = "INSERT INTO apt_rooms SET property_id=?, room_type=?, total_rooms=?, total_beds=?, occupied_beds=?, furnished_type=?, monthly_rent=?, status=?"; 
 			$statement = $this->connection->prepare($sql);
 			$statement->execute([
-				$this->getPropertyId(),
-				$this->getTotalBeds(),
-				$this->getOccupiedBeds(),
-				$this->getFurnishedType(),
-				$this->getMonthlyRent(),
-				$this->getStatus(),
+				$property_id, 
+                $room_type, 
+                $total_rooms, 
+                $total_beds, 
+                $occupied_beds, 
+                $furnished_type, 
+                $monthly_rent, 
+                $status,
 			]);
 			$lastInsertedId = $this->connection->lastInsertId();
             return $lastInsertedId;
@@ -118,35 +117,35 @@ class Room
 		}
     }
 
-    public function updateLandlord($first_name, $last_name, $contact_number, $email, $password){
-		try {
-            $sql = "UPDATE apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=? WHERE user_id=? AND user_type=1 AND status=1";
+    // public function updateLandlord($first_name, $last_name, $contact_number, $email, $password){
+	// 	try {
+    //         $sql = "UPDATE apt_users SET first_name=?, last_name=?, contact_number=?, email=?, password=? WHERE user_id=? AND user_type=1 AND status=1";
             
-            $statement = $this->connection->prepare($sql);
+    //         $statement = $this->connection->prepare($sql);
 
-			$statement->execute([
-				$first_name,
-				$last_name,
-				$contact_number,
-                $email,
-                $password,
-                $this->getId()
-			]);
+	// 		$statement->execute([
+	// 			$first_name,
+	// 			$last_name,
+	// 			$contact_number,
+    //             $email,
+    //             $password,
+    //             $this->getId()
+	// 		]);
 
-		} catch (Exception $e) {
-			error_log($e->getMessage());
-		}
-    }
+	// 	} catch (Exception $e) {
+	// 		error_log($e->getMessage());
+	// 	}
+    // }
 
-    public function deleteLandlord(){
-		try {
-			$sql = 'UPDATE apt_users SET status=2 WHERE user_id=? AND user_type=1';
-			$statement = $this->connection->prepare($sql);
-			$statement->execute([
-				$this->getId()
-			]);
-		} catch (Exception $e) {
-			error_log($e->getMessage());
-		}
-    }
+    // public function deleteLandlord(){
+	// 	try {
+	// 		$sql = 'UPDATE apt_users SET status=2 WHERE user_id=? AND user_type=1';
+	// 		$statement = $this->connection->prepare($sql);
+	// 		$statement->execute([
+	// 			$this->getId()
+	// 		]);
+	// 	} catch (Exception $e) {
+	// 		error_log($e->getMessage());
+	// 	}
+    // }
 }

@@ -29,6 +29,8 @@ $property_id = $_GET['property_id'];
 				<form action="upload.php" method="POST" enctype="multipart/form-data">
 				<input type="hidden" name="property_id" value="<?php echo isset($property_id) ? $property_id : '' ?>">
 				<input type="file" class="form-control" name="images[]" multiple><br>
+                <input type="text" class="form-control" name="image_title" id="image_title" placeholder="Insert caption for image">
+                <br>
 			</div>
 		</div>
         <button class="btn btn-sm btn-outline-danger" name="add_image" id="add_image" type="submit">Upload Images</button>

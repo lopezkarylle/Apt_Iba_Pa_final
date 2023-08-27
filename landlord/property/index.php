@@ -1,12 +1,17 @@
 <?php
 use Models\Property;
 include ("../../init.php");
+include ("session.php");
 
-$property = new Property('','','', '', '', '','','','','', '', '', '','','','','','');
+$landlord_id = $_SESSION['user_id'];
+
+$property = new Property();
 $property->setConnection($connection);
-$properties = $property->getProperties();
+$properties = $property->getProperty($landlord_id); //change to property per landlord
 
-
+if (isset($_SESSION['property_id'])) {
+unset($_SESSION['property_id']);
+}
 ?>
 
 <!DOCTYPE html>

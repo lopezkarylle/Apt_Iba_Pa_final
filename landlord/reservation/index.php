@@ -1,8 +1,7 @@
 <?php
 use Models\Reservation;
 include "../../init.php";
-//include ("../../session.php");
-$user_id = 4;
+include ("session.php");
 
 $reservation = new Reservation('', '', '', '','');
 $reservation->setConnection($connection);

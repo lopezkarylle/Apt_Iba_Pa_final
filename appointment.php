@@ -5,9 +5,9 @@
 use Models\Schedule;
 use Models\Appointment;
 
-include ("../init.php");
+include ("init.php");
 
-$property_id = 1;
+$property_id = 22;
 $user_id = 5; //change with session
 $disabled_dates = [];
 $date_time = new Schedule('','','');
