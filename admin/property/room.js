@@ -63,5 +63,5 @@
   
   hiddenInput.value = JSON.stringify(groupedArrays);
 
-    alert("Selected values: " + hiddenInput.value);
+    alert("Successfully Added Property");
   });

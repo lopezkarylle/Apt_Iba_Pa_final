@@ -41,6 +41,17 @@ class Image
 		}
     }
 
+    public function getDisplayImage($property_id){
+        try {
+			$sql = "SELECT * FROM apt_property_images WHERE property_id=$property_id AND status=1";
+			$data = $this->connection->query($sql)->fetch();
+			return $data;
+
+		} catch (Exception $e) {
+			error_log($e->getMessage());
+		}
+    }
+
     public function deleteImage($image_id, $property_id){
         try {
 			$sql = 'UPDATE apt_property_images SET status=2 WHERE image_id=:image_id AND property_id=:property_id';

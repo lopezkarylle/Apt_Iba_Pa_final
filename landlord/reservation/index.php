@@ -1,11 +1,14 @@
 <?php
 use Models\Reservation;
 include "../../init.php";
-include ("session.php");
+include ("../session.php");
+
+$user_id = $_SESSION['user_id'];
 
 $reservation = new Reservation('', '', '', '','');
 $reservation->setConnection($connection);
 $reservationList = $reservation->getPendingReservations($user_id);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -76,7 +79,7 @@ $reservationList = $reservation->getPendingReservations($user_id);
 					//var_dump($reservationList);
                     foreach($reservationList as $list){
 						$reservation_id = $list['reservation_id'];
-						$room = $list['total_beds'];
+						$room = $list['room_type'];
 							if($room===1){
 								$room_type = "Single Room";
 							} elseif($room===2) {
@@ -121,7 +124,7 @@ $reservationList = $reservation->getPendingReservations($user_id);
 				<td><?php echo $list['email']?></td>
                 <td><?php echo $list['contact_number']?></td>
 				<td><?php echo $payment_status?></td>
-				<td><?php echo $get_status . $status?></td>
+				<td><?php echo $get_status?></td>
 				<td list="text-center">
 					<button type="submit" name="confirm_reservation" id="confirm_single" onclick="return confirmSingle(<?= $reservation_id ?>)">Confirm</button>
 					<button type="submit" name="decline_reservation" id="decline_single" onclick="return declineSingle(<?= $reservation_id ?>)">Decline</button>

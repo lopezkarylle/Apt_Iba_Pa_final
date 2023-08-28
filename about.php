@@ -13,26 +13,19 @@ $user_id = $_SESSION['user_id'] ?? NULL;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About Us</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
-      crossorigin="anonymous"
-    />
-    <script
-    src="https://kit.fontawesome.com/868f1fea46.js"
-    crossorigin="anonymous"
-  ></script>
+    <title>Apt Iba Pa | About Us</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"/>
+    <script src="https://kit.fontawesome.com/868f1fea46.js" crossorigin="anonymous"></script>
     <link href="css/aboutUs.css" rel="stylesheet" />
     <link href="css/all.css" rel="stylesheet" />
   </head>
+
   <body>
     <!-- Navbar -->
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="index.php">
           <img src="images/logo.png" alt="Bootstrap" width="120" height="50" />
         </a>
         <button
@@ -49,13 +42,13 @@ $user_id = $_SESSION['user_id'] ?? NULL;
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+              <a class="nav-link" aria-current="page" href="index.php">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="accommodations.php">Accommodations</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="about.php">About Us</a>
+              <a class="nav-link active" href="about.php">About Us</a>
             </li>
           </ul>
           <form class="d-flex signOutbtn" role="search">

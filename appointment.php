@@ -6,9 +6,10 @@ use Models\Schedule;
 use Models\Appointment;
 
 include ("init.php");
+include ("session.php");
 
-$property_id = 22;
-$user_id = 5; //change with session
+$property_id = $_POST['property_id'];
+$user_id = $_SESSION['user_id']; //change with session
 $disabled_dates = [];
 $date_time = new Schedule('','','');
 $date_time->setConnection($connection);

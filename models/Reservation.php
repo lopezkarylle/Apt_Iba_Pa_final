@@ -53,7 +53,11 @@ class Reservation
 
     public function getPendingReservations($user_id){
 		try {
-            $sql = "SELECT apt_reservations.reservation_id, apt_reservations.user_id, apt_reservations.property_id, apt_reservations.room_id, apt_reservations.payment_status, apt_reservations.status, apt_users.first_name, apt_users.last_name, apt_users.contact_number, apt_users.email, apt_properties.property_name, apt_rooms.total_beds FROM apt_reservations INNER JOIN apt_users ON apt_reservations.user_id=apt_users.user_id INNER JOIN apt_properties ON apt_reservations.property_id=apt_properties.property_id LEFT JOIN apt_rooms ON apt_reservations.room_id=apt_rooms.room_id WHERE apt_properties.owner_id=$user_id AND apt_reservations.status=2;";
+            $sql = "SELECT apt_reservations.*, apt_user_information.first_name, apt_user_information.last_name, apt_user_information.contact_number, apt_users.email, apt_properties.property_name, apt_rooms.room_type FROM apt_reservations 
+            INNER JOIN apt_users ON apt_reservations.user_id=apt_users.user_id 
+            INNER JOIN apt_user_information ON apt_reservations.user_id=apt_user_information.user_id 
+            INNER JOIN apt_properties ON apt_reservations.property_id=apt_properties.property_id 
+            LEFT JOIN apt_rooms ON apt_reservations.room_id=apt_rooms.room_id WHERE apt_properties.landlord_id=$user_id AND apt_reservations.status=2;";
             $data = $this->connection->query($sql)->fetchAll();
             return $data;
         } catch (Exception $e) {

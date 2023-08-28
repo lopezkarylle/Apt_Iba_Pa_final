@@ -76,6 +76,25 @@ class Property
         }
 	}
 
+    // public function searchProperties($query){
+	// 	try {
+    //         //status 1=active, 2=pending, 0=inactive
+    //         $sql = "SELECT * FROM apt_properties 
+    //         LEFT JOIN apt_property_details ON apt_properties.property_id=apt_property_details.property_id 
+    //         LEFT JOIN apt_property_locations ON apt_properties.property_id=apt_property_locations.property_id   
+    //         WHERE apt_properties.status=1 AND (apt_properties.property_type LIKE '%$query%' 
+    //         OR apt_properties.property_name LIKE '%$query%' 
+    //         OR apt_property_locations.barangay LIKE '%$query%' 
+    //         OR apt_property_locations.city LIKE '%$query%' 
+    //         OR apt_property_locations.province LIKE '%$query%' 
+    //         OR apt_property_locations.region LIKE '%$query%')";
+    //         $data = $this->connection->query($sql)->fetchAll();
+    //         return $data;
+    //     } catch (Exception $e) {
+    //         error_log($e->getMessage());
+    //     }
+	// }
+
     public function getProperty($landlord_id){
 		try {
             //status 1=active, 2=pending, 0=inactive

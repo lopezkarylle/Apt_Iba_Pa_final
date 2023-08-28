@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const propertyNumberInput = document.getElementById("property_number");
     const streetInput = document.getElementById("street");
     const descriptionInput = document.getElementById("description");
-    const totalBedsSelect = document.getElementById("total_beds");
+    const totalBedsSelect = document.getElementById("room_type");
     const furnishedTypeSelect = document.getElementById("furnished_type");
     const minWeeksSelect = document.getElementById("min_weeks");
     const fromCurfewSelect = document.getElementById("from_curfew");

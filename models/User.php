@@ -16,39 +16,14 @@ class User
     // Database Connection Object
 	protected $connection;
 
-	public function __construct($first_name, $last_name, $contact_number,$user_type, $status=1)
+	public function __construct()
 	{
-        $this->first_name = $first_name;
-        $this->last_name = $last_name;
-        $this->contact_number = $contact_number;
-        $this->user_type = $user_type;
-        $this->status = $status;
+    
 	}
 
     public function getId() {
         return $this->user_id;
     }
-
-    public function getFirstName() {
-        return $this->first_name;
-    }
-
-    public function getLastName() {
-        return $this->last_name;
-    }
-    
-    public function getContactNumber() {
-        return $this->contact_number;
-    }
-
-    public function getUserType() {
-        return $this->user_type;
-    }
-
-	public function getStatus(){
-		return $this->status;
-	}
-
 
 	public function setConnection($connection)
 	{
