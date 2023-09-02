@@ -56,18 +56,61 @@ class Request
 		}
 	}
 
-	// public function updateAmenities($property_id, $amenities_csv){
-	// 	try {
-	// 		$sql = 'UPDATE apt_property_amenities SET amenity_name=? WHERE property_id=? AND status=1';
-	// 		$statement = $this->connection->prepare($sql);
-	// 		$statement->execute([
-	// 			$amenities_csv,
-	// 			$property_id,
-	// 		]);
-	// 	} catch (Exception $e) {
-	// 		error_log($e->getMessage());
-	// 	}
-    // }
+	public function editRequest($application_id, $property_id, $status){
+		try {
+			$sql1 = 'UPDATE apt_application_requests SET status=? WHERE application_id=?';
+			$statement1 = $this->connection->prepare($sql1);
+			$statement1->execute([
+				$status,
+				$application_id,
+			]);
+
+            $sql = 'UPDATE apt_properties SET status=? WHERE property_id=?';
+			$statement2 = $this->connection->prepare($sql);
+			$statement2->execute([
+				$status,
+				$property_id,
+			]);
+
+            $sql = 'UPDATE apt_property_details SET status=? WHERE property_id=?';
+			$statement3 = $this->connection->prepare($sql);
+			$statement3->execute([
+				$status,
+				$property_id,
+			]);
+
+            $sql = 'UPDATE apt_property_images SET status=? WHERE property_id=?';
+			$statement4 = $this->connection->prepare($sql);
+			$statement4->execute([
+				$status,
+				$property_id,
+			]);
+
+            $sql = 'UPDATE apt_locations SET status=? WHERE property_id=?';
+			$statement5 = $this->connection->prepare($sql);
+			$statement5->execute([
+				$status,
+				$property_id,
+			]);
+
+            $sql = 'UPDATE apt_property_rules SET status=? WHERE property_id=?';
+			$statement6 = $this->connection->prepare($sql);
+			$statement6->execute([
+				$status,
+				$property_id,
+			]);
+
+            $sql = 'UPDATE apt_rooms SET status=? WHERE property_id=?';
+			$statement7 = $this->connection->prepare($sql);
+			$statement7->execute([
+				$status,
+				$property_id,
+			]);
+
+		} catch (Exception $e) {
+			error_log($e->getMessage());
+		}
+    }
 
 	public function addRequest($user_id, $property_id, $status){
         try {

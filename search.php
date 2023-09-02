@@ -62,6 +62,7 @@ if (isset($_POST['submit_filter'])) {
         $property_name = $property['property_name'];
         $barangay = $property['barangay'];
         $lowest_rate = $property['lowest_rate'];
+        $property_type = $property['property_type'];
 
         $property_id = $property['property_id'];
         $images = new Image();
@@ -72,14 +73,62 @@ if (isset($_POST['submit_filter'])) {
             $image = $images['image_path'];
         }
     ?>
+            
             <form action="view.php" method="POST">
-            <input type="hidden" value="<?=$property_id?>" name="property_id">
-            <h3><?= $property_name?></h3>
-            <h4>Barangay <?= $barangay ?></h4>
-            <img src='resources/images/properties/<?= $image ?>' height='100' width='100'></img>
-            <h4>Rate starts at ₱<?= $lowest_rate ?></h4>
-            <button type="submit" name="view_property">View Property</button>
-            </form>
+<input type="hidden" value="<?=$property_id?>" name="property_id">
+
+<div class="box-container">
+            <div class="row gx-5 mb-3">
+              <div class="col-md-6">
+                <div class="box">
+                    <div class="row">
+                        <div class="col-10">
+                            <h3 class="name"><?= $property_name?></h3>
+                            <div class="row">
+                                <div class="h4 mt-3 col-sm-8">
+                                    <div>
+                                    <i class="fas fa-map-marker-alt"></i> <?= $barangay?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                            <div class="col-2 ps-4 justify-content-end">
+                              <Button onclick="Toggle1()" id="btnBm" class="btn btnBookmark"><i class="fa-solid fa-bookmark fa-3x"></i></Button>
+                            </div>
+
+                    </div>
+
+                  <div class="thumb">
+                    <p class="total-images">
+                      <i class="far fa-image"></i><span>4</span>
+                    </p>
+                    <p class="type"><span><?= $property_type?></span></p>
+
+                    <img src="images/house-img-2.webp" alt="" />
+                  </div>
+                  <div class="row">
+                    
+                    <div class="col-sm-6 rentName">
+                      Rent starts at
+                      <div class="price">&#8369;<?= $lowest_rate?></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="btnRating"><i class="fa-solid fa-star-half-stroke starRating"></i> 4.8 (73 reviews)</p>
+                      </div>
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-sm">
+                      <!-- <a href="view_property.html" class="btnView">View property</a> -->
+
+                      <button type="submit" name="view_property">View Property</button>
+                    </div>
+                  </div>
+                </div>
+             </div>
+</div>
     <?php } ?>
 </ul>
 <!-- end of properties -->
+

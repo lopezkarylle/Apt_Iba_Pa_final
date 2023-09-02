@@ -72,8 +72,13 @@ use Models\Property;
                 <td><?php echo $request['email']?></td>
 				<td><?php echo $request['status']?></td>
 				<td class="text-center">
-					<a class="btn btn-sm btn-outline-primary" type="button" href="view.php?application_id=<?php echo $request['application_id']?>" >View</a>
-					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?application_id=<?php echo $request['application_id']?>">Delete</a>
+                    <form action="view.php" method="POST">
+                    <input type="hidden" name="application_id" value="<?php echo $request['application_id'] ?>">
+                    <button type="submit" value="view_request" name="view_request">View</button>
+                    <button type="submit" value="accept_request" name="accept_request">Accept</button>
+                    <button type="submit" value="decline_request" name="decline_request">Decline</button>
+                    <button type="submit" value="delete_request" name="delete_request">Delete</button>
+                    </form>
 				</td>
             </tr>
             <?php } ?>

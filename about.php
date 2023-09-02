@@ -5,20 +5,12 @@ include ("session.php");
 
 $user_id = $_SESSION['user_id'] ?? NULL;
 
-
+$current_page = "| About";
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Apt Iba Pa | About Us</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"/>
-    <script src="https://kit.fontawesome.com/868f1fea46.js" crossorigin="anonymous"></script>
-    <link href="css/aboutUs.css" rel="stylesheet" />
-    <link href="css/all.css" rel="stylesheet" />
-  </head>
+  <?php include('head.php'); ?>
 
   <body>
     <!-- Navbar -->
@@ -39,33 +31,7 @@ $user_id = $_SESSION['user_id'] ?? NULL;
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="index.php">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="accommodations.php">Accommodations</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="about.php">About Us</a>
-            </li>
-          </ul>
-          <form class="d-flex signOutbtn" role="search">
-            <?php if ($user_id){ ?>
-            <a class="btn btn-outline-secondary me-2" href="logout.php" type="button">
-              Logout
-            </a>
-            <?php } else { ?>
-            <a class="btn btn-outline-secondary me-2" href="login.php" type="button">
-                Login
-            </a>
-            <?php } ?>
-            <a class="btn btn-outline-secondary" onclick="window.location.href='apply.php';" type="button">
-              Apply My Property
-            </a>
-          </form>
-        </div>
+        <?php include('navbar.php'); ?>
       </div>
     </nav>
 

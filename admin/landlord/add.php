@@ -59,7 +59,7 @@ use Models\UserImage;
         <label for="image">Image:</label>
         <input type="file" id="image" name="image"><br>
         
-        <input type="submit" value="Add Landlord" id="submit" disabled>
+        <input type="submit" value="Add Landlord" id="submit">
     </form>
     <script src="email-validation.js"></script>
 	<script src="contact-validate.js"></script>

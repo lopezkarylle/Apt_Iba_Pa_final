@@ -4,7 +4,6 @@ use Models\Property;
 use Models\Amenity;
 use Models\Rule;
 use Models\Room;
-use Models\RoomAmenity;
 use Models\Request;
 use Models\User;
 use Models\Image;
@@ -162,7 +161,7 @@ $rooms = $room->getRooms($property_id);
                     <label for="" class="control-label">What amenities does your property offer?</label>
 
                     <?php 
-                    $availableAmenities = array("wifi","parking","reception","food hall","lounge","study area","laundromat","elevator","drinking water","microwave","refrigerator","tv","roof deck","sink","security","cctv","fire exit");
+                    $availableAmenities = array("Aircon, Cabinet, Cctv, Drinking Water, Elevator, Fire Exit, Food Hall, Laundry, Lounge, Microwave, Parking, Reception, Refrigerator, Roof Deck, Security, Sink, Study Area, Tv, Wifi");
                     foreach($availableAmenities as $amenity) {
                         $is_available = in_array($amenity, $amenities_array);
                     ?>
@@ -173,36 +172,12 @@ $rooms = $room->getRooms($property_id);
             <div class="col-md-4">
                         <!-- View and Edit Rooms -->
             <?php foreach($rooms as $room){
-                $room_id = $room['room_id'];
-                $roomAmenity = new RoomAmenity('','','');
-                $roomAmenity->setConnection($connection);
-                $roomAmenities = $roomAmenity->getAmenities($room_id);
-
-                if($roomAmenities){
-                    $roomAmenities_csv = $roomAmenities['amenity_name'];
-                    $roomAmenities_array = explode(",", $roomAmenities_csv);
-                }
-                else {
-                    $roomAmenities_array = array();
-                }?>
+                $room_id = $room['room_id'];?>
             <div name="amenities_checkbox" class="container-fluid" id="room_amenities">
             <h2><?= $room['total_beds'] ?> beds</h2>
             <h3><?= $room['furnished_type'] ?> furnished</h3>
                     <input type="hidden" name="property_id" value="<?php echo isset($property_id) ? $property_id : '' ?>">
                     <input type="hidden" name="room_id" value="<?php echo isset($room_id) ? $room_id : '' ?>">
-                    <div class="row form-group">
-                        <div class="col-md-4">
-                        <?php 
-                        $availableAmenities = array("aircon","cushion","drinking water","refrigerator","electric fan","wifi");
-                        
-                        foreach($availableAmenities as $roomAmenity) {
-                            $is_available = in_array($roomAmenity, $roomAmenities_array);
-                        ?>
-                            <input type="checkbox" class="form-control" name="roomAmenities[]"  value="<?= $roomAmenity?>" <?php echo $is_available ? 'checked' : '' ?>>
-                            <label for="" class="control-label"><?= $roomAmenity?></label><br>
-                        <?php } ?>
-                        </div>
-                        </div>
             </div>
             <?php }?>
             </div>
@@ -235,13 +210,6 @@ $rooms = $room->getRooms($property_id);
                     <option value="Unfurnished">Unfurnished</option>
                 </select>
                 <br>
-                <label class="control-label">Amenities:</label>
-                <?php 
-                $roomAmenities = array("aircon","cushion","drinking water","refrigerator","electric fan","wifi");
-                foreach($roomAmenities as $amenity){?>
-                <input type="checkbox" id="room_amenities" name="room_amenities[][<?=$amenity?>]" value="<?=$amenity?>">
-                <label for="room_amenities"><?=$amenity?></label><br>
-                <?php } ?>
             </div>
             </div>
             <button type="button" id="add-room">Add Another Room</button>

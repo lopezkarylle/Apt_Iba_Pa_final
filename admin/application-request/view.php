@@ -5,13 +5,16 @@ use Models\User;
 use Models\Request;
 use Models\Property;
 
-    $application_id = $_GET['application_id'];
-    $request = new Request();
-    $request->setConnection($connection);
-    $request = $request->getRequest($application_id);
+    $application_id = $_POST['application_id'];
 
-    var_dump($request);
-    
+    if(isset($application_id)){
+        $application = new Request();
+        $application->setConnection($connection);
+        $request = $application->getRequest($application_id);
+    } else {
+        echo "<script>window.location.href='index.php';</script>";
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +42,7 @@ use Models\Property;
 </nav>
 
 <form action="view.php" method="view.php">
-<button type="submit" value="confirm_request" name="confirm_request">Confirm</button>
+<button type="submit" value="accept_request" name="accept_request">Accept</button>
 <button type="submit" value="decline_request" name="decline_request">Decline</button>
 </form>
 </body>
@@ -47,12 +50,23 @@ use Models\Property;
 <?php 
 
 try{
-    if(isset($_POST['application_id'], $_POST['confirm_request'])){
+    if(isset($_POST['application_id'], $_POST['accept_request'])){
+        $status = 1;
+        $application->editRequest($application_id, $status);
+        echo "<script>window.location.href='index.php';</script>";
+        exit();
 
     } elseif (isset($_POST['application_id'], $_POST['decline_request'])) {
+        $status = 3;
+        $application->editRequest($application_id, $status);
+        echo "<script>window.location.href='index.php';</script>";
+        exit();
 
-    } else{
-
+    } elseif (isset($_POST['application_id'], $_POST['delete_request'])){
+        $status = 0;
+        $application->editRequest($application_id, $status);
+        echo "<script>window.location.href='index.php';</script>";
+        exit();
     }
 } catch (Exception $e) {
     error_log($e->getMessage());

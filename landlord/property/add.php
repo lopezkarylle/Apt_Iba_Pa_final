@@ -4,7 +4,6 @@ use Models\Property;
 use Models\Amenity;
 use Models\Rule;
 use Models\Room;
-use Models\RoomAmenity;
 use Models\Request;
 include "../../init.php";
 include ("../../session.php");
@@ -101,7 +100,7 @@ $landlord_id = $_SESSION['user_id'];
                     <label for="" class="control-label">What amenities does your property offer?</label>
 
                     <?php 
-                    $availableAmenities = array("wifi","parking","reception","food hall","lounge","study area","laundromat","elevator","drinking water","microwave","refrigerator","tv","roof deck","sink","security","cctv","fire exit");
+                    $availableAmenities = array("Aircon, Cabinet, Cctv, Drinking Water, Elevator, Fire Exit, Food Hall, Laundry, Lounge, Microwave, Parking, Reception, Refrigerator, Roof Deck, Security, Sink, Study Area, Tv, Wifi");
                     foreach($availableAmenities as $amenity){?>
                     <input type="checkbox" id="amenities" name="amenities[]" value="<?=$amenity?>">
                     <label for="amenities"><?=$amenity?></label><br>
@@ -139,13 +138,6 @@ $landlord_id = $_SESSION['user_id'];
                     <option value="Unfurnished">Unfurnished</option>
                 </select>
                 <br>
-                <label class="control-label">Amenities:</label>
-                <?php 
-                $roomAmenities = array("aircon","cabinet", "cushion","drinking water", "electric fan", "refrigerator","tv","wifi");
-                foreach($roomAmenities as $amenity){?>
-                <input type="checkbox" id="room_amenities" name="room_amenities[][<?=$amenity?>]" value="<?=$amenity?>">
-                <label for="room_amenities"><?=$amenity?></label><br>
-                <?php } ?>
             </div>
             </div>
             <button type="button" id="add-room">Add Another Room</button>
@@ -390,13 +382,6 @@ try {
                 $room = new Room();
                 $room->setConnection($connection);
                 $room_id = $room->addRoom($property_id, $bed_count, $room_total, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, $status);
-
-                $room_amenities = $amenities[$x];
-                $room_amenities_csv = implode(",", $room_amenities);
-                
-                $room_amenities = new RoomAmenity($room_id, $room_amenities_csv, $status);
-                $room_amenities->setConnection($connection);
-                $room_amenities->addRoomAmenities();
             }
 
             $imageData = $_FILES["images"] ?? NULL;

@@ -4,7 +4,6 @@ use Models\Property;
 use Models\Amenity;
 use Models\Rule;
 use Models\Room;
-use Models\RoomAmenity;
 use Models\Request;
 use Models\User;
 use Models\Image;
@@ -115,8 +114,11 @@ $landlords = $landlords->getLandlords();
                     <label for="" class="control-label">What amenities does your property offer?</label>
 
                     <?php 
-                    $availableAmenities = array("wifi","parking","reception","food hall","lounge","study area","laundromat","elevator","drinking water","microwave","refrigerator","tv","roof deck","sink","security","cctv","fire exit");
-                    foreach($availableAmenities as $amenity){?>
+                    $available_amenities = array("Aircon, Cabinet, CCTV, Drinking Water, Elevator, Fire Exit, Food Hall, Laundry, Lounge, Microwave, Parking, Reception, Refrigerator, Roof Deck, Security, Sink, Study Area, Tv, Wifi");
+
+                    // $amenities_icons = array("fa-fan, fa-grip, CCTV, DRINKING WATER, ELEVATOR, fa-person-running, foodhall, laundry, lounge, microwave, parking, reception, refrigerator, fa-arrows-left-right, security, sink, study area, tv, wifi");
+
+                    foreach($available_amenities as $amenity){?>
                     <input type="checkbox" id="amenities" name="amenities[]" value="<?=$amenity?>">
                     <label for="amenities"><?=$amenity?></label><br>
                     <?php } ?>
@@ -147,19 +149,12 @@ $landlords = $landlords->getLandlords();
                 <br>
                 <label for="furnished_type">Furnished type</label>
                 <select name="furnished_type[]" id="furnished_type" required>
-                    <option value="" selected disabled>Select Furnished Type</option>
+                    <option value="" selected disabled> - Select Type of Furnish - </option>
                     <option value="Furnished">Furnished</option>
                     <option value="Semi-furnished">Semi-furnished</option>
                     <option value="Unfurnished">Unfurnished</option>
                 </select>
                 <br>
-                <label class="control-label">Amenities:</label>
-                <?php 
-                $roomAmenities = array("aircon","cabinet", "cushion","drinking water", "electric fan", "refrigerator","tv","wifi");
-                foreach($roomAmenities as $amenity){?>
-                <input type="checkbox" id="room_amenities" name="room_amenities[][<?=$amenity?>]" value="<?=$amenity?>">
-                <label for="room_amenities"><?=$amenity?></label><br>
-                <?php } ?>
             </div>
             </div>
             <button type="button" id="add-room">Add Another Room</button>
@@ -239,11 +234,57 @@ $landlords = $landlords->getLandlords();
                 <label for="css">No</label><br>
 			</div>
             <div class="col-md-4">
+                <label for="alcohol" class="control-label">Do you allow alcoholic drinks?</label>
+				<input type="radio" name="alcohol" value="1" checked>
+                <label for="html">Yes</label><br>
+                <input type="radio" name="alcohol" value="0">
+                <label for="css">No</label><br>
+			</div>
+            <div class="col-md-4">
+                <label for="smoking" class="control-label">Do you allow vaping or smoking?</label>
+				<input type="radio" name="smoking" value="1" checked>
+                <label for="html">Yes</label><br>
+                <input type="radio" name="smoking" value="0">
+                <label for="css">No</label><br>
+			</div>
+            <div class="col-md-4">
                 <label for="visitors" class="control-label">Do you allow visitors?</label>
 				<input type="radio" name="visitors" value="1" checked>
                 <label for="html">Yes</label><br>
                 <input type="radio" name="visitors" value="0">
                 <label for="css">No</label><br>
+			</div>
+            <div class="col-md-4">
+                <label>Visitation Hours</label>
+                <label for="from_visit" class="control-label">From</label>
+				<select name="from_visit" id="from_visit">
+                    <option value="" selected disabled>Select hour</option>
+                    <option value="3am">3am</option>
+                    <option value="4am">4am</option>
+                    <option value="5am">5am</option>
+                    <option value="6am">6am</option>
+                    <option value="7am">7am</option>
+                    <option value="8am">8am</option>
+                    <option value="9am">9am</option>
+                    <option value="10am">10am</option>
+                    <option value="10am">11am</option>
+                    <option value="10am">12am</option>
+                </select><br>
+                <label for="to_visit" class="control-label">To</label>
+				<select name="to_visit" id="to_visit">
+                    <option value="" selected disabled>Select hour</option>
+                    <option value="4pm">4pm</option>
+                    <option value="5pm">5pm</option>
+                    <option value="6pm">6pm</option>
+                    <option value="7pm">7pm</option>
+                    <option value="8pm">8pm</option>
+                    <option value="9pm">9pm</option>
+                    <option value="10pm">10pm</option>
+                    <option value="11pm">11pm</option>
+                    <option value="12mn">12mn</option>
+                    <option value="1am">1am</option>
+                    <option value="2am">2am</option>
+                </select>
 			</div>
 		</div>
         <div class="form-group row">
@@ -378,9 +419,9 @@ try {
         $property_amenities->addAmenities();
 
         //add to property rules table but status=2=pending
-        $rules = new Rule($property_id, $_POST['short_term'], $_POST['min_weeks'], $_POST['mix_gender'], $_POST['curfew'], $_POST['from_curfew'], $_POST['to_curfew'], $_POST['cooking'], $_POST['pets'], $_POST['visitors'],$status);
+        $rules = new Rule();
         $rules->setConnection($connection);
-        $rules->addRules();
+        $rules->addRules($property_id, $_POST['short_term'], $_POST['min_weeks'], $_POST['mix_gender'], $_POST['curfew'], $_POST['from_curfew'], $_POST['to_curfew'], $_POST['cooking'], $_POST['pets'], $_POST['visitors'], $_POST['from_visit'], $_POST['to_visit'], $_POST['alcohol'], $_POST['smoking'],$status);
 
         //add to rooms table but status=2=pending
         $room_type = $_POST['room_type']; 
@@ -404,41 +445,34 @@ try {
                 $room = new Room();
                 $room->setConnection($connection);
                 $room_id = $room->addRoom($property_id, $bed_count, $room_total, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, $status);
-
-                $room_amenities = $amenities[$x];
-                $room_amenities_csv = implode(",", $room_amenities);
-                
-                $room_amenities = new RoomAmenity($room_id, $room_amenities_csv, $status);
-                $room_amenities->setConnection($connection);
-                $room_amenities->addRoomAmenities();
             }
 
             $imageData = $_FILES["images"] ?? NULL;
 
-    // Loop through the uploaded images
-        if(isset($imageData)){
-            for ($i = 0; $i < count($imageData['name']); $i++) {
-                // Get the image properties
-                $imageName = $imageData['name'][$i];
-                $imageTmpName = $imageData['tmp_name'][$i];
-                $title = $_POST['image_title'][$i];
-            
-                // Move the uploaded image to a directory on the server
-                $uploadDirectory = "../../resources/images/properties/";
-                $targetFilePath = $uploadDirectory . basename($imageName);
-                move_uploaded_file($imageTmpName, $targetFilePath);
-            
-                $images = new Image();
-                $images->setConnection($connection);
-                $insert = $images->addImage($property_id, $imageName, $title, $status);
-                //var_dump($insert);
-                if($insert){ 
-                    $statusMsg = "Images are uploaded successfully."; 
-                }else{ 
-                    $statusMsg = "Sorry, there was an error uploading your file."; 
-                } 
+            // Loop through the uploaded images
+            if(isset($imageData)){
+                for ($i = 0; $i < count($imageData['name']); $i++) {
+                    // Get the image properties
+                    $imageName = $imageData['name'][$i];
+                    $imageTmpName = $imageData['tmp_name'][$i];
+                    $title = $_POST['image_title'][$i];
+                
+                    // Move the uploaded image to a directory on the server
+                    $uploadDirectory = "../../resources/images/properties/";
+                    $targetFilePath = $uploadDirectory . basename($imageName);
+                    move_uploaded_file($imageTmpName, $targetFilePath);
+                
+                    $images = new Image();
+                    $images->setConnection($connection);
+                    $insert = $images->addImage($property_id, $imageName, $title, $status);
+                    //var_dump($insert);
+                    if($insert){ 
+                        $statusMsg = "Images are uploaded successfully."; 
+                    }else{ 
+                        $statusMsg = "Sorry, there was an error uploading your file."; 
+                    } 
+                }
             }
-        }
 
         echo "<script>window.location.href='index.php?success=1';</script>";
         exit();

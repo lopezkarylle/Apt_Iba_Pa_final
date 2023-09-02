@@ -4,7 +4,6 @@ use Models\Property;
 use Models\Amenity;
 use Models\Rule;
 use Models\Room;
-use Models\RoomAmenity;
 use Models\Request;
 use Models\User;
 use Models\Image;
@@ -203,18 +202,7 @@ if(isset($_POST['property_id']) || isset($_SESSION['property_id'])){
             <div class="col-md-4">
                         <!-- View and Edit Rooms -->
             <?php foreach($rooms as $room){
-                $room_id = $room['room_id'];
-                $roomAmenity = new RoomAmenity('','','');
-                $roomAmenity->setConnection($connection);
-                $roomAmenities = $roomAmenity->getAmenities($room_id);
-
-                if($roomAmenities){
-                    $roomAmenities_csv = $roomAmenities['amenity_name'];
-                    $roomAmenities_array = explode(",", $roomAmenities_csv);
-                }
-                else {
-                    $roomAmenities_array = array();
-                }?>
+                $room_id = $room['room_id']; ?>
             <div name="amenities_checkbox" id="room_amenities"> 
             <h2><?= $room['total_beds'] ?> beds</h2>
             <h3></h3>
@@ -224,20 +212,6 @@ if(isset($_POST['property_id']) || isset($_SESSION['property_id'])){
                 <option value="Semi-furnished">Semi-furnished</option>
                 <option value="Unfurnished">Unfurnished</option>
             </select>
-                    <input type="hidden" name="room_id" value="<?php echo isset($room_id) ? $room_id : '' ?>">
-                    <div class="row form-group">
-                        <div class="col-md-4">
-                        <?php 
-                        $availableAmenities = array("aircon","cushion","drinking water","refrigerator","electric fan","wifi");
-                        
-                        foreach($availableAmenities as $roomAmenity) {
-                            $is_available = in_array($roomAmenity, $roomAmenities_array);
-                        ?>
-                            <input type="checkbox" name="roomAmenities[]"  value="<?= $roomAmenity?>" <?php echo $is_available ? 'checked' : '' ?>>
-                            <label for="" class="control-label"><?= $roomAmenity?></label><br>
-                        <?php } ?>
-                        </div>
-                        </div>
             </div>
             <?php }?>
             </div>

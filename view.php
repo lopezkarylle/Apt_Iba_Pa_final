@@ -5,6 +5,7 @@ use Models\Room;
 use Models\RoomAmenity;
 use Models\Image;
 use Models\Review;
+use Models\Rule;
 include ("init.php");
 include ("session.php");
 
@@ -57,129 +58,1257 @@ include ("session.php");
 	$room->setConnection($connection);
 	$rooms = $room->getRooms($property_id);
 
+    //get all rules
+    $rules = new Rule();
+    $rules->setConnection($connection);
+    $rules = $rules->getRules($property_id);
+
+    $short = $rules['short_term']; //1 or 0 
+    $minweeks = $rules['min_weeks']; //00-99
+    $mixgender = $rules['mix_gender']; //1 or 0 
+    $curfew = $rules['curfew']; //1 or 0 
+    $from_curfew = $rules['from_curfew']; //time
+    $to_curfew = $rules['to_curfew']; //time
+    $cooking = $rules['cooking']; //1 or 0 
+    $pets = $rules['pets']; //1 or 0 
+    $visitors = $rules['visitors']; //1 or 0 
+    $from_visit = $rules['from_visit']; //time
+    $to_visit = $rules['to_visit']; //time
+    $alcohol = $rules['alcohol']; //1 or 0 
+    $smoking = $rules['smoking']; //1 or 0 
+    
     //get all images
     $images = new Image();
     $images->setConnection($connection);
     $images = $images->getImages($property_id);
     
-    
-    echo"<br>";
-    //each room information
-    
-    
+    $current_page = '| ' . $property_name;
 ?>
-<!-- header -->
-<h2>Header</h2>
-<ul class="nav nav-pills nav-justified">
-    <li class="active"><a href="index.php">Dashboard</a></li>
-    <li><a  href="accommodations.php">Accommodations</a></li>
-    <li><a  href="about.php">About Us</a></li>
-</ul>
-    <a href="apply.php">Apply My Property</a><br>
-    <?php if(isset($user_id)) {?>
-    <h2><?php echo 'Hi ' . $full_name ?></h2>
-    <a href="logout.php">Logout</a>
-    <?php } else {?>
-    <a href="login.php">Login</a>
-    <?php }?>
-  </nav>
 
-<!-- end of header -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <?php include('head.php'); ?>
+  </head>
+  <body>
+    <!-- Navbar -->
+<?php include('navbar.php'); ?>
 
-<!-- Property Information -->
-<h2>Property Information</h2><br>
-<h1><?php echo $property_name ?></h1>
-<div>
-    <?php foreach($images as $img){
-        $image = $img['image_path'];
-        $title = $img['title'];
-    ?>
-        <img src='resources/images/properties/<?php echo $image ?>' name="image" height='100' width='100'>
-        <label for="image"><?php echo $title ?></label>
-        <div>
-    <?php } ?>
+    <!-- Navbar ends -->
+
+
+
+    <!-- Carousel code starts here -->
+    <div class="container-fluid">
+      <h1 class="text-center fw-bold display-1 mt-5 mb-5"> <?= $property_name ?> </h1>
+      <div class="row">
+          <div class="col-12 m-auto">
+              <div class="owl-carousel owl-theme carousel-container">
+                <?php foreach($images as $img){
+                    $image = $img['image_path'];
+                    $title = $img['title'];
+                ?>
+                  <div class="item">
+                      <div class="card border-0 shadow">
+                          <img src='resources/images/properties/<?php echo $image ?>' name="image" alt="" class="card-img-center">
+                          <div class="card-body">
+                            <div class="card-title text-center">
+                                <h4><?php echo $title ?></h4>
+                            </div>
+                        </div>
+                          
+                      </div>
+                  </div>
+                <?php } ?>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  
+
+    <!-- Carousel code ends here -->
+
+<!-- Start of Property Information -->
+
+<div class="container pt-5 pb-5 viewP">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-10">
+          <h3 class="name"><?= $property_name ?></h3>
+          <div class="row">
+            <div class="h4 mt-3 col-sm-10 location">
+              <div>
+                <i class="fas fa-map-marker-alt"></i> <?= $full_address ?>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-2 ps-4 justify-content-end">
+          <button onclick="Toggle1()" id="btnBm" class="btn btnBookmark">
+            <i class="fa-solid fa-bookmark fa-3x"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-11 mt-5 viewpDescription">
+          Description
+          <div class="description">
+            <?= $description ?>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm mb-3">
+          <p class="btnRating">
+            <i class="fa-solid fa-star-half-stroke starRating"></i> 4.8 (73
+            reviews)
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- closing tag of 1st col-md-6 -->
+
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col justify-content-center">
+          <h4 class="aptStarts" style="text-align: center;">
+            Rent starts at
+          </h4>
+          <h3 class="aptPrice">
+            &#8369;<?= $lowest_rate ?><span class="monthly">/Monthly</span>
+          </h3>
+          <!-- <h3 class="aptPrice">
+            &#8369;5,000<span class="monthly">/Monthly</span>
+          </h3> -->
+        </div>
+      </div>
+
+      <div class="row py-3">
+        <div class="col-sm">
+          <a href="#" class="btnViewP" data-bs-toggle="modal" data-bs-target="#requestVisit">Request a Visit</a>
+        </div>
+        <div class="col-sm">
+          <a href="#" class="btnViewP" data-bs-toggle="modal" data-bs-target="#reserveRoom">Reserve a Room</a>
+        </div>
+      </div>
+
+      <div class="row pt-5">
+        <div class="col-sm availRoom">
+          <div class="room">Available Rooms</div>
+          <span> 3 out of 9 room/s available </span>
+        </div>
+      </div>
+    </div>
+    <!-- closing tag of 1st col-md-6 -->
+  </div>
+  <!-- closing tag of container viewP row -->
 </div>
-<div>
-    <h2><?php echo $property_name ?></h2>
-    <div><?php echo $full_address ?></div>
-    <br>
-    <h4>Description</h4>
-    <div><?php echo $description ?></div>
-</div>
-<div>
-    <form action="appointment.php" method="POST">
-        <input type="hidden" name="property_id" value="<?php echo $property_id ?>">
-        <button type="input" name="appointment" disabled>Set Appointment</button>
-    </form>
-    <form action="reserve.php" method="POST">
-        <input type="hidden" name="property_id" value="<?php echo $property_id ?>">
-        <button type="input" name="reserve" disabled>Reserve a Room</button>
-    </form>
-</div>
-<div>
-    <h4>Rent start at </h4>
-    <h2>₱<?php echo $lowest_rate ?></h2>
-</div>
-<div>
-    <h4>Property Amenities</h4>
-    <?php 
-    foreach($propertyAmenities as $amenity) {
-        $is_available = in_array($amenity, $property_amenities);
-    ?>
-        <input type="checkbox" id="amenities" name="amenities[]"  value="<?= $amenity?>" <?php echo $is_available ? 'checked' : '' ?>>
-        <label for="" class="control-label"><?= $amenity?></label><br>
-    <?php } ?>
-</div>
-<div>
-    <h4>Rooms</h4>
-    <?php
-        $room_types = [
-            '1' => 'Single Bed Room',
-            '2' => 'Double Bed Room',
-            '3' => 'Triple Bed Room',
-            '4' => 'Quad Bed Room',
-            '5' => 'Five Bed Room',
-            '6' => 'Six Bed Room',
-            '7' => 'Seven Bed Room',
-            '8' => 'Eight Bed Room',
-          ];
+<!-- closing tag of container viewP-->
+
+
+    
+
+<!-- Start of Property Amenities under Property Information -->
+<div class="container pt-3 amenities">
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="name">Property Amenities</h3>
+      
+    <hr />
+    </div>
+
+    <div class="col-md-6 text-md-start order-2 order-md-0">
+
+        <div class="h5 d-none d-md-block">
+          <span class="name h3">House Rules</span>
+        </div>
+
+        <div class="name h3 d-block d-md-none">House Rules</div>
+
+      <hr />
+    </div>
+
+    <div class="col-md-6">
+
+      <div class="row">
+        
+        <div class="text-center" >
+  
+          <div class="row mt-3">
+            <div class="col-md-6 description">
+                <?php 
+                $count = 0;
+                foreach ($propertyAmenities as $amenity){ 
+                    $is_available = in_array($amenity, $property_amenities); ?>
+              <div class="row">
+                <p <?php echo $is_available ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> <?= $amenity ?></span></p>
+              </div> 
+              <?php 
+                if ($count % 6 == 0 && $count != 0) {
+                    // Start a new column after every 6 amenities
+                    echo '</div><div class="col-md-6 description">';
+                    }  
+                $count++;
+                } 
+                ?>
+            </div>
+  
+            
+          </div>
           
-          foreach($rooms as $roomie){
-            $room_id = $roomie['room_id'];
-    
-            $room_amenity = new RoomAmenity('','','');
-            $room_amenity->setConnection($connection);
-            $room_amenity = $room_amenity->getAmenities($room_id);
-    
-            $room_amenities_array = $room_amenity['amenity_name'];
-            $room_amenities = explode(",", $room_amenities_array);
+        </div>
+  
+      </div>
+  
+      </div>
+
+      <!-- House Rules -->
+    <div class="col-md-6 order-3 order-md-0">
+
+      <div class="row">
+        
+        <div class="row mt-3">
+          <div class="col-md-6 description">
+            <div class="row">
+                <?php if($pets===0){ ?>
+                <p style="text-decoration: line-through">
+                <? } else{ ?> 
+                <p> 
+                <?php } ?>
+                <i class="fa-solid fa-paw"></i>
+                <span> Pets are allowed</span>
+              </p>
+            </div>
+
+            <div class="row">
+                <?php if($visitors===0){ ?>
+                    <p style="text-decoration: line-through">
+                    <? } else{ ?> 
+                    <p> 
+                    <?php } ?>
+                <i class="fa-solid fa-user-group-simple"></i>
+                <span> Guests are allowed</span>
+              </p>
+            </div>
             
-            $room_type = $roomie['room_type'];
-            $room_type = $room_types[$room_type] ?: 'Single Bed Room';
+            <div class="row">
+                <?php if($smoking===0){ ?>
+                    <p style="text-decoration: line-through">
+                    <? } else{ ?> 
+                    <p> 
+                    <?php } ?>
+                <i class="fa-regular fa-smoking"></i>
+                <span> Smoking/Vaping not allowed</span>
+              </p>
+            </div>
+
+            <div class="row">
+                <?php if($alcohol===0){ ?>
+                    <p style="text-decoration: line-through">
+                    <? } else{ ?> 
+                    <p> 
+                    <?php } ?>
+                <i class="fa-regular fa-wine-bottle"></i>
+                <span> Alcoholic drinks not allowed</span>
+              </p>
+            </div>
             
-            $monthly_rent = $roomie['monthly_rent'];
-            $total_beds = $roomie['total_beds'];
-            $occupied_beds = $roomie['occupied_beds'];
+
+          </div>
+
+          <div class="col-md-3 description ps-md-5 ms-md-3">
+            <?php if($curfew===0){ ?>
+            <div class="row">
+                <p style="text-decoration: line-through">
+                <i class="fa-solid fa-clock-eleven"></i>
+                <span> Curfew Hours</span>
+                </p>
+            </div>
+            <?php } elseif($curfew===1){ ?> 
+            <div class="row">
+                <p>
+                <i class="fa-solid fa-clock-eleven"></i>
+                <span> Curfew Hours</span>
+                </p>
+            </div>
+            <div class="row">
+              <p>
+                <span> <?php echo $from_curfew . ' to ' . $to_curfew ?></span>
+              </p>
+            </div>
+            <?php } ?>
+
+            <div class="row">
+            <?php if($visitors===0){ ?>
+            <p style="text-decoration: line-through">
+                <i class="fa-sharp fa-regular fa-hourglass-clock"></i>
+                <span> Guests Hours</span>
+              </p>
+
+              <?php } else{ ?> 
+                <p>
+                    <i class="fa-sharp fa-regular fa-hourglass-clock"></i>
+                    <span> Guests Hours</span>
+                </p>
+
+            </div>
+
+            <div class="row">
+              <p>
+                <span> <?php echo $from_visit . ' to ' . $to_visit ?></span>
+              </p>
+            </div>
+            <?php } ?>
+
+          </div>
+
+          
+        </div>
+          
+        
+  
+      </div>
+
+    </div>
+
+
+
+  </div>
+</div>
+
+<!-- End of Property Amenities under Property Information -->
+
+</div>
+
+
+
+
+<!-- Start of Google Map under Property Information -->
+
+<div class="container pt-5">
+  <div class="row">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d962.807197098562!2d120.59276596960956!3d15.145774899088007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3396f313262cc467%3A0xa12b7889c166e418!2sJaeden%20Kent%20Residence%20%2F%20Batac%20-Valencia!5e0!3m2!1sen!2sph!4v1690310871739!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+</div>
+
+<!-- End of Google Map under Property Information -->
+
+
+<!-- Start of Reviews under Property Information -->
+<div class="container-fluid mt-5" style="background-color: #191d28;">
+<div class="container pt-5">
+    <div class="row">
+            <div class="testimonials-section px-5">
+                
+                <!-- Section Header Starts -->
+              <div class="row">
+                <div class="col-10">
+                  <header class="section-header">
+                      <h1>Reviews</h1>
+                  </header>
+                    <div class="row">
+                      <div class="col-sm">
+                        <div class="review-p">
+                          <p>How others rated this apartment</p>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 section-header-btn">
+                    <a href="#" class="btnReview">Add a review</a>
+                </div>
+              </div>
+              <!-- Section Header Ends -->
+            
+                <!-- Owl Carousel Slider Starts -->
+                <div class="owl-carousel owl-theme testimonials-container">
+                    <!-- Item1 Starts -->
+                    <div class="item testimonial-card">
+                        <main class="test-card-body">
+                          <div class="profile">
+                            <div class="profile-image">
+                                <img src="images/prof1.png">
+                            </div>
+                            <div class="profile-desc">
+                                <span>Micoh Yabut</span>
+                                <span class="ratings">
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="num"> 5.0</i>
+                                </span>
+                                <span class="date">Jun-06-23</span>
+                            </div>
+                          </div>
+                            <div class="quote">
+                                <i class="fa fa-quote-left"></i>
+                                <h2>Awesome Coding</h2>
+                            </div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
+                        </main>
+
+                    </div>
+                    <!-- Item1 Ends -->
+            
+                    <!-- Item2 Starts -->
+                    <div class="item testimonial-card">
+                        <main class="test-card-body">
+                          <div class="profile">
+                            <div class="profile-image">
+                                <img src="images/prof2.png">
+                            </div>
+                            <div class="profile-desc">
+                                <span>Arnold Lim</span>
+                                <span class="ratings">
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="num"> 5.0</i>
+                                </span>
+                                <span class="date">Jun-06-23</span>
+                            </div>
+                          </div>
+                            <div class="quote">
+                                <i class="fa fa-quote-left"></i>
+                                <h2>Awesome Coding</h2>
+                            </div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
+                        </main>
+                    </div>
+                    <!-- Item2 Ends -->
+            
+                    <!-- Item3 Starts -->
+                    <div class="item testimonial-card">
+                        <main class="test-card-body">
+                          <div class="profile">
+                            <div class="profile-image">
+                                <img src="images/prof3.png">
+                            </div>
+                            <div class="profile-desc">
+                                <span>Aaron Echon</span>
+                                <span class="ratings">
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="num"> 5.0</i>
+                                </span>
+                                <span class="date">Jun-06-23</span>
+                            </div>
+                          </div>
+                            <div class="quote">
+                                <i class="fa fa-quote-left"></i>
+                                <h2>Awesome Coding</h2>
+                            </div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
+                        </main>
+                    </div>
+                    <!-- Item3 Ends -->
+            
+                    <!-- Item4 Starts -->
+                    <div class="item testimonial-card">
+                        <main class="test-card-body">
+                          <div class="profile">
+                            <div class="profile-image">
+                                <img src="images/prof1.png">
+                            </div>
+                            <div class="profile-desc">
+                                <span>Micoh Jomarie</span>
+                                <span class="ratings">
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="num"> 5.0</i>
+                                </span>
+                                <span class="date">Jun-06-23</span>
+                            </div>
+                          </div>
+                            <div class="quote">
+                                <i class="fa fa-quote-left"></i>
+                                <h2>Awesome Coding</h2>
+                            </div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
+                        </main>
+                    </div>
+                    <!-- Item4 Ends -->
+            
+                    <!-- Item5 Starts -->
+                    <div class="item testimonial-card">
+                        <main class="test-card-body">
+                          <div class="profile">
+                            <div class="profile-image">
+                                <img src="images/prof2.png">
+                            </div>
+                            <div class="profile-desc">
+                                <span>Arnold Nicholas</span>
+                                <span class="ratings">
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="num"> 5.0</i>
+                                </span>
+                                <span class="date">Jun-06-23</span>
+                            </div>
+                          </div>
+                            <div class="quote">
+                                <i class="fa fa-quote-left"></i>
+                                <h2>Awesome Coding</h2>
+                            </div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
+                        </main>
+                    </div>
+                    <!-- Item5 Ends -->
+            
+                    <!-- Item6 Starts -->
+                    <div class="item testimonial-card">
+                        <main class="test-card-body">
+                          <div class="profile">
+                            <div class="profile-image">
+                                <img src="images/prof3.png">
+                            </div>
+                            <div class="profile-desc">
+                                <span>David Aaron</span>
+                                <span class="ratings">
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="fa-solid fa-star"></i>
+                                  <i class="num"> 5.0</i>
+                                </span>
+                                <span class="date">Jun-06-23</span>
+                            </div>
+                          </div>
+                            <div class="quote">
+                                <i class="fa fa-quote-left"></i>
+                                <h2>Awesome Coding</h2>
+                            </div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
+                        </main>
+                    </div>
+                    <!-- Item6 Ends -->
+            
+                </div>
+                <!-- Owl Carousel Slider Ends -->
+            
+            </div>
+
+            
+    </div>
+  </div>
+</div>
+  
+  <!-- End of Reviews under Property Information -->
+
+<!-- ======= Frequently Asked Questions Section ======= -->
+  <section id="faq" class="faq section-bg">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>Frequently Asked Questions</h2>
+        <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+      </div>
+
+      <div class="faq-list">
+        <ul>
+          <li data-aos="fade-up" data-aos-delay="100">
+            <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" class="collapse" data-bs-target="#faq-list-1">Non consectetur a erat nam at lectus urna duis? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+            <div id="faq-list-1" class="collapse show" data-bs-parent=".faq-list">
+              <p>
+                Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.
+              </p>
+            </div>
+          </li>
+
+          <li data-aos="fade-up" data-aos-delay="200">
+            <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-2" class="collapsed">Feugiat scelerisque varius morbi enim nunc? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+            <div id="faq-list-2" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
+              </p>
+            </div>
+          </li>
+
+          <li data-aos="fade-up" data-aos-delay="300">
+            <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-3" class="collapsed">Dolor sit amet consectetur adipiscing elit? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+            <div id="faq-list-3" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis
+              </p>
+            </div>
+          </li>
+
+          <li data-aos="fade-up" data-aos-delay="400">
+            <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-4" class="collapsed">Tempus quam pellentesque nec nam aliquam sem et tortor consequat? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+            <div id="faq-list-4" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in.
+              </p>
+            </div>
+          </li>
+
+          <li data-aos="fade-up" data-aos-delay="500">
+            <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-5" class="collapsed">Tortor vitae purus faucibus ornare. Varius vel pharetra vel turpis nunc eget lorem dolor? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+            <div id="faq-list-5" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                Laoreet sit amet cursus sit amet dictum sit amet justo. Mauris vitae ultricies leo integer malesuada nunc vel. Tincidunt eget nullam non nisi est sit amet. Turpis nunc eget lorem dolor sed. Ut venenatis tellus in metus vulputate eu scelerisque.
+              </p>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+
+    </div>
+  </section>
+<!-- End Frequently Asked Questions Section -->
+
+
+  <!-- Start of Similar Apartment Listings -->
+
+    <!-- <div class="container-fluid featuredHtml"> -->
+      
+    <hr>
     
-            $available_beds = $total_beds - $occupied_beds;
+      <section class="listings">
+        <h1 class="featureHeading p-3">Featured Dormitories and Apartments</h1>
+
+        <!-- <div class="container-md"> -->
+          <div class="box-container">
+            <div class="row gx-5">
+              <div class="col-md">
+                <div class="box">
+                  <div class="thumb">
+                    <p class="total-images">
+                      <i class="far fa-image"></i><span>4</span>
+                    </p>
+                    <p class="type"><span>Apartment</span></p>
+                    <form action="" method="post" class="save">
+                      <button
+                        type="submit"
+                        name="save"
+                        class="fa-solid fa-bookmark fa-3x"
+                      ></button>
+                    </form>
+                    <img src="images/house-img-2.webp" alt="" />
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-8">
+                      <h3 class="name">Batacs Dormitory</h3>
+                      <div class="row">
+                        <div class="h4 mt-3 col-sm-8">
+                          <div>
+                            <i class="fas fa-map-marker-alt"></i> Brgy. Claro M.
+                            Recto
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 rentName">
+                      Rent starts at
+                      <div class="price">&#8369;5,000</div>
+                    </div>
+                  </div>
+          
+                  <div class="row flex">
+                    <div class="col">
+                      <p><i class="fas fa-bed"></i><span>4</span></p>
+                    </div>
+                    <div class="col">
+                      <p><i class="fas fa-bath"></i><span>2</span></p>
+                    </div>
+                    <div class="col">
+                      <p><i class="fas fa-maximize"></i><span>750sqft</span></p>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <p class="btnRating"><i class="fa-solid fa-star starRating"></i> 5.0 (150 reviews)
+                    </div>
+                    <div class="col-lg-6">
+                      <a href="view_property.html" class="btnView">View property</a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+
+              <div class="col-md">
+                <div class="box">
+                  <div class="thumb">
+                    <p class="total-images">
+                      <i class="far fa-image"></i><span>4</span>
+                    </p>
+                    <p class="type"><span>Apartment</span></p>
+                    <form action="" method="post" class="save">
+                      <button
+                        type="submit"
+                        name="save"
+                        class="fa-solid fa-bookmark fa-3x"
+                      ></button>
+                    </form>
+                    <img src="images/house-img-2.webp" alt="" />
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-8">
+                      <h3 class="name">Batac Dormitory</h3>
+                      <div class="row">
+                        <div class="h4 mt-3 col-sm-8">
+                          <div>
+                            <i class="fas fa-map-marker-alt"></i> Brgy. Claro M.
+                            Recto
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 rentName">
+                      Rent starts at
+                      <div class="price">&#8369;5,000</div>
+                    </div>
+                  </div>
+          
+                  <div class="row flex">
+                    <div class="col">
+                      <p><i class="fas fa-bed"></i><span>4</span></p>
+                    </div>
+                    <div class="col">
+                      <p><i class="fas fa-bath"></i><span>2</span></p>
+                    </div>
+                    <div class="col">
+                      <p><i class="fas fa-maximize"></i><span>750sqft</span></p>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <p class="btnRating"><i class="fa-solid fa-star starRating"></i> 5.0 (150 reviews)
+                    </div>
+                    <div class="col-lg-6">
+                      <a href="view_property.html" class="btnView">View property</a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+
+              <div class="col-md">
+                <div class="box">
+                  <div class="thumb">
+                    <p class="total-images">
+                      <i class="far fa-image"></i><span>4</span>
+                    </p>
+                    <p class="type"><span>Apartment</span></p>
+                    <form action="" method="post" class="save">
+                      <button
+                        type="submit"
+                        name="save"
+                        class="fa-solid fa-bookmark fa-3x"
+                      ></button>
+                    </form>
+                    <img src="images/house-img-2.webp" alt="" />
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-8">
+                      <h3 class="name">Batac Dormitory</h3>
+                      <div class="row">
+                        <div class="h4 mt-3 col-sm-8">
+                          <div>
+                            <i class="fas fa-map-marker-alt"></i> Brgy. Claro M.
+                            Recto
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 rentName">
+                      Rent starts at
+                      <div class="price">&#8369;5,000</div>
+                    </div>
+                  </div>
+          
+                  <div class="row flex">
+                    <div class="col">
+                      <p><i class="fas fa-bed"></i><span>4</span></p>
+                    </div>
+                    <div class="col">
+                      <p><i class="fas fa-bath"></i><span>2</span></p>
+                    </div>
+                    <div class="col">
+                      <p><i class="fas fa-maximize"></i><span>750sqft</span></p>
+                    </div>
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <p class="btnRating"><i class="fa-solid fa-star-half-stroke starRating"></i> 4.8 (73 reviews)</p>
+                    </div>
+                    <div class="col-lg-6">
+                      <a href="view_property.html" class="btnView">View property</a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="margin-top: 4rem; text-align: center">
+            <a href="accomodations.html" class="inline-btn">View All</a>
+          </div>
+
+        <!-- </div> -->
+      </section>
+    <!-- </div> -->
+
+    <!-- Featured ends -->
+
+
+
+  <!-- End of Similar Apartment Listings -->
+
+
+
+<!-- End of Property Information -->
+ 
+
+    <!-- Footer -->
+
+    
+      <footer class="site-footer">
+        <div class="container-fluid">
+          <div class="container">
+          <div class="row">
+              <div class="col-sm-12 col-md-8">
+              <h2>APT IBA PA</h2>
+                <div class="row">
+                  <div class="col-sm-12 col-md-8">
+                    <p class="text-justify">
+                      Our platform serves as a comprehensive guide, providing a vast database of dormitories and apartments in the area surrounding AUF. Through our interactive map interface, users can easily navigate and explore different locations, allowing them to make informed decisions based on their preferences and requirements.
+                    </p>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="col-xs-6 col-md-2 me-auto pt-4">
+              <h6>Pages</h6>
+              <ul class="footer-links">
+                  <li><a href="http://scanfcode.com/category/c-language/">Accomodations</a><li>
+                  <li>
+                  <a href="http://scanfcode.com/category/front-end-development/">About Us</a>
+                  </li>
+                  <li>
+                  <a href="http://scanfcode.com/category/back-end-development/">Apply My Property</a>
+              </ul>
+              </div>
+  
+              <div class="col-xs-6 col-md-2 pt-4">
+              <h6>Features</h6>
+              <ul class="footer-links">
+                  <li><a href="http://scanfcode.com/about/">Favorites</a></li>
+                  <li><a href="http://scanfcode.com/contact/">Reserve a Room</a></li>
+                  <li>
+                  <a href="http://scanfcode.com/contribute-at-scanfcode/">Schedule a Visit</a>
+              </ul>
+              </div>
+          </div>
+          <hr />
+          </div>
+          <div class="container">
+          <div class="row">
+              <div class="col-md-8 col-sm-6 col-xs-12">
+              <p class="copyright-text">
+                  Copyright &copy; 2023 All Rights Reserved by
+                  <a href="#">APT IBA PA</a>.
+              </p>
+              </div>
+  
+              <div class="col-md-4 col-sm-6 col-xs-12">
+              <ul class="social-icons">
+                  <li>
+                  <a class="facebook" href="#"><i class="fa fa-facebook"></i></a>
+                  </li>
+                  <li>
+                  <a class="twitter" href="#"><i class="fa fa-twitter"></i></a>
+                  </li>
+                  <li>
+                  <a class="dribbble" href="#"><i class="fa fa-dribbble"></i></a>
+                  </li>
+                  <li>
+                  <a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a>
+                  </li>
+              </ul>
+              </div>
+          </div>
+          </div>
+        </div>
+      </footer>
+      
+  
+      <!-- Footer ends -->
+  
+
+
+
+  <!-- Request a Visit Modal -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="requestVisit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="requestVisitLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg overflow-x-hidden ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-3" id="requestVisitLabel">Schedule a Visit</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body overflow-x-hidden  modalTimeslots">
+
+          <div class="container">
+
+            <form>
+              <!-- Form start -->
+              <div class="container pt-5 pb-5 bgTimeSlots timeSlots">
+
+                <div class="row">
+                  <h3 class="text-center">View the property on</h3>
+                  <div class="col-md">
+                    <h2 class="ms-3 apptDate">August 04, 2023</h2>
+                  </div>
+                </div>
+
+                <div class="row justify-content-center">
+
+                  
+                  <div class="col-md-4">
+
+                    <form action="#">
+                      <div class="form-group p-3 datePicker">
+                        <input type="date" class="form-control" id="pick-date" placeholder="Pick A Date">
+                      </div>
+                      
+                      <h5 class="text-center">*Click to change date</h5>
+                    </form>
+
+                  </div>
+                </div>
+
+
+                <div class="row ps-4 h3 mt-2">
+                  <h2 class="dayzone">
+                    <img src="images/dayzone1.png" alt=""/>
+                    Morning
+                  </h2>
+                  <h2 class="timezone">8:00 AM to 11:30 AM</h2>
+                </div>
+                
+                  <div class="row pt-5 justify-content-center">
+        
+                      <div class="col-5 col-sm-3 col-lg-2  d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 8:00 AM </a></div>
+                      
+                      <div class="col-5 col-sm-3 col-lg-2 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 8:30 AM </a></div>
+        
+                      <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 9:00 AM </a></div>
+                      
+                      <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 9:30 AM </a></div>
+        
+                  </div>
+                  <div class="row pt-5 pb-5 justify-content-center">
+        
+                    <div class="col-5 col-sm-3 col-lg-2  d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i>  10:00 AM </a></div>
+                      
+                    <div class="col-5 col-sm-3 col-lg-2 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 10:30 AM </a></div>
+        
+                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 11:00 AM </a></div>
+                      
+                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 11:30 AM </a></div>
+        
+                  </div>
+                
+                <div class="row ps-4 h3 mt-5">
+                  <hr>
+                  <h2 class="dayzone pt-4">
+                    <img src="images/dayzone2.png" alt=""/>
+                    Afternoon
+                  </h2>
+                  <h2 class="timezone">1:00 PM to 5:30 PM</h2>
+                </div>
+                  <div class="row pt-5 justify-content-center">
+        
+                    <div class="col-5 col-sm-3 col-lg-2  d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 12:00 PM </a></div>
+                    
+                    <div class="col-5 col-sm-3 col-lg-2 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 12:30 PM </a></div>
+        
+                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 1:00 PM </a></div>
+                    
+                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 1:30 PM </a></div>
+        
+                  </div>
+                  <div class="row pt-5 justify-content-center">
+        
+                    <div class="col-5 col-sm-3 col-lg-2  d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 2:00 PM </a></div>
+                    
+                    <div class="col-5 col-sm-3 col-lg-2 d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 2:30 PM </a></div>
+        
+                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 3:00 PM </a></div>
+                    
+                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 3:30 PM </a></div>
+        
+                  </div>
+                  <div class="row pt-5 justify-content-center">
+        
+                    <div class="col-5 col-sm-3 col-lg-2  d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 4:00 PM </a></div>
+                    
+                    <div class="col-5 col-sm-3 col-lg-2 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 4:30 PM </a></div>
+        
+                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 5:00 PM </a></div>
+                    
+                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 5:30 PM </a></div>
+        
+                  </div>
+              </div>
+          </form>
+          <!-- form end -->
+
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reserve a Room Modal -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="reserveRoom" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reserveRoomLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-3" id="reserveRoomLabel">Reservation</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body modalReserveroom">
+
+          <div class="container">
+
+            <form>
+              <!-- Form start -->
+              <div class="container pt-5 pb-5 bgReserveroom reserveRoomType">
+
+                <div class="row">
+                  <h3 class="text-center">Reserve a Room</h3>
+                  <div class="col-md">
+                    <h2 class="apptDate">August 04, 2023</h2>
+                  </div>
+                </div>
+
+                <div class="row justify-content-center mt-2">
+                  <div class="col-md-6">
+
+                    <form action="#">
+                      
+                      <div class="row mt-2">
+                        <div class="col-12">
+                          <label class="radio w-100">
+                            <input type="radio" name="add" value="1 bed | ₱5,000" checked />
+                            <div
+                              class="row justify-content-between p-3 radioRoomType" id="pickRoomType">
+                              <div class="col-8">
+                                  <span class="roomTypeName">Single Room</span>
+                                <div class="row">
+                                  <span class="roomTypeDetails">1 bed | ₱5,000</span>
+                                </div>
+                              </div>
+                      
+                              <div class="col-3">
+                                <i class="fa-solid fa-bed fa-4x float-end"></i>
+                              </div>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+                      
+
+                      <div class="row mt-2">
+                        <div class="col-12">
+                          <label class="radio w-100">
+                            <input type="radio" name="add" value="1 bed | ₱5,000"/>
+                            <div
+                              class="row justify-content-between p-3 radioRoomType" id="pickRoomType">
+                              <div class="col-8">
+                                  <span class="roomTypeName">2-bed Room</span>
+                                <div class="row">
+                                  <span class="roomTypeDetails">2 bed | ₱5,800</span>
+                                </div>
+                              </div>
+                      
+                              <div class="col-3">
+                                <i class="fa-solid fa-bed fa-4x float-end"></i>
+                              </div>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="row mt-2">
+                        <div class="col-12">
+                          <label class="radio w-100">
+                            <input type="radio" name="add" value="1 bed | ₱5,000" />
+                            <div
+                              class="row justify-content-between p-3 radioRoomType" id="pickRoomType">
+                              <div class="col-8">
+                                  <span class="roomTypeName">3-bed Room</span>
+                                <div class="row">
+                                  <span class="roomTypeDetails">3 bed | ₱6,000</span>
+                                </div>
+                              </div>
+                      
+                              <div class="col-3">
+                                <i class="fa-solid fa-bed fa-4x float-end"></i>
+                              </div>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="row mt-2">
+                        <div class="col-12">
+                          <label class="radio w-100">
+                            <input type="radio" name="add" value="1 bed | ₱5,000" />
+                            <div
+                              class="row justify-content-between p-3 radioRoomType" id="pickRoomType">
+                              <div class="col-8">
+                                  <span class="roomTypeName">4-bed Room</span>
+                                <div class="row">
+                                  <span class="roomTypeDetails">4 bed | ₱7,000</span>
+                                </div>
+                              </div>
+                      
+                              <div class="col-3">
+                                <i class="fa-solid fa-bed fa-4x float-end"></i>
+                              </div>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+                        
+                      </form>
+
+                  </div>
+                  
+                </div>
+
+
+
+
+
+              </div>
+          </form>
+          <!-- form end -->
+
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    
+
+
+  </body>
+
+  <!-- javascript -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"
+  ></script>
+
+  <script src="js/accommodations.js"></script>
+  
+
+  <!-- JS of Carousel -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+      integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+      crossorigin="anonymous"></script>
+  <script>
+      $('.carousel-container').owlCarousel({
+          loop: false,
+          margin: 15,
+          nav: true,
+          navText:["<i class='fa-solid fa-arrow-left leftArrow'></i>",
+                   "<i class='fa-solid fa-arrow-right rightArrow'></i>"],
+          responsive: {
+              0: {
+                  items: 1
+              },
+              600: {
+                  items: 2
+              },
+              1000: {
+                  items: 3
+              }
+          }
+      })
+
+      $('.testimonials-container').owlCarousel({
+        loop:true,
+        autoplay:false,
+        autoplayTimeout:6000,
+        margin:10,
+        nav:false,
+        responsive:{
+            0:{
+                items:1,
+                nav:false
+            },
+            600:{
+                items:1,
+                nav:true
+            },
+            768:{
+                items:2
+            },
         }
-    ?>
-    <h5><?php echo $room_type ?></h5>
-    <h5>₱<?php echo $monthly_rent ?></h5>
-    <h5>Available beds: <?php echo $available_beds ?></h5>
-    <span>
-        <?php 
-        foreach($roomAmenities as $roomAmenity) {
-            $is_available = in_array($roomAmenity, $room_amenities);
-        ?>
-            <input type="checkbox" name="roomAmenities[]"  value="<?= $roomAmenity?>" <?php echo $is_available ? 'checked' : '' ?>>
-            <label for="" class="control-label"><?= $roomAmenity?></label><br>
-        <?php } ?>
-    </span>
-</div>
-<div>
-    <h4>Map</h4>
-</div>
-<div>
-    <h4>Reviews</h4>
-</div>
+        })
+  </script>
+
+              
+    <!--   *****   JQuery Link   *****   -->
+    
+    <!--   *****   Owl Carousel js Link  *****  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+    <!-- modal jquery link -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+
+</html>

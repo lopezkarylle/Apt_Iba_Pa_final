@@ -29,7 +29,7 @@ try {
                 $deposit = $_POST['deposit'];
                 $status = 1;
 
-                $property = new Property('','','','', '', '', '','','','','', '', '', '','','','');
+                $property = new Property();
                 $property->setConnection($connection);
                 $property->updateProperty($property_type, $property_name, $landlord_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$postal_code,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit, $status);
                 
@@ -50,22 +50,6 @@ try {
                 $amenity->updateAmenities($property_id, $amenities_csv);
 
                 header("Location: view.php?property_id=" . $property_id . "#property_amenities");
-                exit();
-        }
-        else if (isset($_POST['edit_room_amenities'])) {
-                if(isset($_POST["roomAmenities"]) && is_array($_POST["roomAmenities"])){
-                        $roomAmenities = $_POST["roomAmenities"];
-                } else {
-                        $roomAmenities = array(); // No amenities selected, initialize an empty array.
-                }
-                $roomAmenities_csv = implode(",", $roomAmenities);
-                //var_dump($roomAmenities_csv);
-                $property_id = $_POST['property_id']??null;
-                $room_id = $_POST['room_id']??null;
-                $roomAmenity = new RoomAmenity('','','');
-                $roomAmenity->setConnection($connection);
-                $roomAmenity->updateRoomAmenities($room_id ,$roomAmenities_csv);
-                header("Location: view.php?property_id=" . $property_id  . "#room_amenities");
                 exit();
         }
         else if (isset($_POST['delete_review'])) {
