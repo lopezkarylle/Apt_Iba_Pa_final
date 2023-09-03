@@ -18,14 +18,15 @@ class Auth
 		$this->connection = $connection;
 	}
 
-    public function registerUser($email, $hashedPassword, $salt){
+    public function registerUser($email, $hashedPassword, $salt, $status){
         try {
-            $sql = "INSERT INTO apt_users SET email=?, password=?, salt=?, status=1"; 
+            $sql = "INSERT INTO apt_users SET email=?, password=?, salt=?, status=?"; 
             $statement = $this->connection->prepare($sql);
             $success = $statement->execute([
                 $email, 
                 $hashedPassword, 
                 $salt,
+                $status
             ]);
     
             $lastInsertedId = null;

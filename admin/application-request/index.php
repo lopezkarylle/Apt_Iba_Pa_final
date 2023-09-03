@@ -16,7 +16,7 @@ use Models\Property;
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-	<title>Users</title>
+	<title>Application Requests</title>
 </head>
 <body>
 
@@ -74,6 +74,8 @@ use Models\Property;
 				<td class="text-center">
                     <form action="view.php" method="POST">
                     <input type="hidden" name="application_id" value="<?php echo $request['application_id'] ?>">
+                    <input type="hidden" name="user_id" value="<?php echo $request['user_id'] ?>">
+                    <input type="hidden" name="property_id" value="<?php echo $request['property_id'] ?>">
                     <button type="submit" value="view_request" name="view_request">View</button>
                     <button type="submit" value="accept_request" name="accept_request">Accept</button>
                     <button type="submit" value="decline_request" name="decline_request">Decline</button>

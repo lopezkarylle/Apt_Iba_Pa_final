@@ -72,7 +72,8 @@ try {
         $password = $_POST['password'];
         $salt = bin2hex(random_bytes(16));
         $hashedPassword = hash('sha256', $password . $salt);
-
+        $status = 1;
+        
         $register_user = new Auth();
         $register_user->setConnection($connection);
         $register_user = $register_user->registerUser($email, $hashedPassword, $salt);
@@ -80,7 +81,7 @@ try {
         $user_auth = $register_user['statement'] ?? null;
         $user_id = $register_user['lastInsertedId'] ?? null;
 
-        $register_info = new User('','','','','','');
+        $register_info = new User();
         $register_info->setConnection($connection);
         $register_info->registerUserInfo($user_id, $first_name, $last_name, $contact_number);
 

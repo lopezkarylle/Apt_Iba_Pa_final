@@ -33,12 +33,27 @@ include ("session.php");
     $city = $details['city'];
     $province = $details['province'];
 	$region = $details['region'];
-    $postal_code = $details['postal_code'];
 	$latitude = $details['latitude'];
 	$longitude = $details['longitude'];
 
-    $amenities_array = $details['amenity_name'];
-    $property_amenities = explode(",", $amenities_array);
+    $aircon = $details['aircon'];
+    $cabinet = $details['cabinet'];
+    $cctv = $details['cctv'];
+    $drinking_water = $details['drinking_water'];
+    $elevator = $details['elevator'];
+    $emergency_exit = $details['emergency_exit'];
+    $food_hall = $details['food_hall'];
+    $laundry = $details['laundry'];
+    $lounge = $details['lounge'];
+    $microwave = $details['microwave'];
+    $parking = $details['parking'];
+    $refrigerator = $details['refrigerator'];
+    $roof_deck = $details['roof_deck'];
+    $security = $details['security'];
+    $sink = $details['sink'];
+    $study_area = $details['study_area'];
+    $tv = $details['tv'];
+    $wifi = $details['wifi'];
 
     $full_address = $property_number . ' ' . $street . ', ' . $barangay . '
      ' . $city . ' ' . $province;
@@ -46,12 +61,6 @@ include ("session.php");
     //landlord information
 	$first_name = $details['first_name'];
 	$last_name = $details['last_name'];
-    
-    //property amenities
-    $propertyAmenities = array("wifi","parking","reception","food hall","lounge","study area","laundromat","elevator","drinking water","microwave","refrigerator","tv","roof deck","sink","security","cctv","fire exit"); //can be from csv
-    
-    //room amenities
-    $roomAmenities = array("aircon","cushion","drinking water","refrigerator","electric fan","wifi","cabinet","tv"); //can be from csv
 
     //get all rooms of property
 	$room = new Room();
@@ -82,13 +91,54 @@ include ("session.php");
     $images->setConnection($connection);
     $images = $images->getImages($property_id);
     
-    $current_page = '| ' . $property_name;
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <?php include('head.php'); ?>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> Apt Iba Pa | <?php echo $property_name ?> </title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://getbootstrap.com/docs/5.3/assets/css/docs.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/868f1fea46.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <link href="css/view_property.css" rel="stylesheet" />
+    <link href="css/all.css" rel="stylesheet" />
+
+        <!-- Vendor Files -->
+        <link href="vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    
+
+    <!-- Bootstrap Carousel CSS -->
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+      integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+      integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+      crossorigin="anonymous"
+    />
   </head>
   <body>
     <!-- Navbar -->
@@ -234,38 +284,75 @@ include ("session.php");
     </div>
 
     <div class="col-md-6">
-
       <div class="row">
-        
         <div class="text-center" >
-  
           <div class="row mt-3">
-            <div class="col-md-6 description">
-                <?php 
-                $count = 0;
-                foreach ($propertyAmenities as $amenity){ 
-                    $is_available = in_array($amenity, $property_amenities); ?>
-              <div class="row">
-                <p <?php echo $is_available ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> <?= $amenity ?></span></p>
-              </div> 
-              <?php 
-                if ($count % 6 == 0 && $count != 0) {
-                    // Start a new column after every 6 amenities
-                    echo '</div><div class="col-md-6 description">';
-                    }  
-                $count++;
-                } 
-                ?>
+            <div class="col-md-4 description">
+                <div class="row">
+                    <p <?php echo $aircon===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-fan"></i><span> Aircon</span></p>
+                </div>
+                <div class="row">
+                    <p <?php echo $cabinet===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> Cabinet</span></p>
+                </div> 
+                <div class="row">
+                    <p <?php echo $cctv===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> CCTV</span></p>
+                </div> 
+                <div class="row">
+                    <p <?php echo $drinking_water===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> Drinking Water</span></p>
+                </div> 
+                <div class="row">
+                    <p <?php echo $elevator===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> Elevator</span></p>
+                </div> 
+                <div class="row">
+                    <p <?php echo $emergency_exit===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> Emergency Exit</span></p>
+                </div>  
             </div>
-  
-            
+
+            <div class="col-md-4 description">
+                <div class="row">
+                    <p <?php echo $food_hall===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> Food Hall</span></p>
+                </div>
+                <div class="row">
+                    <p <?php echo $laundry===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> Laundry</span></p>
+                </div> 
+                <div class="row">
+                    <p <?php echo $lounge===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> Lounge</span></p>
+                </div> 
+                <div class="row">
+                    <p <?php echo $microwave===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> Microwave</span></p>
+                </div> 
+                <div class="row">
+                    <p <?php echo $parking===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> Parking</span></p>
+                </div> 
+                <div class="row">
+                    <p <?php echo $refrigerator===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> Refrigerator</span></p>
+                </div>          
+            </div>
+
+            <div class="col-md-4 description">
+                <div class="row">
+                    <p <?php echo $roof_deck===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-arrows-left-right"></i><span> Roof Deck</span></p>
+                </div>
+                <div class="row">
+                    <p <?php echo $security===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> Security</span></p>
+                </div> 
+                <div class="row">
+                    <p <?php echo $sink===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> Sink</span></p>
+                </div> 
+                <div class="row">
+                    <p <?php echo $study_area===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> Study Area</span></p>
+                </div> 
+                <div class="row">
+                    <p <?php echo $tv===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> TV</span></p>
+                </div> 
+                <div class="row">
+                    <p <?php echo $wifi===1 ? '' : 'style="text-decoration: line-through"' ?>><i class="fa solid fa-grip"></i><span> Wifi</span></p>
+                </div>          
+            </div>
           </div>
-          
         </div>
-  
       </div>
-  
-      </div>
+    </div>
 
       <!-- House Rules -->
     <div class="col-md-6 order-3 order-md-0">
@@ -381,7 +468,87 @@ include ("session.php");
   </div>
 </div>
 
-<!-- End of Property Amenities under Property Information -->
+<!-- Start of Room Amenities under Property Information -->
+<div class="container pt-5 amenities">
+  <div class="row">
+    <div class="col-12 text-center">
+      <h3 class="name">Available Rooms</h3>
+    </div>
+  </div>
+
+    <hr />
+  <div class="row row-gap-3 ">
+
+    <div class="row column-gap-3 justify-content-center ">
+      
+      <div class="col-md-5 text-center" >
+        
+          <div class="row justify-content-between">
+            <div class="col-6 col-md-6 mt-3 d-flex justify-content-start amenitiesTitle">
+              Single Bed Room
+            </div>
+
+            <div class="col-5 col-md-6 mt-3 d-flex justify-content-end amenitiesTitle" >
+              ₱5000
+            </div>
+          </div>
+
+      </div>
+      
+
+      <div class="col-md-5 text-center" >
+        
+        <div class="row justify-content-between">
+          <div class="col-6 col-md-6 mt-3 d-flex justify-content-start amenitiesTitle">
+            Double Bed Room
+          </div>
+
+          <div class="col-5 col-md-6 mt-3 d-flex justify-content-end amenitiesTitle" >
+            ₱5000
+          </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="row column-gap-3 justify-content-center ">
+      
+      <div class="col-md-5 text-center" >
+        
+          <div class="row justify-content-between">
+            <div class="col-6 col-md-6 mt-3 d-flex justify-content-start amenitiesTitle">
+              Triple Bed Room
+            </div>
+
+            <div class="col-5 col-md-6 mt-3 d-flex justify-content-end amenitiesTitle" >
+              ₱5000
+            </div>
+          </div>
+
+      </div>
+      
+
+      <div class="col-md-5 text-center" >
+        
+        <div class="row justify-content-between">
+          <div class="col-6 col-md-6 mt-3 d-flex justify-content-start amenitiesTitle">
+            Quad Bed Room
+          </div>
+
+          <div class="col-5 col-md-6 mt-3 d-flex justify-content-end amenitiesTitle" >
+            ₱5000
+          </div>
+        </div>
+
+        
+    </div>
+
+
+    </div>
+
+  </div>
+
+  <!-- End of Room Amenities under Property Information -->
+</div>
 
 </div>
 

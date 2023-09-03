@@ -14,6 +14,7 @@
   ></script>
     <link href="css/dashboard.css" rel="stylesheet" />
     <link href="css/all.css" rel="stylesheet" />
+    <link href="css/accommodations.css" rel="stylesheet" />
     <link href="css/apply_property.css" rel="stylesheet" />
     <link href="css/property_enlist.css" rel="stylesheet" />
     <link href="css/view_property.css" rel="stylesheet" />

@@ -19,13 +19,14 @@ class UserImage
 		$this->connection = $connection;
 	}
 
-    public function addImage($user_id, $image_name, $image_path){
-        $sql = 'INSERT INTO apt_user_images SET user_id=?, image_name=?,image_path=?, status=1';
+    public function addImage($user_id, $image_name, $image_path, $status){
+        $sql = 'INSERT INTO apt_user_images SET user_id=?, image_name=?,image_path=?, status=?';
 		$statement = $this->connection->prepare($sql);
 		return $statement->execute([
             $user_id,
             $image_name,
             $image_path,
+            $status
         ]);
     }
 
@@ -40,9 +41,9 @@ class UserImage
 		}
     }
 
-    public function updateImage($user_id, $image_name, $image_path){
+    public function updateImage($user_id, $image_name, $image_path, $status){
         try {
-			$sql = 'UPDATE apt_user_images SET image_name=?, image_path=? WHERE user_id=? AND status=1';
+			$sql = 'UPDATE apt_user_images SET image_name=?, image_path=? WHERE user_id=?';
 			$statement = $this->connection->prepare($sql);
 			return $statement->execute([
                 $image_name, 

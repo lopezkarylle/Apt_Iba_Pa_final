@@ -33,11 +33,12 @@ $region = $details['region'];
 $province = $details['province'];
 $city = $details['city'];
 $barangay = $details['barangay'];
-$postal_code = $details['postal_code'];
 $latitude = $details['latitude'];
 $longitude = $details['longitude'];
 $reservation = $details['reservation_fee'];
 $deposit = $details['advance_deposit'];
+$electric_bill = $details['electric_bill'];
+$water_bill = $details['water_bill'];
 $first_name = $details['first_name'];
 $last_name = $details['last_name'];
 
@@ -45,13 +46,24 @@ $amenity = new Amenity('','','');
 $amenity->setConnection($connection);
 $amenities = $amenity->getAmenities($property_id);
 
-if($amenities){
-    $amenities_csv = $amenities['amenity_name'];
-    $amenities_array = explode(",", $amenities_csv);
-}
-else {
-    $amenities_array = array();
-}
+$aircon = $details['aircon'];
+$cabinet = $details['cabinet'];
+$cctv = $details['cctv'];
+$drinking_water = $details['drinking_water'];
+$elevator = $details['elevator'];
+$emergency_exit = $details['emergency_exit'];
+$food_hall = $details['food_hall'];
+$laundry = $details['laundry'];
+$lounge = $details['lounge'];
+$microwave = $details['microwave'];
+$parking = $details['parking'];
+$refrigerator = $details['refrigerator'];
+$roof_deck = $details['roof_deck'];
+$security = $details['security'];
+$sink = $details['sink'];
+$study_area = $details['study_area'];
+$tv = $details['tv'];
+$wifi = $details['wifi'];
 
 $room = new Room('','','','','','');
 $room->setConnection($connection);
@@ -136,10 +148,6 @@ $rooms = $room->getRooms($property_id);
 				<label for="barangay" class="control-label">Barangay - <?php echo isset($barangay) ? $barangay : '' ?></label>
 				<select name="barangay" class="form-control form-control-md" id="barangay"></select>
                 <input type="hidden" class="form-control form-control-md" name="barangay_text" id="barangay-text" value="<?php echo isset($barangay) ? $barangay : '' ?>" required>
-			</div>
-            <div class="col-md-4">
-				<label for="postal_code" class="control-label">Postal Code</label>
-				<input type="text" class="form-control" name="postal_code" id="postal_code" value="<?= $postal_code ?>" required>
 			</div>
 		</div>
 		<div class="form-group row">
@@ -403,7 +411,7 @@ $rooms = $room->getRooms($property_id);
 
 <?php 
 try {
-    if(isset($_POST['property_type'], $_POST['property_name'], $_POST['landlord_id'], $_POST['total_rooms'],$_POST['total_floors'],$_POST['description'],$_POST['property_number'],$_POST['street'],$_POST['region_text'],$_POST['province_text'],$_POST['city_text'],$_POST['barangay_text'],$_POST['postal_code'],$_POST['latitude'],$_POST['longitude'],$_POST['reservation_fee'],$_POST['advance_deposit'])){
+    if(isset($_POST['property_type'], $_POST['property_name'], $_POST['landlord_id'], $_POST['total_rooms'],$_POST['total_floors'],$_POST['description'],$_POST['property_number'],$_POST['street'],$_POST['region_text'],$_POST['province_text'],$_POST['city_text'],$_POST['barangay_text'],$_POST['latitude'],$_POST['longitude'],$_POST['reservation_fee'],$_POST['advance_deposit'])){
         $property_type = $_POST['property_type']; 
         $property_name = ucfirst($_POST['property_name']); 
         $landlord_id = $_POST['landlord_id']; 
@@ -416,7 +424,6 @@ try {
         $province_text = $_POST['province_text'];
         $city_text = $_POST['city_text'];
         $barangay_text = $_POST['barangay_text'];
-        $postal_code = $_POST['postal_code'];
         $latitude = $_POST['latitude'];
         $longitude = $_POST['longitude'];
         $reservation_fee = $_POST['reservation_fee'];
@@ -433,7 +440,7 @@ try {
         
         $property = new Property();
         $property->setConnection($connection);
-        $property_id = $property->addProperty($property_type, $property_name, $landlord_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$postal_code,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit, $status);
+        $property_id = $property->addProperty($property_type, $property_name, $landlord_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit, $status);
 
         //add to property amenities table but status=2=pending
         $amenities = $_POST['amenities'];

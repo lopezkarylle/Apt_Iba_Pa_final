@@ -63,6 +63,7 @@ include ("../session.php");
                     $property = new Property();
                     $property->setConnection($connection);
                     $properties = $property->getProperties();
+                    
                     foreach($properties as $property){
                 ?>
             <tr>

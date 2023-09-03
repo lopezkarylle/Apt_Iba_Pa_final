@@ -1,7 +1,6 @@
     
   const addRoomButton = document.getElementById('add-room');
   const roomContainer = document.getElementById('room-container');
-  const form = document.getElementById('property-form');
 
   addRoomButton.addEventListener('click', function(event) {
     event.preventDefault();
@@ -40,28 +39,4 @@
     }
   });
 
-  // Collect the selected amenities for each form submission
-  form.addEventListener("submit", function(event) {
-
-    const checkboxes = form.querySelectorAll('#room_amenities');
-    const hiddenInput = form.querySelector('#hiddenInput');
-    
-    const groupedArrays = [];
-    let tempArray = [];
-    
-
-    checkboxes.forEach((checkbox, index) => {
-      if (checkbox.checked) {
-        tempArray.push(checkbox.value);
-      }
-      
-      if ((index + 1) % 5 === 0 || index === checkboxes.length - 1) {
-        groupedArrays.push(tempArray);
-        tempArray = [];
-      }
-    });
   
-  hiddenInput.value = JSON.stringify(groupedArrays);
-
-    alert("Selected values: " + hiddenInput.value);
-  });

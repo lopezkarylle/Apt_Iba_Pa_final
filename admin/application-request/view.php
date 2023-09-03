@@ -15,6 +15,8 @@ use Models\Property;
         echo "<script>window.location.href='index.php';</script>";
         exit();
     }
+    var_dump($request);
+    
 ?>
 
 <!DOCTYPE html>
@@ -41,9 +43,13 @@ use Models\Property;
 </ul>
 </nav>
 
-<form action="view.php" method="view.php">
+<form action="view.php" method="POST">
+<input type="hidden" name="application_id" value="<?php echo $request['application_id'] ?> ">
+<input type="hidden" name="user_id" value="<?php echo $request['user_id'] ?> ">
+<input type="hidden" name="property_id" value="<?php echo $request['property_id'] ?> ">
 <button type="submit" value="accept_request" name="accept_request">Accept</button>
 <button type="submit" value="decline_request" name="decline_request">Decline</button>
+<button type="submit" value="delete_request" name="delete_request">Delete</button>
 </form>
 </body>
 </html>
@@ -52,22 +58,34 @@ use Models\Property;
 try{
     if(isset($_POST['application_id'], $_POST['accept_request'])){
         $status = 1;
-        $application->editRequest($application_id, $status);
+        $user_type = 1;
+        $user_id = $_POST['user_id'];
+        $property_id = $_POST['property_id'];
+        $application = $application->editRequest($application_id, $user_id, $property_id, $status, $user_type); 
         echo "<script>window.location.href='index.php';</script>";
         exit();
 
     } elseif (isset($_POST['application_id'], $_POST['decline_request'])) {
         $status = 3;
-        $application->editRequest($application_id, $status);
+        $user_type = 1;
+        $user_id = $_POST['user_id'];
+        $property_id = $_POST['property_id'];
+        $application = $application->editRequest($application_id, $user_id, $property_id, $status, $user_type); 
         echo "<script>window.location.href='index.php';</script>";
         exit();
 
     } elseif (isset($_POST['application_id'], $_POST['delete_request'])){
         $status = 0;
-        $application->editRequest($application_id, $status);
+        $user_type = 1;
+        $user_id = $_POST['user_id'];
+        $property_id = $_POST['property_id'];
+        $application = $application->editRequest($application_id, $user_id, $property_id, $status, $user_type); 
         echo "<script>window.location.href='index.php';</script>";
         exit();
     }
+
+   
+    
 } catch (Exception $e) {
     error_log($e->getMessage());
 }

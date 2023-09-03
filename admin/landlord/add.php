@@ -75,10 +75,11 @@ try {
         $password = $_POST['password'];
         $salt = bin2hex(random_bytes(16));
         $hashedPassword = hash('sha256', $password . $salt);
+        $status = 1;
 
         $user_auth = new Auth();
         $user_auth->setConnection($connection);
-        $user_auth = $user_auth->registerUser($email, $hashedPassword, $salt);
+        $user_auth = $user_auth->registerUser($email, $hashedPassword, $salt, $status);
         
         $user_id = $user_auth['lastInsertedId'];
         $first_name = ucfirst($_POST['first_name']);
@@ -108,12 +109,12 @@ try {
 
             $image = new UserImage();
             $image->setConnection($connection);
-            $image->addImage($user_id, $image_name, $uploadDirectory);
+            $image->addImage($user_id, $image_name, $uploadDirectory, $status);
         }
         
-        $landlord = new User('','','','','');
+        $landlord = new User();
         $landlord->setConnection($connection);
-        $landlord = $landlord->addLandlord($user_id, $first_name, $last_name, $contact_number);
+        $landlord = $landlord->addLandlord($user_id, $first_name, $last_name, $contact_number, $status);
 
         if($landlord != NULL){
             echo '<script>alert("Added Landlord Successfully")</script>';

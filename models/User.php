@@ -30,15 +30,16 @@ class User
 		$this->connection = $connection;
 	}
 
-    public function registerUserInfo($user_id, $first_name, $last_name, $contact_number){
+    public function registerUserInfo($user_id, $first_name, $last_name, $contact_number, $status){
         try {
-            $sql = "INSERT INTO apt_user_information SET user_id=?, first_name=?, last_name=?, contact_number=?, user_type=2, status=1"; 
+            $sql = "INSERT INTO apt_user_information SET user_id=?, first_name=?, last_name=?, contact_number=?, user_type=2, status=?"; 
             $statement = $this->connection->prepare($sql);
             return $statement->execute([
                 $user_id,
                 $first_name, 
                 $last_name, 
                 $contact_number, 
+                $status
             ]);
     
         } catch (Exception $e) {
@@ -84,15 +85,16 @@ class User
 		}
     }
 
-    public function addLandlord($user_id, $first_name, $last_name, $contact_number){
+    public function addLandlord($user_id, $first_name, $last_name, $contact_number, $status){
         try {
-			$sql = "INSERT INTO apt_user_information SET user_id=?, first_name=?, last_name=?, contact_number=?, user_type=1, status=1"; 
+			$sql = "INSERT INTO apt_user_information SET user_id=?, first_name=?, last_name=?, contact_number=?, user_type=1, status=?"; 
 			$statement = $this->connection->prepare($sql);
 			return $statement->execute([
                 $user_id,
 				$first_name, 
                 $last_name, 
                 $contact_number, 
+                $status
 			]);
 
 		} catch (Exception $e) {

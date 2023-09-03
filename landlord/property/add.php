@@ -63,7 +63,7 @@ $landlord_id = $_SESSION['user_id'];
             <div class="col-md-4">
 				<label for="region" class="control-label">Region</label>
 				<select name="region" class="form-control form-control-md" id="region" required></select>
-                <input type="hidden" class="form-control form-control-md" name="region_text" id="region-text" required>
+                <input type="hidden" class="form-control form-control-md" name="region_text" id="region-text">
 			</div>
             <div class="col-md-4">
 				<label for="province" class="control-label">Province</label>
@@ -79,10 +79,6 @@ $landlord_id = $_SESSION['user_id'];
 				<label for="barangay" class="control-label">Barangay</label>
 				<select name="barangay" class="form-control form-control-md" id="barangay" required></select>
                 <input type="hidden" class="form-control form-control-md" name="barangay_text" id="barangay-text" required>
-			</div>
-            <div class="col-md-4">
-				<label for="postal_code" class="control-label">Postal Code</label>
-				<input type="text" class="form-control" name="postal_code" id="postal_code" required>
 			</div>
 		</div>
 		<div class="form-group row">

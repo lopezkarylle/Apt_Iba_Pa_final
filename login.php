@@ -126,10 +126,14 @@ try {
               $_SESSION['user_type'] = $user['user_type'];
               header('location:index.php');
               exit();
-            } elseif ($user != NULL && $user['user_type'] == 0) {
+            } elseif ($user != NULL && $user['user_type'] == 3) {
               $_SESSION['user_type'] = $user['user_type'];
               header('location:admin/index.php');
               exit();
+            } elseif ($user != NULL && $user['user_type'] == 4) {
+                $_SESSION['user_type'] = $user['user_type'];
+                header('location:superadmin/index.php');
+                exit();
             } else {
                 $error_message = "Your account is not verified. Please contact the admin.";
                 header('location:login.php?error=' . $error_message);
