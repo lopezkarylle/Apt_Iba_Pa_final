@@ -6,11 +6,21 @@ use Models\RoomAmenity;
 use Models\Image;
 use Models\Review;
 use Models\Rule;
+use Models\Schedule;
+use Models\Appointment;
 include ("init.php");
 include ("session.php");
 
     $user_id = $_SESSION['user_id'] ?? NULL;
-    $property_id = $_POST['property_id'];
+    if(isset($_GET['property_id'])){
+        $_SESSION['property_view_id'] = $_GET['property_id'];
+    } else{
+        $_SESSION['property_view_id'] = $_SESSION['property_view_id'];
+    }
+    
+    $property_id = $_SESSION['property_view_id'];
+    $_SESSION['current_page'] = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    
     $property = new Property();
     $property->setConnection($connection);
     $details = $property->getPropertyDetails($property_id);
@@ -91,6 +101,16 @@ include ("session.php");
     $images->setConnection($connection);
     $images = $images->getImages($property_id);
     
+    //var_dump($images);
+    //$property_id = 26;
+        //$user_id = 33; //change with session
+
+    $disabled_dates = [];
+
+    $date_time = new Schedule('','','');
+    $date_time->setConnection($connection);
+    $date_time = $date_time->getDateTime($property_id);
+
 ?>
 
 <!DOCTYPE html>
@@ -106,13 +126,14 @@ include ("session.php");
       crossorigin="anonymous"
     />
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
       href="https://getbootstrap.com/docs/5.3/assets/css/docs.css"
       rel="stylesheet"
     />
+    <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"
+  ></script>
     <script
       src="https://kit.fontawesome.com/868f1fea46.js"
       crossorigin="anonymous"
@@ -121,9 +142,16 @@ include ("session.php");
     <link href="css/view_property.css" rel="stylesheet" />
     <link href="css/all.css" rel="stylesheet" />
 
-        <!-- Vendor Files -->
-        <link href="vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <!-- Vendor Files -->
+    <link href="vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
     
+    <!-- LeafletJS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
 
     <!-- Bootstrap Carousel CSS -->
 
@@ -147,7 +175,8 @@ include ("session.php");
     <!-- Navbar ends -->
 
 
-
+<input type="hidden" value="<?php echo $property_id ?>" name="property_id" id="property_id">
+<input type="hidden" value="<?php echo $property_name ?>" name="property_name" id="property_name">
     <!-- Carousel code starts here -->
     <div class="container-fluid">
       <h1 class="text-center fw-bold display-1 mt-5 mb-5"> <?= $property_name ?> </h1>
@@ -191,7 +220,7 @@ include ("session.php");
             <div class="h4 mt-3 col-sm-10 location">
               <div>
                 <i class="fas fa-map-marker-alt"></i> <?= $full_address ?>
-              </div>
+              </div> 
             </div>
           </div>
         </div>
@@ -238,6 +267,16 @@ include ("session.php");
         </div>
       </div>
 
+      <?php if(!isset($_SESSION['user_id'])){ ?>
+      <div class="row py-3">
+        <div class="col-sm">
+          <a href="login.php" class="btnViewP">Request a Visit</a>
+        </div>
+        <div class="col-sm">
+          <a href="login.php" class="btnViewP">Reserve a Room</a>
+        </div>
+      </div>
+    <?php } else { ?>
       <div class="row py-3">
         <div class="col-sm">
           <a href="#" class="btnViewP" data-bs-toggle="modal" data-bs-target="#requestVisit">Request a Visit</a>
@@ -246,7 +285,7 @@ include ("session.php");
           <a href="#" class="btnViewP" data-bs-toggle="modal" data-bs-target="#reserveRoom">Reserve a Room</a>
         </div>
       </div>
-
+    <?php } ?>
       <div class="row pt-5">
         <div class="col-sm availRoom">
           <div class="room">Available Rooms</div>
@@ -559,10 +598,28 @@ include ("session.php");
 
 <div class="container pt-5">
   <div class="row">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d962.807197098562!2d120.59276596960956!3d15.145774899088007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3396f313262cc467%3A0xa12b7889c166e418!2sJaeden%20Kent%20Residence%20%2F%20Batac%20-Valencia!5e0!3m2!1sen!2sph!4v1690310871739!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div id="map"></div>
+    <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d962.807197098562!2d120.59276596960956!3d15.145774899088007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3396f313262cc467%3A0xa12b7889c166e418!2sJaeden%20Kent%20Residence%20%2F%20Batac%20-Valencia!5e0!3m2!1sen!2sph!4v1690310871739!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
   </div>
 </div>
+<style>
+        #map {height: 600px; width: 1350px }
+    </style>
+<script>
+var map_center = [15.145763463436099, 120.59339729138502];
+        var mapOptions = {
+        center: map_center,
+        zoom: 30
+        }
+        var map = L.map('map', mapOptions);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+        var marker = L.marker([15.145763463436099, 120.59339729138502]).addTo(map);
+        marker.bindPopup("<b>Batac Dormitory</b><br>Lourdes Sur East<br><a href='view.php?property_id=<?php echo $property_id ?>'>View</a>").openPopup();
 
+</script>
 <!-- End of Google Map under Property Information -->
 
 
@@ -908,7 +965,7 @@ include ("session.php");
                       <p class="btnRating"><i class="fa-solid fa-star starRating"></i> 5.0 (150 reviews)
                     </div>
                     <div class="col-lg-6">
-                      <a href="view_property.html" class="btnView">View property</a>
+                      <a href="view.php?property_id=<?= $property_id ?>" class="btnView">View property</a>
                     </div>
                   </div>
 
@@ -967,7 +1024,7 @@ include ("session.php");
                       <p class="btnRating"><i class="fa-solid fa-star starRating"></i> 5.0 (150 reviews)
                     </div>
                     <div class="col-lg-6">
-                      <a href="view_property.html" class="btnView">View property</a>
+                      <a href="view.php?property_id=<?= $property_id ?>" class="btnView">View property</a>
                     </div>
                   </div>
 
@@ -1026,7 +1083,7 @@ include ("session.php");
                       <p class="btnRating"><i class="fa-solid fa-star-half-stroke starRating"></i> 4.8 (73 reviews)</p>
                     </div>
                     <div class="col-lg-6">
-                      <a href="view_property.html" class="btnView">View property</a>
+                      <a href="view.php?property_id=<?= $property_id ?>" class="btnView">View property</a>
                     </div>
                   </div>
 
@@ -1037,7 +1094,7 @@ include ("session.php");
           </div>
 
           <div style="margin-top: 4rem; text-align: center">
-            <a href="accomodations.html" class="inline-btn">View All</a>
+            <a href="accomodations.php" class="inline-btn">View All</a>
           </div>
 
         <!-- </div> -->
@@ -1136,291 +1193,27 @@ include ("session.php");
   <!-- Request a Visit Modal -->
 
   <!-- Modal -->
-  <div class="modal fade" id="requestVisit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="requestVisitLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg overflow-x-hidden ">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-3" id="requestVisitLabel">Schedule a Visit</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body overflow-x-hidden  modalTimeslots">
 
-          <div class="container">
-
-            <form>
-              <!-- Form start -->
-              <div class="container pt-5 pb-5 bgTimeSlots timeSlots">
-
-                <div class="row">
-                  <h3 class="text-center">View the property on</h3>
-                  <div class="col-md">
-                    <h2 class="ms-3 apptDate">August 04, 2023</h2>
-                  </div>
-                </div>
-
-                <div class="row justify-content-center">
-
-                  
-                  <div class="col-md-4">
-
-                    <form action="#">
-                      <div class="form-group p-3 datePicker">
-                        <input type="date" class="form-control" id="pick-date" placeholder="Pick A Date">
-                      </div>
-                      
-                      <h5 class="text-center">*Click to change date</h5>
-                    </form>
-
-                  </div>
-                </div>
-
-
-                <div class="row ps-4 h3 mt-2">
-                  <h2 class="dayzone">
-                    <img src="images/dayzone1.png" alt=""/>
-                    Morning
-                  </h2>
-                  <h2 class="timezone">8:00 AM to 11:30 AM</h2>
-                </div>
-                
-                  <div class="row pt-5 justify-content-center">
-        
-                      <div class="col-5 col-sm-3 col-lg-2  d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 8:00 AM </a></div>
-                      
-                      <div class="col-5 col-sm-3 col-lg-2 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 8:30 AM </a></div>
-        
-                      <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 9:00 AM </a></div>
-                      
-                      <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 9:30 AM </a></div>
-        
-                  </div>
-                  <div class="row pt-5 pb-5 justify-content-center">
-        
-                    <div class="col-5 col-sm-3 col-lg-2  d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i>  10:00 AM </a></div>
-                      
-                    <div class="col-5 col-sm-3 col-lg-2 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 10:30 AM </a></div>
-        
-                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 11:00 AM </a></div>
-                      
-                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 11:30 AM </a></div>
-        
-                  </div>
-                
-                <div class="row ps-4 h3 mt-5">
-                  <hr>
-                  <h2 class="dayzone pt-4">
-                    <img src="images/dayzone2.png" alt=""/>
-                    Afternoon
-                  </h2>
-                  <h2 class="timezone">1:00 PM to 5:30 PM</h2>
-                </div>
-                  <div class="row pt-5 justify-content-center">
-        
-                    <div class="col-5 col-sm-3 col-lg-2  d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 12:00 PM </a></div>
-                    
-                    <div class="col-5 col-sm-3 col-lg-2 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 12:30 PM </a></div>
-        
-                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 1:00 PM </a></div>
-                    
-                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 1:30 PM </a></div>
-        
-                  </div>
-                  <div class="row pt-5 justify-content-center">
-        
-                    <div class="col-5 col-sm-3 col-lg-2  d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 2:00 PM </a></div>
-                    
-                    <div class="col-5 col-sm-3 col-lg-2 d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 2:30 PM </a></div>
-        
-                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 3:00 PM </a></div>
-                    
-                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 3:30 PM </a></div>
-        
-                  </div>
-                  <div class="row pt-5 justify-content-center">
-        
-                    <div class="col-5 col-sm-3 col-lg-2  d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 4:00 PM </a></div>
-                    
-                    <div class="col-5 col-sm-3 col-lg-2 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 4:30 PM </a></div>
-        
-                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary disabled" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 5:00 PM </a></div>
-                    
-                    <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-sm-0 d-flex justify-content-center"><a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> 5:30 PM </a></div>
-        
-                  </div>
-              </div>
-          </form>
-          <!-- form end -->
-
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary">Submit</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <?php include('appointment-modal.php'); ?>
 
   <!-- Reserve a Room Modal -->
 
-  <!-- Modal -->
-  <div class="modal fade" id="reserveRoom" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reserveRoomLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-3" id="reserveRoomLabel">Reservation</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body modalReserveroom">
-
-          <div class="container">
-
-            <form>
-              <!-- Form start -->
-              <div class="container pt-5 pb-5 bgReserveroom reserveRoomType">
-
-                <div class="row">
-                  <h3 class="text-center">Reserve a Room</h3>
-                  <div class="col-md">
-                    <h2 class="apptDate">August 04, 2023</h2>
-                  </div>
-                </div>
-
-                <div class="row justify-content-center mt-2">
-                  <div class="col-md-6">
-
-                    <form action="#">
-                      
-                      <div class="row mt-2">
-                        <div class="col-12">
-                          <label class="radio w-100">
-                            <input type="radio" name="add" value="1 bed | ₱5,000" checked />
-                            <div
-                              class="row justify-content-between p-3 radioRoomType" id="pickRoomType">
-                              <div class="col-8">
-                                  <span class="roomTypeName">Single Room</span>
-                                <div class="row">
-                                  <span class="roomTypeDetails">1 bed | ₱5,000</span>
-                                </div>
-                              </div>
-                      
-                              <div class="col-3">
-                                <i class="fa-solid fa-bed fa-4x float-end"></i>
-                              </div>
-                            </div>
-                          </label>
-                        </div>
-                      </div>
-                      
-
-                      <div class="row mt-2">
-                        <div class="col-12">
-                          <label class="radio w-100">
-                            <input type="radio" name="add" value="1 bed | ₱5,000"/>
-                            <div
-                              class="row justify-content-between p-3 radioRoomType" id="pickRoomType">
-                              <div class="col-8">
-                                  <span class="roomTypeName">2-bed Room</span>
-                                <div class="row">
-                                  <span class="roomTypeDetails">2 bed | ₱5,800</span>
-                                </div>
-                              </div>
-                      
-                              <div class="col-3">
-                                <i class="fa-solid fa-bed fa-4x float-end"></i>
-                              </div>
-                            </div>
-                          </label>
-                        </div>
-                      </div>
-
-                      <div class="row mt-2">
-                        <div class="col-12">
-                          <label class="radio w-100">
-                            <input type="radio" name="add" value="1 bed | ₱5,000" />
-                            <div
-                              class="row justify-content-between p-3 radioRoomType" id="pickRoomType">
-                              <div class="col-8">
-                                  <span class="roomTypeName">3-bed Room</span>
-                                <div class="row">
-                                  <span class="roomTypeDetails">3 bed | ₱6,000</span>
-                                </div>
-                              </div>
-                      
-                              <div class="col-3">
-                                <i class="fa-solid fa-bed fa-4x float-end"></i>
-                              </div>
-                            </div>
-                          </label>
-                        </div>
-                      </div>
-
-                      <div class="row mt-2">
-                        <div class="col-12">
-                          <label class="radio w-100">
-                            <input type="radio" name="add" value="1 bed | ₱5,000" />
-                            <div
-                              class="row justify-content-between p-3 radioRoomType" id="pickRoomType">
-                              <div class="col-8">
-                                  <span class="roomTypeName">4-bed Room</span>
-                                <div class="row">
-                                  <span class="roomTypeDetails">4 bed | ₱7,000</span>
-                                </div>
-                              </div>
-                      
-                              <div class="col-3">
-                                <i class="fa-solid fa-bed fa-4x float-end"></i>
-                              </div>
-                            </div>
-                          </label>
-                        </div>
-                      </div>
-                        
-                      </form>
-
-                  </div>
-                  
-                </div>
-
-
-
-
-
-              </div>
-          </form>
-          <!-- form end -->
-
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary">Submit</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-    
-
-
+  <?php include('reservation-modal.php'); ?>
   </body>
 
   <!-- javascript -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-    crossorigin="anonymous"
-  ></script>
+  
 
   <script src="js/accommodations.js"></script>
   
 
+
   <!-- JS of Carousel -->
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  -->
+
 
   <!-- Option 1: Bootstrap Bundle with Popper -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
@@ -1467,15 +1260,5 @@ include ("session.php");
         }
         })
   </script>
-
-              
-    <!--   *****   JQuery Link   *****   -->
-    
-    <!--   *****   Owl Carousel js Link  *****  -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-
-    <!-- modal jquery link -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-
 
 </html>

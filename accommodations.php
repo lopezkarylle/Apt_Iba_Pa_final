@@ -6,8 +6,8 @@ include ("session.php");
 
 if(isset($_POST['query'])){
     $query = $_POST['query'];
-} elseif(isset($_POST['barangay'])){
-    $query = $_POST['barangay'];
+} elseif(isset($_GET['barangay'])){
+    $query = $_GET['barangay'];
 
 }
 $barangay_list = array('Lourdes Sur East', 'Salapungan', 'Claro M. Recto'); //can be converted or taken from csv
@@ -40,8 +40,6 @@ $current_page = "| Accommodations";
     <link href="css/accommodations.css" rel="stylesheet" />
     <link href="css/all.css" rel="stylesheet" />
 
-    <!-- Vendor Files -->
-    <link href="vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
   </head>
   
   <body>
@@ -60,22 +58,49 @@ $current_page = "| Accommodations";
             <div class="wrapper">
 
                 <!-- Search -->
-                <h2>Search</h2>
-                <div>
-                    <input type="text" name="query" id="search_bar" placeholder="Search for properties..." value="<?php echo $query ?? ''?>">
+                <div class="row justify-content-center mb-3">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <input class="form-control" type="text" name="query" id="search_bar" placeholder="Search.." aria-label="Search" value="<?php echo $query ?? ''?>">
+                </div>
                 </div>
                 <!-- End of search -->
               
-              <div class="d-md-flex align-items-md-center">
-                  <div class="h2"><i class="fa-solid fa-filter-list"></i> Filter</div>
-              </div>
-
-              <form id="filter_form">
+                <div class="d-none d-md-block">
+                    <div class="d-md-flex align-items-md-center" >
+                        <div class="h2">
+                            <i class="fa-solid fa-filter-list"></i> Filter
+                        </div>
+                    </div>
+                </div>
+                <hr class="d-block d-md-none">
+              <!-- <form id="filter_form"> -->
 
 
               <!-- <divs class="d-lg-flex align-items-lg-center pt-2"> -->
-            <div class="row">
-              <div class="col-12 col-md-6 col-lg-3">
+              <div class="row">
+
+                <div class="col-12 col-lg-auto col-xl-auto d-block d-md-none d-lg-block">
+                <label class="filterTitle">Location:</label>
+                <div class="form-inline d-flex justify-content-lg-start justify-content-md-center align-items-center my-2 checkbox bg-light border mx-lg-2"> 
+                    <div class="row">
+                    <?php 
+                            foreach ($barangay_list as $barangay){ 
+                                if(isset($_POST['barangay'])){
+                                    $isChecked = ($query === $barangays) ? 'checked' : '';
+                                }
+                        ?>
+                    <div class="col-12 col-md-0 col-lg-auto">
+                        <label class="tick"><?= $barangay ?> <input type="checkbox"> 
+                            <span class="check"></span> 
+                        </label> 
+                    </div>
+                    <?php } ?>
+                    
+                    </div>
+                </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-auto">
                 <label class="filterTitle">Price:</label>
                 <div class="form-inline d-flex align-items-center my-2 radio bg-light border"> 
                     <label class="options">Any 
@@ -83,75 +108,46 @@ $current_page = "| Accommodations";
                         <span class="checkmark"></span> 
                     <label class="options">Highest First 
                         <input type="radio" name="price" value="high">
-                    <span class="checkmark"></span> 
+                        <span class="checkmark"></span> 
                     </label> <label class="options">Lowest First 
                         <input type="radio" name="price" value="low">
                         <span class="checkmark"></span> </label> 
                 </div>
-              </div>
+                </div>
 
-              <div class="col-12 col-md-6 col-lg-3">
+                <div class="col-12 col-md-6 col-lg-auto">
                 <label class="filterTitle">Type:</label>
                 <div class="form-inline d-flex align-items-center my-2 checkbox bg-light border mx-lg-2"> 
-                  <label class="tick">Apartment 
-                    <input type="checkbox" name="property_type[]" value="Apartment"> 
-                    <span class="check"></span> 
-                  </label> 
+                    <label class="tick">Apartment 
+                        <input type="checkbox" name="property_type[]" value="Apartment"> 
+                        <span class="check"></span> 
+                    </label> 
 
-                  <label class="tick">Dormitory 
-                    <input type="checkbox" name="property_type[]" value="Dormitory">
-                    <span class="check"></span> 
-                </label> 
+                    <label class="tick">Dormitory 
+                        <input type="checkbox" name="property_type[]" value="Dormitory">
+                        <span class="check"></span> 
+                    </label> 
+
+                    <label class="tick">Apartelle 
+                        <input type="checkbox" name="property_type[]" value="Apartelle">
+                        <span class="check"></span> 
+                    </label> 
                 </div>
-              </div>
-
-              <div class="col-12 col-lg-6 col-xl-5 col-xxl-4 d-block d-md-none d-lg-block">
-                <label class="filterTitle">Location:</label>
-                <div class="form-inline d-flex justify-content-lg-start justify-content-md-center align-items-center my-2 checkbox bg-light border mx-lg-2"> 
-                  <!-- <div class="row"> -->
-                    <!-- <div class="col-12 col-md-3"> -->
-                        <?php foreach ($barangay_list as $barangay){ 
-                            if(isset($_POST['barangay'])){
-                                $isChecked = ($query === $barangays) ? 'checked' : '';
-                                }
-                        ?>
-                      <label class="tick">Salapungan 
-                        <input type="checkbox" name="barangay[]" value="<?php echo $barangays ?>" <?php echo $isChecked ?? '' ?>>
-                          <span class="check"></span> 
-                      </label> 
-                      <?php } ?>
-                    <!-- <div> -->
-                  <!-- </div> -->
                 </div>
-              </div>
 
-              <button type="submit" id="submit_filter" name="submit_filter" value="submit_filter">Filter</button>
-            </form>
+                </div>
 
-              <!-- </divs> -->
-            </div>
-            </div>
-          </div>
+                </div>
+                </div>
 
-          <div class="row">
-            <div class="d-sm-flex align-items-sm-center pt-2 clear wrapper">
-                <div class="text-muted filter-label">Applied Filters:</div>
-                <div class="green-label font-weight-bold p-0 px-1 mx-sm-1 mx-0 my-sm-0 my-2">Selected Filter <span class=" px-1 close">×</span> </div>
-                <div class="green-label font-weight-bold p-0 px-1 mx-sm-1 mx-0">Selected Filter <span class=" px-1 close">×</span> </div>
-            </div>
-          </div>
-
-          <div id="results">
-            <!-- Contains each accommodations -->
-          </div>
-
-              <div class="row mt-5 mb-5 justify-content-center">
-                <a href="accomodations.html" class="btnViewAll">View All</a>
-              </div>
-
-
+        <!-- Contains each accommodations -->
+        
+        <div class="box-container" id="results"></div>
               
-          
+        <!-- End of accommodations display -->
+            <div class="row mt-5 mb-5 justify-content-center">
+                <a href="accomodations.php" class="btnViewAll">View All</a>
+            </div>
           </div>
         </div>
       </section>
@@ -281,20 +277,33 @@ $(document).ready(function () {
     });
 
     // Listen for form submission
-    $('#filter_form').on('submit', function (e) {
-        e.preventDefault(); // Prevent the form from submitting normally
+    // $('#filter_form').on('submit', function (e) {
+    //     e.preventDefault(); // Prevent the form from submitting normally
 
-        performAjax({
-            price: $('input[name="price"]:checked').val(),
-            property_type: $('input[name="property_type[]"]:checked').map(function () {
-                return $(this).val();
-            }).get(),
-            barangay: $('input[name="barangay[]"]:checked').map(function () {
-                return $(this).val();
-            }).get(),
-            submit_filter: $('#submit_filter').val()
-        }); // Perform AJAX request when the form is submitted
+    //     performAjax({
+    //         price: $('input[name="price"]:checked').val(),
+    //         property_type: $('input[name="property_type[]"]:checked').map(function () {
+    //             return $(this).val();
+    //         }).get(),
+    //         barangay: $('input[name="barangay[]"]:checked').map(function () {
+    //             return $(this).val();
+    //         }).get(),
+    //         submit_filter: $('#submit_filter').val()
+    //     }); // Perform AJAX request when the form is submitted
+    // });
+
+    $('input[name="price"], input[name="property_type[]"], input[name="barangay[]"]').on('change', function () {
+    performAjax({
+        price: $('input[name="price"]:checked').val(),
+        property_type: $('input[name="property_type[]"]:checked').map(function () {
+            return $(this).val();
+        }).get(),
+        barangay: $('input[name="barangay[]"]:checked').map(function () {
+            return $(this).val();
+        }).get(),
+        submit_filter: $('#submit_filter').val()
     });
+});
 });
 </script>
 </html>

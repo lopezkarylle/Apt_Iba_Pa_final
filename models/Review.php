@@ -21,20 +21,37 @@ class Review
 		$this->connection = $connection;
 	}
 
-    // public function addImage($property_id, $targetFilePath, $status){
-    //     //$encrypted_password = sha1($password);
-    //     $sql = 'INSERT INTO apt_property_images SET property_id=:property_id, image_path=:image_path, status=:status';
-	// 	$statement = $this->connection->prepare($sql);
-	// 	return $statement->execute([
-    //         ':property_id' => $property_id,
-    //         ':image_path' => $targetFilePath,
-    //         ':status' => $status,
-    //     ]);
-    // }
+    public function addReview($rating, $description, $user_id, $property_id, $status){
+        try {
+            $sql = "INSERT INTO apt_review SET rating=?, description=?, user_id=?, property_id=?, status=?";
+            $statement = $this->connection->prepare($sql);
+			return $statement->execute([
+                $rating, 
+                $description, 
+                $user_id, 
+                $property_id, 
+                $status
+
+            ]);
+        } catch (Exception $e) {
+            echo 'An error occurred: ' . $e->getMessage();
+        }
+    }
 
     public function getReviews($property_id){
         try {
 			$sql = "SELECT * FROM apt_reviews JOIN apt_users ON apt_reviews.user_id=apt_users.user_id WHERE apt_reviews.property_id=$property_id AND apt_reviews.status=1";
+			$data = $this->connection->query($sql)->fetchAll();
+			return $data;
+
+		} catch (Exception $e) {
+			error_log($e->getMessage());
+		}
+    }
+
+    public function getRatings($property_id){
+        try {
+			$sql = "SELECT rating FROM apt_reviews WHERE apt_reviews.property_id=$property_id AND apt_reviews.status=1";
 			$data = $this->connection->query($sql)->fetchAll();
 			return $data;
 

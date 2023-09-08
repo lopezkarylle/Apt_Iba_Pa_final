@@ -99,4 +99,18 @@ class Auth
 			error_log($e->getMessage());
 		}
     }
+
+    public function resetToken($email, $token){
+        try {
+             $sql = 'INSERT INTO apt_password_reset_tokens SET email=?, token=?, expiry=DATE_ADD(NOW(), INTERVAL 1 HOUR)';
+             $statement = $this->connection->prepare($sql);
+             return $statement->execute([
+                        $email,
+                        $token
+                    ]);
+
+        } catch (Exception $e) {
+            echo 'An error occurred: ' . $e->getMessage();
+        }
+    }
 }

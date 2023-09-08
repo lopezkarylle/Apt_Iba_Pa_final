@@ -56,11 +56,18 @@ if (isset($_POST['submit_filter'])) {
 ?>
 
 <!-- properties -->
-<ul>
-    <?php 
+
+<form action="view.php" method="POST">
+    
+            
+            
+        <input type="hidden" value="<?=$property_id?>" name="property_id">
+
+        <?php $propertyCounter = 0; ?>
+        <?php 
     foreach ($properties as $property) { 
         $property_name = $property['property_name'];
-        $barangay = $property['barangay'];
+        $address = $property['barangay'] . ', ' . $property['city'];
         $lowest_rate = $property['lowest_rate'];
         $property_type = $property['property_type'];
 
@@ -73,21 +80,18 @@ if (isset($_POST['submit_filter'])) {
             $image = $images['image_path'];
         }
     ?>
-            
-            <form action="view.php" method="POST">
-<input type="hidden" value="<?=$property_id?>" name="property_id">
-
-<div class="box-container">
+        <?php if ($propertyCounter % 2 == 0) { ?>
             <div class="row gx-5 mb-3">
+            <?php } ?>
               <div class="col-md-6">
                 <div class="box">
                     <div class="row">
                         <div class="col-10">
-                            <h3 class="name"><?= $property_name?></h3>
+                            <h3 class="name"><?= $property_name ?></h3>
                             <div class="row">
                                 <div class="h4 mt-3 col-sm-8">
                                     <div>
-                                    <i class="fas fa-map-marker-alt"></i> <?= $barangay?>
+                                    <i class="fas fa-map-marker-alt"></i> <?= $address ?>
                                     </div>
                                 </div>
                             </div>
@@ -103,15 +107,15 @@ if (isset($_POST['submit_filter'])) {
                     <p class="total-images">
                       <i class="far fa-image"></i><span>4</span>
                     </p>
-                    <p class="type"><span><?= $property_type?></span></p>
+                    <p class="type"><span><?= $property_type ?></span></p>
 
-                    <img src="images/house-img-2.webp" alt="" />
+                    <img src="resources/images/properties/<?= $image ?>" alt="" />
                   </div>
                   <div class="row">
                     
                     <div class="col-sm-6 rentName">
                       Rent starts at
-                      <div class="price">&#8369;<?= $lowest_rate?></div>
+                      <div class="price">&#8369;<?= $lowest_rate ?></div>
                     </div>
                     <div class="col-sm-6">
                         <p class="btnRating"><i class="fa-solid fa-star-half-stroke starRating"></i> 4.8 (73 reviews)</p>
@@ -119,16 +123,20 @@ if (isset($_POST['submit_filter'])) {
                   </div>
                   
                   <div class="row">
-                    <div class="col-sm">
-                      <!-- <a href="view_property.html" class="btnView">View property</a> -->
-
-                      <button type="submit" name="view_property">View Property</button>
+                    <div class="col-sm"> 
+                      <a href="view.php?property_id=<?= $property_id ?>" class="btnView">View property</a>
                     </div>
                   </div>
+
                 </div>
-             </div>
-</div>
+              </div>
+              <?php if ($propertyCounter % 2 == 1 || $propertyCounter == count($properties) - 1) { ?>
+              
+            </div>
+            <?php } ?>
+        <?php $propertyCounter++; ?>
     <?php } ?>
-</ul>
+
+    </form>
 <!-- end of properties -->
 

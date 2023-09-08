@@ -2,26 +2,46 @@
 use Models\Property;
 use Models\Image;
 use Models\User;
+use Models\Review;
 include ("init.php");
 include ("session.php");
 
+
+if(isset($_SESSION['user_id'])){
+    $user_id = $_SESSION['user_id'];
+    
+    $user = new User();
+    $user->setConnection($connection);
+    $user = $user->getById($user_id);
+    
+    $full_name = $user['first_name'] . ' ' . $user['last_name'];
+}
+
+if(isset($_SESSION['current_page'])){
+    unset($_SESSION['current_page']);
+}
+
+//Get all properties
 $property = new Property();
 $property->setConnection($connection);
 $properties = $property->getProperties();
 
-if(isset($_SESSION['user_id'])){
-$user_id = $_SESSION['user_id'];
 
-$user = new User();
-$user->setConnection($connection);
-$user = $user->getById($user_id);
-
-$full_name = $user['first_name'] . ' ' . $user['last_name'];
+//For map display
+$map_latitude = [];
+$map_longitude = [];
+$map_property = [];
+$full_address = [];
+foreach($properties as $property_item){
+    $map_latitude[] = $property_item['latitude'];
+    $map_longitude[] = $property_item['longitude'];
+    $map_property[] = $property_item['property_name'];
+    $full_address[] = $property_item['property_number'] . ' ' . $property_item['street'] . ', ' .  $property_item['barangay'];
 }
 
+//All available barangay
 $barangay_list = array('Lourdes Sur East', 'Salapungan', 'Claro M. Recto'); //can be converted or taken from csv
 
-$current_page = '';
 ?>
 
 <!DOCTYPE html>
@@ -31,23 +51,24 @@ $current_page = '';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Apt Iba Pa</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
-      crossorigin="anonymous"
-    />
-    <script
-    src="https://kit.fontawesome.com/868f1fea46.js"
-    crossorigin="anonymous"
-  ></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"/>
+    <script src="https://kit.fontawesome.com/868f1fea46.js" crossorigin="anonymous"></script>
     <link href="css/dashboard.css" rel="stylesheet" />
     <link href="css/all.css" rel="stylesheet" />
-  </head>
 
-  <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+    <!-- LeafletJS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+
+<body>
     <!-- Navbar -->
         <?php include('navbar.php') ?>
+        <div>
+            <a href="profile.php">Profile</a>
+        </div>
     <!-- Navbar ends -->
     
     <!-- Header/Banner starts -->
@@ -85,38 +106,37 @@ $current_page = '';
 
     <!-- Info Buttons starts-->
 
-    <div class="container-fluid">
+    <div class="container-md">
       <div class="row mt-5">
         <section class="info">
-          <div class="box-container">
-            <!-- Browse by barangay -->
-            <form action="accommodations.php" method="POST">
-                <?php foreach($barangay_list as $barangay) {?>
-                <button type="submit" value="<?php echo $barangay ?>" name="barangay"><?php echo $barangay ?></button>
-                <?php } ?>
-            </form>
-            <!-- End browse -->
+          <div class="row gy-4">
 
-            <!-- <a href="your-link-1" class="box">
-              <img src="images/icon-17.png" alt="" />
-              <h3>Dormitories and Apartments located in Salapungan</h3>
-            </a>
+          <?php foreach($barangay_list as $barangay) {?>
+              <div class="col ">
+                <div class="box-container">
+                  <a href="accommodations.php?barangay=<?php echo $barangay ?>" class="box">
+                    <img src="images/icon-17.png" alt="" />
+                    <h3>Dormitories and Apartments located in <?php echo $barangay ?></h3>
+                  </a>
+                </div>
+              </div>
+              <?php } ?>
+              
 
-            <a href="your-link-1" class="box">
-              <img src="images/icon-17.png" alt="" />
-              <h3>Dormitories and Apartments located in Lourdes Sur East</h3>
-            </a>
-
-            <a href="your-link-1" class="box">
-              <img src="images/icon-18.png" alt="" />
-              <h3>Dormitories and Apartments located around AUF</h3>
-            </a> -->
-
+            
           </div>
         </section>
       </div>
     </div>
     <!-- Info Buttons ends-->
+
+        <!-- Map Browse -->
+        <div class="container-md">
+      <div class="row mt-5">
+            <div id="map"></div>
+        </div>
+    </div>
+    <!-- Map Browse end -->
 
     <!-- Featured section starts -->
 
@@ -141,6 +161,19 @@ $current_page = '';
                     $images->setConnection($connection);
                     $images = $images->getDisplayImage($property_id);
                     
+                    $reviews = new Review();
+                    $reviews->setConnection($connection);
+                    $reviews = $reviews->getRatings($property_id);
+                    
+                    $total_ratings = 0;
+                    $total_reviews = count($reviews);
+                    
+                    foreach ($reviews as $review) {
+                        $total_ratings += $review["rating"];
+                    }
+
+                    $average_rating = $total_ratings / $total_reviews;
+
                     if($images){
                         $image = $images['image_path'];
                     }
@@ -195,12 +228,12 @@ $current_page = '';
 
                   <div class="row">
                     <div class="col-lg-6">
-                      <p class="btnRating"><i class="fa-solid fa-star starRating"></i> 5.0 (150 reviews)
+                      <p class="btnRating"><i class="fa-solid fa-star starRating"></i> <?= $average_rating ?>
                     </div>
                     <div class="col-lg-6">
-                      <!-- <a href="view_property.html" class="btnView">View property</a> -->
+                      <a href="view.php?property_id=<?php echo $property_id ?>" class="btnView">View property</a> 
 
-                      <button type="submit" name="view_property">View Property</button>
+                      <!-- <button type="submit" name="view_property">View Property</button> -->
                     </div>
                   </div>
 
@@ -375,18 +408,31 @@ $current_page = '';
       <!-- Footer ends -->
   
 
+<!-- map style and script -->
 
+<style>
+    #map {height: 600px; width: 1350px }
+</style>
+<script>
+var map_center = [15.145158062165162, 120.59477842687491];
+        var mapOptions = {
+        center: map_center,
+        zoom: 18
+        }
+        var map = L.map('map', mapOptions);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
 
-    
-
-
-  </body>
-
-  <!-- javascript -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-    crossorigin="anonymous"
-  ></script>
-
+        var latitude = <?php echo json_encode($map_latitude); ?>;
+        var longitude = <?php echo json_encode($map_longitude); ?>;
+        var propertyNames = <?php echo json_encode($map_property); ?>;
+        var full_address = <?php echo json_encode($full_address); ?>;
+        for (var i = 0; i < latitude.length; i++) {
+        var marker = L.marker([latitude[i], longitude[i]]).addTo(map);
+        marker.bindPopup("<b>" + propertyNames[i] + "</b><br>" + full_address[i] + "<br><a href='view.php?property_id'>View</a>").openPopup();
+        }
+</script>
+</body>
 </html>

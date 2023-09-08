@@ -857,7 +857,7 @@ $user_id = $_SESSION['user_id'] ?? NULL;
             
             <div class="form-group row">
                     <div class="col-md-4">
-                            <label for="" class="control-label">Locate your property</label>
+                            <!-- <label for="" class="control-label">Locate your property</label> -->
                             <!-- <div id='map' style='width: 400px; height: 300px;'></div> -->
                             <input type="hidden" name="latitude" value="15.145113074763598">
                             <input type="hidden" name="longitude" value="120.5950306751359">

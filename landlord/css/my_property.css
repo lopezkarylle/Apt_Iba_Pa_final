@@ -72,7 +72,19 @@ section {
 
 }
 
-.d-flex .btn {
+.signOutbtn .btn {
+   background-color: #232A3D;
+   color: #FFF;
+   font-size: 1.5rem;
+}
+
+.signOutbtn .btn:hover {
+   background-color: #E4E9F7;
+   color: #232A3D;
+}
+
+
+/* .d-flex .btn {
    background-color: #232A3D;
    color: #FFF;
    font-size: 1.5rem;
@@ -81,7 +93,7 @@ section {
 .d-flex .btn:hover {
    background-color: #E4E9F7;
    color: #232A3D;
-}
+} */
 
 .jumbotron {
    background: url('../images/header.png') no-repeat center fixed;
@@ -359,12 +371,13 @@ section {
 }
 
 .accommodations .box-container .box .name {
-   font-size: 2rem;
+   font-size: 2.5rem;
    text-overflow: ellipsis;
    overflow-x: hidden;
    color: var(--black);
    margin-bottom: .5rem;
    overflow-y: hidden;
+   font-weight: 600;
 }
 
 .accommodations .box-container .box .rentName {
@@ -415,25 +428,79 @@ section {
    color: var(--main-color);
 }
 
+/* Pending */
+.accommodations .box-container .box .statusP span {
+   padding: .5rem 2.5rem;
+   color: #ffcc00;
+   background-color: #fff1b9;
+   font-size: 1.6rem;
+   border-radius: 25px;
+}
+
+/* Posted/Accepted */
+.accommodations .box-container .box .statusA span {
+   padding: .5rem 2rem;
+   color: #13853f;
+   background-color: #b7e6c9;
+   font-size: 1.6rem;
+   border-radius: 25px;
+}
+
+
 /* View All button */
 
-.btnViewAll:hover {
-   background-color: #323233;
-   border-radius: 5px;
+.btnViewMyP,
+.inline-btn {
+   padding: 1rem 5.5rem;
+   background-color: #232A3D;
+   color: #fff;
+   cursor: pointer;
+   text-align: center;
+   font-size: 1.8rem;
+   text-transform: capitalize;
+}
+
+.btnViewMyP:hover,
+.inline-btn:hover {
+   background-color: #0e162c;
 
 }
 
-.btnViewAll {
+.btn.btnViewMyP:active,
+.btn.inline-btn:active {
+   background-color: #0e162c;
+
+}
+
+.btnViewMyP {
+   display: block;
+   width: 100%;
    border-radius: 5px;
-   background-color: #232A3D;
-   width: 50%;
-   padding: 1rem 3rem;
+   text-decoration: none;
+}
+
+.linkViewProperty{
+   text-decoration: none;
+   color: #fff;
+   width: 100%;
+}
+
+.btnDelete {
+   border-radius: 5px;
+   background-color: #b30000;
+   width: 100%;
+   padding: 1rem 5rem;
    color: #fff;
    cursor: pointer;
    text-align: center;
    font-size: 1.8rem;
    text-decoration: none;
    
+}
+.btnDelete:hover {
+   background-color: #970000;
+   border-radius: 5px;
+
 }
 
 

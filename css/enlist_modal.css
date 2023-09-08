@@ -300,28 +300,13 @@ input[type=number] {
  }
  
  .multisteps-form__panel {
-   position: absolute;
-   top:0;
-   left:0;
+   top: 0;
+   left: 0;
    width: 100%;
    height: 0;
    opacity: 0;
    visibility: hidden;
  }
-
- @media screen and (min-width: 992px) {
-
-  .multisteps-form__form {
-    margin-left: 25%;
-  }
-
-  .multisteps-form__panel {
-    width: 50%;
-  }
-
-}
-
-
  .multisteps-form__panel.js-active {
    height: auto;
    opacity: 1;
@@ -427,8 +412,4 @@ label.radio input:checked+div#pickRoomType {
   border: 3px solid;
   border-color: black;
   border-radius: 5px;
-}
-
-.placeImage div{
-  border:1px dashed black
 }

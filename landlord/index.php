@@ -1,5 +1,6 @@
 <?php 
 use Models\User;
+use Models\Notification;
 
 include ("../init.php");
 
@@ -11,6 +12,12 @@ if(!isset($_SESSION['user_id']) || $_SESSION['user_type'] != 1){
 }
 
 $user_id = $_SESSION['user_id'];
+
+$notification = new Notification();
+$notification->setConnection($connection);
+$notifications = $notification->getNotifications($user_id);
+
+var_dump($notifications);
 
 ?>
 <!DOCTYPE html>

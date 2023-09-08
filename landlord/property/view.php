@@ -38,7 +38,6 @@ if(isset($_POST['property_id']) || isset($_SESSION['property_id'])){
     $province = $details['province'];
     $city = $details['city'];
     $barangay = $details['barangay'];
-    $postal_code = $details['postal_code'];
     $latitude = $details['latitude'];
     $longitude = $details['longitude'];
     $reservation = $details['reservation_fee'];
@@ -149,10 +148,6 @@ if(isset($_POST['property_id']) || isset($_SESSION['property_id'])){
 				<label for="barangay" class="control-label">Barangay - <?php echo isset($barangay) ? $barangay : '' ?></label>
 				<select name="barangay" class="form-control form-control-md" id="barangay"></select>
                 <input type="hidden" class="form-control form-control-md" name="barangay_text" id="barangay-text" value="<?php echo isset($barangay) ? $barangay : '' ?>" required>
-			</div>
-            <div class="col-md-4">
-				<label for="postal_code" class="control-label">Postal Code</label>
-				<input type="text" class="form-control" name="postal_code" id="postal_code" value="<?= $postal_code ?>" required>
 			</div>
 		</div>
 		<div class="form-group row">
@@ -291,7 +286,6 @@ try {
         $province_text = $_POST['province_text'];
         $city_text = $_POST['city_text'];
         $barangay_text = $_POST['barangay_text'];
-        $postal_code = $_POST['postal_code'];
         $latitude = $_POST['latitude'];
         $longitude = $_POST['longitude'];
         $reservation_fee = $_POST['reservation_fee'];
@@ -309,7 +303,7 @@ try {
         
         $property = new Property();
         $property->setConnection($connection);
-        $property = $property->updateProperty($property_id, $property_type, $property_name, $landlord_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$postal_code,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit);
+        $property = $property->updateProperty($property_id, $property_type, $property_name, $landlord_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit);
         
     //     //add to property amenities table but status=2=pending
         $amenities = $_POST['amenities'];

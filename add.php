@@ -21,9 +21,9 @@ try {
         //Basic Details
         $property_name = ucfirst($_POST['property_name']); 
         $property_type = $_POST['property_type']; 
-        $property_number = $_POST['property_number'];
-
+        
         //Property Location
+        $property_number = $_POST['property_number'];
         $street = ucfirst($_POST['street']);
         $region_text = $_POST['region_text'];
         $province_text = $_POST['province_text'];
@@ -47,14 +47,14 @@ try {
 
             $register_user = new Auth();
             $register_user->setConnection($connection);
-            $register_user = $register_user->registerUser($email, $hashedPassword, $salt, $status);
+            $register_user = $register_user->registerUser($email, $hashedPassword, $salt, 1);
             
             $user_auth = $register_user['statement'] ?? null;
             $user_id = $register_user['lastInsertedId'] ?? null;
 
             $register_info = new User('','','','','','');
             $register_info->setConnection($connection);
-            $register_info->registerUserInfo($user_id, $first_name, $last_name, $contact_number, $status);
+            $register_info->registerUserInfo($user_id, $first_name, $last_name, $contact_number, 1);
         }
 
         //Upload user image

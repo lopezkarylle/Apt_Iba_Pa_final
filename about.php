@@ -44,11 +44,7 @@ $current_page = "| About";
           </div>
         </div>
         <div class="row aboutUsText">
-          <p class="about-info">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-            consequatur necessitatibus eaque. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-            consequatur necessitatibus eaque. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-            consequatur necessitatibus eaque. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-            consequatur necessitatibus eaque.</p>
+          <p class="about-info"></p>
         </div>
       
 
@@ -146,11 +142,7 @@ $current_page = "| About";
     </div>
     
     <div class="row faqSectionText">
-      <p class="about-info">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-      consequatur necessitatibus eaque. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-      consequatur necessitatibus eaque. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-      consequatur necessitatibus eaque. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-      consequatur necessitatibus eaque.</p>
+      <p class="about-info"></p>
     </div>
         
     <div class="container-md pt-3">

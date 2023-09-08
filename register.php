@@ -76,14 +76,14 @@ try {
         
         $register_user = new Auth();
         $register_user->setConnection($connection);
-        $register_user = $register_user->registerUser($email, $hashedPassword, $salt);
+        $register_user = $register_user->registerUser($email, $hashedPassword, $salt, $status);
         
         $user_auth = $register_user['statement'] ?? null;
         $user_id = $register_user['lastInsertedId'] ?? null;
 
         $register_info = new User();
         $register_info->setConnection($connection);
-        $register_info->registerUserInfo($user_id, $first_name, $last_name, $contact_number);
+        $register_info->registerUserInfo($user_id, $first_name, $last_name, $contact_number, $status);
 
         $_SESSION['user_id'] = $user_id;
 

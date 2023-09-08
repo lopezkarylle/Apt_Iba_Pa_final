@@ -5,9 +5,11 @@ use Models\User;
 include ("init.php");
 include ("session.php");
 
-$last_page = isset($_POST['current_url']) ? $_POST['current_url'] : 'index.php'; //to get last visited page before clicking register
+$current_page = isset($_SESSION['current_page']) ? $_SESSION['current_page'] : 'index.php'; //to get last visited page before clicking register
+//var_dump($current_page);
 
-$error_message = $_GET['error'] ?? NULL;
+$error_message = $_SESSION['login_error'] ?? NULL;
+unset($_SESSION['login_error']);
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +36,7 @@ $error_message = $_GET['error'] ?? NULL;
       <input type="password" class="form-control" id="password" placeholder="Enter password" name="password" required>
     </div>
     <div class="form-group">
-      <a href="forgot-password-owner.php">Forgot your Password ? </a> 
+      <a href="forgot-password.php">Forgot your Password ? </a> 
     </div>
     <center><input type="submit" id="submit" class="btn btn-primary btn-block" value="Login" disabled></center>
     <br>
@@ -99,6 +101,7 @@ $error_message = $_GET['error'] ?? NULL;
 
 try {
     if(isset($_POST['email'], $_POST['password'])){
+    unset($_SESSION['error']);
     $email = $_POST['email'];
     $password = $_POST['password'];
     
@@ -124,7 +127,7 @@ try {
                 exit();
             } elseif ($user != NULL && $user['user_type'] == 2) {
               $_SESSION['user_type'] = $user['user_type'];
-              header('location:index.php');
+              header('location:' . $current_page );
               exit();
             } elseif ($user != NULL && $user['user_type'] == 3) {
               $_SESSION['user_type'] = $user['user_type'];
@@ -135,21 +138,25 @@ try {
                 header('location:superadmin/index.php');
                 exit();
             } else {
-                $error_message = "Your account is not verified. Please contact the admin.";
-                header('location:login.php?error=' . $error_message);
+                $_SESSION['login_error'] = "Your account is not verified. Please contact the admin.";
+                header('location:login.php');
             }
             
         } else {
-        $error_message = "Invalid email or password.";
-        header('location:login.php?error=' . $error_message);
+        $_SESSION['login_error'] = "Invalid email or password.";
+        header('location:login.php');
         }
     
+    } else {
+        $_SESSION['login_error'] = "Invalid email or password.";
+        header('location:login.php');
     }
 }
 }
 
 catch (Exception $e) {
-    
+    echo 'An error occurred: ' . $e->getMessage();
 }
+
 ?>
 

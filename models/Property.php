@@ -41,6 +41,18 @@ class Property
         }
 	}
 
+    public function getAllMaps(){
+		try {
+            //status 1=active, 2=pending, 0=inactive
+            $sql = "SELECT apt_properties.property_name, apt_property_locations.* FROM apt_properties JOIN apt_property_locations ON apt_properties.property_id=apt_property_locations.property_id WHERE apt_properties.status=1;
+            ";
+            $data = $this->connection->query($sql)->fetchAll();
+            return $data;
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+	}
+
     public function getPropertiesByBarangay($barangay){
 		try {
             //status 1=active, 2=pending, 0=inactive

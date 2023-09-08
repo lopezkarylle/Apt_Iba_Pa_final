@@ -1,61 +1,32 @@
 <?php
-
-// FOR USER WHEN SELECTING APPOINTMENT DATES
-
-use Models\Schedule;
-use Models\Appointment;
-
+use Models\Schedule; 
+use Models\Appointment; 
+use Models\Property; 
+use Models\User; 
+use Models\Notification; 
 include ("init.php");
 include ("session.php");
 
-$property_id = $_POST['property_id'];
-$user_id = $_SESSION['user_id']; //change with session
-$disabled_dates = [];
-$date_time = new Schedule('','','');
-$date_time->setConnection($connection);
-$date_time = $date_time->getDateTime($property_id);
 
-foreach($date_time as $date_item){
-  $unavailable_date = $date_item['date'];
-  $time_list = $date_item['time'];
-  $time_list = explode(", ", $time_list);
-  if ((count($time_list))===21){
-    $disabled_dates[]=$unavailable_date;
-  }
-}
-//var_dump($disabled_dates);
+//if(isset($_POST['set_appointment'])){
+//   $property_id = $_POST['property_id'];
+//   $user_id = $_POST['user_id'];
+//   $appointment_date = $_POST['date'];
+//   $appointment_time = $_POST['appointment_time'];
 
-$unavailable_time = [];
+$property_id = 26;
+$user_id = 33;
+$appointment_date = '2023-09-09';
+$appointment_time = '3:00 PM';
 
-if(isset($_POST['set_date'])){
-  $set_date = $_POST['date'];
-  //var_dump($set_date);
-  $timestamp = strtotime($set_date);
-  
-  $date_check = date("Y-m-d", $timestamp); 
-  //var_dump($date_check);
-  foreach($date_time as $date){
-    $dates = $date['date'];
-
-    if($dates===$date_check){
-      $time_date = $date['time'];
-      $unavailable_time = explode(", ", $time_date);
-    } 
-  }
-} 
-
-$time_slots = array("08:00 AM","08:30 AM","09:00 AM","09:30 AM","10:00 AM","10:30 AM","11:00 AM","11:30 AM","12:00 NN","12:30 PM","01:00 PM","01:30 PM","02:00 PM","02:30 PM","03:00 PM", "03:30 PM","04:00 PM","04:30 PM","05:00 PM","05:30 PM","06:00 PM");
-
-if(isset($_POST['set_appointment'])){
-  $property_id = $_POST['property_id'];
-  $user_id = $_POST['user_id'];
-  $appointment_date = $_POST['date'];
-  $appointment_time = $_POST['appointment_time'];
-
+  $formatted_date = date("F j, Y", strtotime($appointment_date));
   //var_dump($property_id, $user_id, $appointment_date, $appointment_time);
 
   $matchFound = false;
-
+  $date_time = new Schedule('','','');
+  $date_time->setConnection($connection);
+  $date_time = $date_time->getDateTime($property_id);
+ 
   foreach($date_time as $date_item){
     $unavailable_date = $date_item['date'];
     //$check_time = $date_item['time'];
@@ -72,6 +43,26 @@ if(isset($_POST['set_appointment'])){
   $appointment = new Appointment($property_id, $user_id, $appointment_date,$appointment_time,1);
   $appointment->setConnection($connection);
   $appointment->setAppointment();
+
+  $user = new User();
+  $user->setConnection($connection);
+  $user = $user->getById($user_id);
+  $full_name = $user['first_name'] . ' ' . $user['last_name'];
+
+  $property = new Property();
+  $property->setConnection($connection);
+  $property = $property->getPropertyDetails($property_id);
+  $property_name = $property['property_name'];
+  $landlord_id = $property['landlord_id'];
+  $notification_text = 'An appointment has been scheduled for your property, ' . $property_name . ', on ' . $formatted_date . ' at ' . $appointment_time . ' by ' . $full_name;
+  $notification_type = 'appointment';
+  $isRead = 0;
+  $status = 1;
+
+  $notification = new Notification();
+  $notification->setConnection($connection);
+  $notification->sendNotification($landlord_id, $notification_text, $notification_type, $isRead, $status);
+
     if ($matchFound) {
       $unavailable = new Schedule('','','');
       $unavailable->setConnection($connection);
@@ -82,34 +73,33 @@ if(isset($_POST['set_appointment'])){
       $unavailable->setConnection($connection);
       $unavailable->setUnavailable();
     }
+
     header("Location: view.php?property_id=" . $property_id);
     exit();
   //var_dump($unavailable_dates);
   
-}
+//}
 ?>
 
 <!DOCTYPE html>
 <html>
 
-<?php include ('head.php'); ?>
 <body>
-<?php include('navbar.php'); ?>
 
   <h1>Content for Selected Date:<?php echo isset($set_date) ? $set_date : ''; ?></h1>
   <div id="contentContainer">
     <p>Select a date on the calendar to see the content for that day.</p>
   </div>
 
-  <form action="appointment.php" method="POST" id="check_time">
+  <form action="set-appointment.php" method="POST" id="check_time">
 
-    <input type="text" id="datepicker" value="<?= isset($set_date) ? $set_date : '' ?>" placeholder="<?= isset($set_date) ? $set_date : '' ?>" required>
+    <input type="date" id="datepicker" value="<?= isset($set_date) ? $set_date : '' ?>" placeholder="<?= isset($set_date) ? $set_date : '' ?>" required>
     <input type="hidden" name="date" id="date" value="<?= isset($date_check) ? $date_check : '' ?>">
 
     <button id="fetchButton" name="set_date" type="submit">Select this date</button>
   </form>
 
-  <form action="appointment.php" method="POST" id="appointment-form">
+  <form action="set-appointment.php" method="POST" id="appointment-form">
     <input type="hidden" name="date" id="date" value="<?= isset($date_check) ? $date_check : '' ?>">
     <input type="hidden" name="user_id" id="user_id" value="<?= $user_id?>">
     <input type="hidden" name="property_id" id="property_id" value="<?= $property_id?>">
@@ -166,7 +156,7 @@ if(isset($_POST['set_appointment'])){
       day: 'numeric'
     });
 
-  var disabledDates = <?php echo json_encode($disabled_dates); ?>;
+    var disabledDates = <?php echo json_encode($disabled_dates); ?>;
 
     $("#datepicker").datepicker({
       dateFormat: "MM d, yy",
@@ -174,9 +164,10 @@ if(isset($_POST['set_appointment'])){
       beforeShowDay: function(date) {
         var formattedDate = $.datepicker.formatDate("yy-mm-dd", date);
         if (disabledDates.includes(formattedDate)) {
-          return [false];
-        }
+        return [false];
+        } else if (formattedDate === localDate) {
         return [true];
+        }
       }
     });
     });
