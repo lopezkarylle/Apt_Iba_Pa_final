@@ -37,28 +37,28 @@ if (isset($_POST['email'])) {
         $message = "To reset your password, click on the following link:\n\n$reset_link";
         //mail($email, $subject, $message);
 
-        $mail = new PHPMailer();
+        // $mail = new PHPMailer();
 
-        $mail->isSMTP(); 
-        $mail->SMTPAuth = true;
+        // $mail->isSMTP(); 
+        // $mail->SMTPAuth = true;
 
-        $mail->Host = 'smtp.gmail.com';
-        $mail->Username = 'sia.yabut.micohjomarie@gmail.com';
-        $mail->Password = 'chocoboyabut8';
+        // $mail->Host = 'smtp.gmail.com';
+        // $mail->Username = '';
+        // $mail->Password = '';
 
-        $mail->SMTPSecure = 'tls';
-        $mail->Port = 587;
+        // $mail->SMTPSecure = 'tls';
+        // $mail->Port = 587;
 
-        $mail->setFrom('sia.yabut.micohjomarie@gmail.com', 'Apt Iba Pa');
-        $mail->addAddress($email, 'User');
+        // $mail->setFrom('', 'Apt Iba Pa');
+        // $mail->addAddress($email, 'User');
 
-        //Content
-        $mail->isHTML(true);                                  //Set email format to HTML
-        $mail->Subject = 'Reset Password Link';
-        $mail->Body    = "To reset your password, click on the following link:\n\n$reset_link";
-        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+        // //Content
+        // $mail->isHTML(true);                                  //Set email format to HTML
+        // $mail->Subject = 'Reset Password Link';
+        // $mail->Body    = "To reset your password, click on the following link:\n\n$reset_link";
+        // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-        $mail->send();
+        // $mail->send();
         if ($mail->send()) {
             echo 'Email sent successfully!';
         } else {
