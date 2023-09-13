@@ -11,13 +11,34 @@
    --box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
    --body-color: #E4E9F7;
    --light-bg: #eee;
-   	/* Variables for storing colors */
+      	/* Variables for storing colors */
 	--card-clr: #161922;
 	--body-clr: #191d28;
 	--primary-clr: #f0bf6a;
 	--heading-clr: #dadada;
 	--text-clr: #767a86;
+
+   
+   --dark-jungle-green: hsl(188, 63%, 7%);
+   --prussian-blue: hsl(200, 69%, 14%);
+   --prussian-pale: hsl(201, 19%, 42%);
+   --raisin-black-1: hsl(227, 29%, 13%);
+   --raisin-black-2: hsl(229, 17%, 19%);
+   --yellow-green: hsl(89, 72%, 45%);
+   --orange-soda: hsl(9, 100%, 62%);
+   --orange-tangy: hsla(9, 100%, 62%, 0.1);
+   --orange-pale: hsl(9, 100%, 73%);
+   --cultured-1: hsl(0, 0%, 93%);
+   --cultured-2: hsl(192, 24%, 96%);
+   --misty-rose: hsl(7, 56%, 91%);
+   --alice-blue: hsl(210, 100%, 97%);
+   --seashell: hsl(8, 100%, 97%);
+   --cadet: hsl(200, 15%, 43%);
+   --white: hsl(0, 0%, 100%);
+   --black: hsl(0, 0%, 0%);
+   --opal: hsl(180, 20%, 62%);
 }
+
 
 *::-webkit-scrollbar-thumb {
    background-color: #232A3D;
@@ -55,17 +76,13 @@ section {
 
 .navbar-nav .nav-item {
    font-size: 1.5rem;
+   font-weight: 600;
    padding: 1rem;
    border-radius: 5px;
 }
 
-.nav-item .nav-link:hover {
-   padding-left: 1rem;
-   padding-right: 1rem;
 
-}
-
-.nav-item .nav-link:hover {
+.nav-item .nav-link:hover, .nav-item .nav-link:focus{
    background-color: #232A3D;
    color: #FFF;
    border-radius: 5px;
@@ -73,14 +90,14 @@ section {
 }
 
 .signOutbtn .btn {
-   background-color: #232A3D;
+   background-color: var(--prussian-blue);
    color: #FFF;
    font-size: 1.5rem;
 }
 
 .signOutbtn .btn:hover {
-   background-color: #E4E9F7;
-   color: #232A3D;
+   background-color: var(--orange-soda);
+   color: #E4E9F7;
 }
 
 .jumbotron {
@@ -265,7 +282,7 @@ section {
    transform: scale(1.1);
 }
 
-.listings .box-container .box .thumb .total-images {
+.listings .box-container .box .thumb total-rooms-left{
    position: absolute;
    top: 1rem;
    left: 1rem;
@@ -276,7 +293,7 @@ section {
    z-index: 1;
 }
 
-.listings .box-container .box .thumb .total-images i {
+.listings .box-container .box .thumb total-rooms-lefti {
    margin-right: .7rem;
 }
 
@@ -380,7 +397,7 @@ section {
 .inline-btn {
    margin-top: 1rem;
    padding: 1rem 3rem;
-   background-color: #232A3D;
+   background-color: var(--orange-soda);
    color: #fff;
    cursor: pointer;
    text-align: center;
@@ -390,7 +407,8 @@ section {
 
 .btnView:hover,
 .inline-btn:hover {
-   background-color: #303030;
+   
+   background-color: hsl(9, 97%, 57%);
 
 }
 
@@ -635,6 +653,7 @@ section {
 
 /* Accommodations */
 
+
 .accomJumbuildings {
    background: url('../images/header3.png') no-repeat bottom fixed;
    background-size: 100%;
@@ -650,7 +669,7 @@ section {
 .inline-btn {
    margin-top: 1rem;
    padding: 1rem;
-   background-color: #232A3D;
+   background-color: var(--orange-soda);
    color: #fff;
    cursor: pointer;
    text-align: center;
@@ -672,7 +691,6 @@ section {
 
 /* Accommodations */
 
-
 .accommodations .box-container {
    gap: 4rem;
    justify-content: center;
@@ -680,7 +698,7 @@ section {
 }
 
 .accommodations .box-container .box {
-   background-color: #E4E9F7;
+   background: var(--cultured-2);
    box-shadow: var(--box-shadow);
    padding: 3rem;
    overflow-x: hidden;
@@ -742,33 +760,33 @@ section {
 
 .accommodations .box-container .box .thumb {
    position: relative;
-   height: 20rem;
+   height: 30rem;
    overflow: hidden;
    margin: 1.5rem 0;
 }
 
 .accommodations .box-container .box .thumb img {
    height: 100%;
-   width: 100%;
-   transition: .2s linear;
+   object-fit: cover;
 }
+
 
 .accommodations .box-container .box:hover .thumb img {
    transform: scale(1.1);
 }
 
-.accommodations .box-container .box .thumb .total-images {
+.accommodations .box-container .box .thumb .total-rooms-left{
    position: absolute;
    top: 1rem;
    left: 1rem;
-   background-color: rgba(0, 0, 0, .3);
+   background-color: var(--prussian-pale);
    color: var(--white);
    padding: .5rem 1.5rem;
    font-size: 1.6rem;
    z-index: 1;
 }
 
-.accommodations .box-container .box .thumb .total-images i {
+.accommodations .box-container .box .thumb .total-rooms-left i {
    margin-right: .7rem;
 }
 
@@ -783,7 +801,7 @@ section {
    margin-right: .7rem;
    padding: .5rem 1.5rem;
    color: #fff;
-   background-color: #232A3D;
+   background-color: var(--prussian-blue);
    font-size: 1.6rem;
 }
 
@@ -811,9 +829,17 @@ section {
    margin-top: 1.5rem;
    border: none;
    outline: none;
-   color: grey;
+   color: var(--prussian-pale);
    
 }
+
+.accommodations .btnBookmark:hover {
+   background: transparent;
+   border: none;
+   outline: none;
+   color: var(--prussian-blue) !important;
+}
+
 
 
 /* 
@@ -885,13 +911,13 @@ section {
 .wrapper .views{
     font-size: 0.85rem;
 }
+
 .wrapper .btn{
-    color: #666;
+    color: var(--white);
     font-size: 0.85rem;
+    background-color: var(--prussian-blue);
 }
-.wrapper .btn:hover{
-    color: #232A3D;
-}
+
 .wrapper .green-label{
     background-color: #defadb;
     color: #48b83e;
@@ -949,7 +975,7 @@ section {
     transition: 300ms ease-in-out 0s;
 }
 .wrapper .options input[type="radio"]:checked ~ .checkmark{
-    background: #232A3D;
+    background: var(--orange-soda);
     transition: 300ms ease-in-out 0s;
 }
 .wrapper .options input[type="radio"]:checked ~ .checkmark:after{
@@ -992,7 +1018,7 @@ section {
     background-color: #f3f3f3;
 }
  .tick input:checked ~ .check {
-    background-color: #232A3D;
+    background-color: var(--orange-soda);
 }
  .check:after {
     content: "";
@@ -1061,7 +1087,8 @@ section {
 
 
 .accommodations .box-container .box .name {
-   font-size: 2rem;
+   font-size: 2.7rem;
+   font-weight: 600;
    text-overflow: ellipsis;
    overflow-x: hidden;
    color: var(--black);
@@ -1120,14 +1147,14 @@ section {
 /* View All button */
 
 .btnViewAll:hover {
-   background-color: #323233;
+   background-color: hsl(200, 74%, 10%);;
+   color: #fff;
    border-radius: 5px;
-
 }
 
 .btnViewAll {
    border-radius: 5px;
-   background-color: #232A3D;
+   background-color: var(--prussian-blue);
    width: 50%;
    padding: 1rem 3rem;
    color: #fff;
@@ -1137,6 +1164,7 @@ section {
    text-decoration: none;
    
 }
+
 
 
 /* View Property */

@@ -9,10 +9,10 @@ bookmarkButtons.forEach(function (button) {
 });
 
 function toggleBookmark(button) {
-  if (button.style.color === "grey") {
-    button.style.color = "#232A3D";
+  if (button.style.color === "var(--prussian-pale)") {
+    button.style.color = "var(--prussian-blue)";
   } else {
-    button.style.color = "grey";
+    button.style.color = "var(--prussian-pale)";
   }
 }
 

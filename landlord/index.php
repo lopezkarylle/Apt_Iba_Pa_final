@@ -17,7 +17,7 @@ $notification = new Notification();
 $notification->setConnection($connection);
 $notifications = $notification->getNotifications($user_id);
 
-var_dump($notifications);
+//var_dump($notifications);
 
 ?>
 <!DOCTYPE html>

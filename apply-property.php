@@ -6,613 +6,886 @@ use Models\Rule;
 use Models\Room;
 use Models\Request;
 use Models\User;
+use Models\Auth;
 include "init.php";
-include ("session.php");
+include "session.php";
 
-$user_id = $_SESSION['user_id'] ?? NULL;
+if(isset($_SESSION['user_id'])){
+    $user_id = $_SESSION['user_id'];
+
+    $user = new User();
+    $user->setConnection($connection);
+    $user = $user->getById($user_id);
+
+    $first_name = $user['first_name'];
+    $last_name = $user['last_name'];
+    $email = $user['email'];
+    $contact_number = $user['contact_number'];
+
+} else {
+    $user_id = NULL;
+}
+
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Apt Iba Pa | Apply Property</title>
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apt Iba Pa | Apply Property</title>
 
-    <!-- Form -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  <!-- Form -->
 
-    <!-- <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet"> -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
 
-    <!-- Others -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://kit.fontawesome.com/868f1fea46.js" crossorigin="anonymous"></script>
-    <link href="css/property_enlist.css" rel="stylesheet" />
-    <link href="css/all.css" rel="stylesheet" />
+  <!-- <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet"> -->
 
-  </head>
-  <body>
-    <!-- Navbar -->
-<?php include('navbar.php') ?>
+  <!-- Others -->
+  <script src="https://kit.fontawesome.com/868f1fea46.js" crossorigin="anonymous"></script>
+  <link href="css/property_enlist.css" rel="stylesheet" />
+  <link href="css/all.css" rel="stylesheet" />
 
-    <!-- Navbar ends -->
+  <!-- LeafletJS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+
+<body>
+  
 
 
-
-<!-- Enlist starts -->
+  <!-- Enlist starts -->
 
   <div class="container ps-md-0 enlistDetailscon">
     <section class="enlistDetails">
       <!-- <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image">
         <img class="img-fluid" src="images/hero-img.png">
       </div> -->
-      <!-- <divd class="col-md-8 col-lg-6 " style="border: 1px solid red;"> -->
-        <div class="w-100 d-none d-md-block"><div class="row m-2"></div></div>
-          <div class="multisteps-form">
-            <div class="row justify-content-center">
-              <div class="col-12 col-lg-8 ml-auto mr-auto">
-                <div class="multisteps-form__progress">
-                  <button class="multisteps-form__progress-btn js-active" type="button" title="BasicDetails">Basic Details</button>
-                  <button class="multisteps-form__progress-btn" type="button" title="PropertyDetails">Property Details</button>
-                  <button class="multisteps-form__progress-btn" type="button" title="House Rules">House Rules</button>
-                  <button class="multisteps-form__progress-btn" type="button" title="Message">Message        </button>
-                </div>
-              </div>
+      <!-- <divd class="col-md-8 col-lg-6 " > -->
+      <div class="w-100 d-none d-md-block">
+        <div class="row m-2"></div>
+      </div>
+      <div class="multisteps-form">
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-8 ml-auto mr-auto">
+            <div class="multisteps-form__progress">
+              <button class="multisteps-form__progress-btn js-active" id="basic-modal" type="button" title="BasicDetails">Basic
+                Details</button>
+              <button class="multisteps-form__progress-btn" id="location-modal" type="button" title="PropertyLocation">Property
+                Location</button>
+            <button class="multisteps-form__progress-btn" id="map-modal" type="button" title="Map">Pin on Map</button>
+            <button class="multisteps-form__progress-btn" id="amenities-modal" type="button" title="PropertyAmenities">Property
+                Amenities</button>
+              <button class="multisteps-form__progress-btn" id="room-modal" type="button" title="RoomDetails">Room
+                Details</button>
+              <button class="multisteps-form__progress-btn" id="images-modal" type="button" title="AddImages">Add Images</button>
+              <button class="multisteps-form__progress-btn" id="description-modal" type="button" title="PropertyDes">Property Description </button>
+              <button class="multisteps-form__progress-btn" id="rules-modal" type="button" title="PropertyDes">House Rules </button>
             </div>
-            <div class="container multisteps-form__form mt-sm-0 mt-lg-5">
+          </div>
+        </div>
+        <div class="container multisteps-form__form mt-sm-0 mt-lg-5">
+          <form>
 
-              <div class="container">
-                <div class="row justify-content-center">
-                  <div class="col-md-11 col-lg-8">
-                      <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active" data-animation="scaleIn">
-                        <h3 class="login-heading mb-4 multisteps-form__title">Welcome back!</h3>
-                        <div class="multisteps-form__content">
+            <div class="row justify-content-center">
+              <div class="col-md-11 col-lg-8">
 
-        
-                        <!-- Enlist Form -->
-                        <form action="add.php" method="POST" id="property-form" enctype="multipart/form-data">
+                <div  class="multisteps-form__panel shadow p-4  bg-white js-active" data-animation="fadeIn">
 
-                        <input type="hidden" name="user_id" value="<?php echo isset($user_id) ? '' : NULL ?>">
-
-                        <div class="row mt-3">
-                          <h2>Property Details</h2>
-                        </div>
-
-                        <div class="row g-2">
-                          <div class="col-12 col-sm-6">
-                            <div class="form-floating">
-                              <input type="text" class="form-control" id="property_name" name="property_name" placeholder="propertyname">
-                              <label for="property_name" class="form-label">Property Name</label>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row justify-content-center mt-2 reserveRoomType">
-                          <div class="col-md-12 ">
-                            <div class="row mt-3">
-                              <h4>
-                                Property Type
-                              </h4>
-                            </div>
-                              
-                              <div class="row mt-2">
-                                <div class="col-12 col-md-4">
-                                  <label class="radio w-100">
-                                    <input type="radio" name="property_type" value="Dormitory" />
-                                    <div
-                                      class="row justify-content-between p-3 radioRoomType" id="pickRoomType">
-                                      <div class="col-8">
-                                          <span class="roomTypeName">Dormitory</span>
-                                      </div>
-                              
-                                      <div class="col-3">
-                                        <i class="fa-solid fa-people-roof fa-4x float-end"></i>
-                                      </div>
-                                    </div>
-                                  </label>
-                                </div>
-
-                                <div class="col-12 col-md-4">
-                                  <label class="radio w-100">
-                                    <input type="radio" name="property_type" value="Apartment" />
-                                    <div
-                                      class="row justify-content-between p-3 radioRoomType" id="pickRoomType">
-                                      <div class="col-8">
-                                          <span class="roomTypeName">Apartment</span>
-                                      </div>
-                              
-                                      <div class="col-3">
-                                        <i class="fa-solid fa-house-building fa-4x float-end"></i>
-                                      </div>
-                                    </div>
-                                  </label>
-                                </div>
-
-                                <div class="col-12 col-md-4">
-                                  <label class="radio w-100">
-                                    <input type="radio" name="property_type" value="Apartelle" />
-                                    <div
-                                      class="row justify-content-between p-3 radioRoomType" id="pickRoomType">
-                                      <div class="col-8">
-                                          <span class="roomTypeName">Apartelle</span>
-                                      </div>
-                              
-                                      <div class="col-3">
-                                        <i class="fa-solid fa-warehouse-full fa-4x float-end"></i>
-                                      </div>
-                                    </div>
-                                  </label>
-                                </div>
+                  <div class="multisteps-form__content">
 
 
-                              </div>
-                              
-                                
-                    
-        
-                          </div>
-                          
-                        </div>
+                    <!-- Enlist Form -->
+                    <form action="add.php" method="POST" id="property-form" enctype="multipart/form-data">
 
-                        <div class="form-group row">
-                            <label for="images" class="control-label">Upload at least 5 images</label>
-                            <input type="file" class="form-control" name="images[]" id="image" multiple><br>
-                            <button class="btn btn-sm btn-outline-primary" id="add_titles" type="button">Add Image Titles</button>
-                            <div id="image_titles_container"></div>
-                            <div id="image_previews_container"></div>
-                        </div>
-                        <div class="row mt-4">
-                          <h2>Property Location</h2>
-                        </div>
-                  
-                        <div class="row g-2">
-                          <div class="col-12 col-md-4">
-                            <div class="form-floating">
-                            <input type="text" class="form-control" id="property_number" name="property_number" placeholder="housenumber">
-                            <label for="property_number" class="form-label">Bldg/House No.</label>
-                            </div>
-                          </div>
-                  
-                          <div class="col-12 col-md-4">
-                            <div class="form-floating">
-                              <input type="text" class="form-control" id="street" name="street" placeholder="housenumber">
-                              <label for="street" class="form-label">Street</label>
-                            </div>
-                          </div>
-                  
-                          <div class="col-12 col-md-4">
-                            <div class="form-floating">
-                              <select class="form-select" name="region" id="region" >
-                              </select>
-                              <input type="hidden" class="form-control form-control-md" name="region_text" id="region-text">
-                              <label for="region">Region</label>
-                            </div>
-                          </div>
+                    <input type="hidden" name="user_id" value="<?php echo isset($user_id) ? '' : NULL ?>">
 
-                          
-                        </div>
-
-                        <div class="row g-2">
-                          <div class="col-12 col-md-4">
-                            <div class="form-floating">
-                              <select class="form-select" name="province" id="province" ></select>
-                              <input type="hidden" class="form-control form-control-md" name="province_text" id="province-text">
-                              <label for="province">Province</label>
-                            </div>
-                          </div>
-
-                          <div class="col-12 col-md-4">
-                            <div class="form-floating">
-                              <select class="form-select" name="city" id="city" ></select>
-                              <input type="hidden" class="form-control form-control-md" name="city_text" id="city-text" >
-                              <label for="city">City / Municipality</label>
-                            </div>
-                          </div>
-
-                          <div class="col-12 col-md-4">
-                            <div class="form-floating">
-                              <select class="form-select" name="barangay" id="barangay" ></select>
-                              <input type="hidden" class="form-control form-control-md" name="barangay_text" id="barangay-text" >
-                              <label for="barangay">Barangay</label>
-                            </div>
-                          </div>
-                  
-                        </div>
-
-                        <?php if(!isset($user_id)){ ?>
-
-                        <div class="row mt-4">
-                          <h2>Property Owner Details</h2>
-                        </div>
-                  
-                        <div class="row g-2">
-                          <div class="col-12 col-md-4">
-                            <div class="form-floating">
-                              <input type="text" class="form-control" id="first_name" name="first_name" placeholder="fname">
-                              <label for="first_name" class="form-label">First Name</label>
-                            </div>
-                          </div>
-                  
-                          <div class="col-12 col-md-4">
-                            <div class="form-floating">
-                              <input type="text" class="form-control" id="last_name" name="last_name"  placeholder="lname">
-                              <label for="last_name" class="form-label">Last Name</label>
-                            </div>
-                          </div>
-                  
-                        </div>
-                  
-                        <div class="row g-2 mt-3">
-
-                        <div class="col-12 col-md-3">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="contact_number" name="contact_number" placeholder="Contact Number">
-                                <label for="contact_number" class="form-label">Phone Number</label>
-                            </div>
-                        </div>
-                  
-                          <div class="col-12 col-md-5">
-                            <div class="form-floating">
-                              <input type="email" class="form-control" id="email" name="email"  placeholder="email">
-                              <label for="email" class="form-label">Email</label>
-                            </div>
-                            <span id="email-error" style="color: red;"></span><br>
-                          </div>
-
-                          <div class="col-12 col-md-5">
-                            <div class="form-floating">
-                              <input type="password" class="form-control" id="password" name="password"  placeholder="password">
-                              <label for="password" class="form-label">Password</label>
-                            </div>
-                          </div>
-
-                          <div class="col-12 col-md-5">
-                            <div class="form-floating">
-                              <input type="password" class="form-control" id="confpass" name="confpass"  placeholder="password">
-                              <label for="password" class="form-label">Confirm Password</label>
-                            </div>
-                            <span id="confpass-error" style="color: red;"></span><br>
-                          </div>
-
-                          <div class="col-12 col-md-5">
-                            <div class="form-floating">
-                            <input type="file" class="form-control" name="picture" id="picture"><br>
-                              <label for="picture" class="form-label">Upload Image</label>
-                            </div>
-                          </div>
-                  
-                        </div>
-
-                        <?php } ?>
-                           
-                        <div class="row g-2 mt-4">                  
-                          <div class="row">
-                            <h5>*I guarantee that all details provided are accurate and true.</h5>
-                          </div>
-                          <div class="col-6 col-md-5 ms-md-2 ms-sm-2">
-                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                              <input type="radio" class="btn-check" name="btnradioAgreement" id="btnTrue" checked>
-                              <label class="btn btn-outline-primary" for="btnTrue">Yes</label>
-                              
-                              <input type="radio" class="btn-check" name="btnradioAgreement" id="btnFalse">
-                              <label class="btn btn-outline-primary" for="btnFalse">No</label>
-
-                            </div>
-                          </div>
-                  
-                        </div>
-
-                        <!-- <div class="row g-2 mt-3">
-                  
-                          <div class="col-12 col-md-5">
-                            <button type="button" class="btn btn-primary btn-sm">Next Button</button>
-                          </div>
-                  
-                        </div> -->
-
-                        <div class="row">
-                          <div class="button-row d-flex mt-4 col-12">
-                            <button class="btn btn-primary ml-auto js-btn-next" type="button" title="Next">Next</button>
-                          </div>
-                        </div>
-
-                        </div>
+                    <div class="row mt-5  ">
+                      <h2>Property Details</h2>
                     </div>
-                
+
+                    <div class="row ">
+                      <div class="col-12 pt-4 pb-4">
+                        <div class="form-floating">
+                            <input type="text" class="form-control fs-2  "  id="floatingPropertyName" name="property_name" placeholder="propertyname" required>
+                          <label for="floatingPropertyName" class="form-label  ">Property Name*</label>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="row justify-content-center mt-2 reserveRoomType">
+                      <div class="col-md-12 ">
+                        <div class="row mt-3">
+                          <h4>
+                            Property Type*
+                          </h4>
+                        </div>
+
+                          <div class="row mt-2">
+
+
+                            <div class="col-12 mb-3">
+                              <label class="radio w-100 justify-content-center d-flex ">
+                                <input type="radio" name="property_type" value="Dormitory" />
+                                <div class="row justify-content-between p-3 radioRoomType align-items-center " 
+                                  id="pickRoomType"  >
+                                  <div class="col-8 ">
+                                    <span class="roomTypeName fs-3 ">Dormitory</span>
+                                  </div>
+
+                                  <div class="col-3">
+                                    <i class="fa-light fa-house-building fa-4x float-end"></i>
+                                  </div>
+                                </div>
+                              </label>
+                            </div>
+
+
+
+                            <div class="col-12 mb-3 ">
+                              <label class="radio w-100 justify-content-center d-flex">
+                                <input type="radio" name="property_type" value="Apartment" />
+                                <div class="row justify-content-between p-3 radioRoomType align-items-center"
+                                  id="pickRoomType">
+                                  <div class="col-8">
+                                    <span class="roomTypeName fs-3">Apartment</span>
+                                  </div>
+
+                                  <div class="col-3">
+                                    <i class="fa-light fa-apartment fa-4x float-end"></i>
+                                  </div>
+                                </div>
+                              </label>
+                            </div>
+
+                            <div class="col-12 mb-3 ">
+                              <label class="radio w-100 justify-content-center d-flex">
+                                <input type="radio" name="property_type" value="Apartelle" />
+                                <div class="row justify-content-between p-3 radioRoomType align-items-center"
+                                  id="pickRoomType">
+                                  <div class="col-8">
+                                    <span class="roomTypeName fs-3">Apartelle</span>
+                                  </div>
+
+                                  <div class="col-3">
+                                    <i class="fa-light fa-house fa-4x float-end"></i>
+                                  </div>
+                                </div>
+                              </label>
+                            </div>
+
+
+                          </div>
+
+
+                        </form>
+
+                      </div>
+
+                    </div>
+
+                    <div class="row mt-4 mb-3 ">
+                      <div class="col-12 d-flex justify-content-end">
+                        <button class=" btn ml-auto js-btn-next " type="button" title="Next" id="next2">Next</button>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
+
               </div>
+            </div>
 
-              <div class="container">
-                <div class="row justify-content-center">
-                  <div class="col-md-11 col-lg-8 mx-auto justify-content-center">
-                    <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
-                    <h3 class="login-heading mb-4 multisteps-form__title">Welcome back!</h3>
-                    <div class="multisteps-form__content">
-      
-                      <!-- Enlist Form -->
-                      <div class="row mt-3">
-                        <h2>Property Room Details</h2>
-                      </div>
+            <div class="row justify-content-center">
+              <div class="col-md-11 col-lg-8">
 
-                      <div class="row g-2">
-                        <div class="col-12">
-                          <div class="propertyDescrip">
-                            <label for="description" class="form-label">Property Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Describe your property."></textarea>
-                          </div>
-                        </div>
-                      </div>
-                
-                      <div class="row g-2 mt-2">
-                        <div class="col-12 col-md-4">
-                          <div class="form2">
-                            <label for="total_floors" class="form-label h5">How many floors?</label>
-                            <input type="number" class="form-control" id="total_floors" name="total_floors" min="0" placeholder="No. of floors">
-                          </div>
-                        </div>
-                
-                      </div>
+                <div class="multisteps-form__panel shadow p-4  bg-white " data-animation="fadeIn">
+
+                  <div class="multisteps-form__content">
 
 
-                      <div class="row g-2 mt-2">
 
-                        <div class="col-12 col-md-4">
-                          <div>
-                            <label class="form-label h5">Amenities <span class="h6"> *please click all that applies</span></label>
-                          </div>
-                        </div>
-                        
-                          <div class="row">
 
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-1" name="aircon" value="1">
-                                <label class="btnA" for="btn-check-1">Aircon</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-2" name="cabinet" value="1">
-                                <label class="btnA" for="btn-check-2">Cabinet</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-3" name="cctv" value="1">
-                                <label class="btnA" for="btn-check-3">CCTV</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-4" name="drinkingwater" value="1">
-                                <label class="btnA" for="btn-check-4">Drinking Water</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-5" name="elevator" value="1">
-                                <label class="btnA" for="btn-check-5">Elevator</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-6" name="fireexit" value="1">
-                                <label class="btnA" for="btn-check-6">Fire Exit</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-7" name="foodhall" value="1">
-                                <label class="btnA" for="btn-check-7">Food Hall</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-8" name="laundry" value="1">
-                                <label class="btnA" for="btn-check-8">Laundry</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-9" name="lounge" value="1">
-                                <label class="btnA" for="btn-check-9">Lounge</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-10" name="microwave" value="1">
-                                <label class="btnA" for="btn-check-10">Microwave</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-11" name="parking" value="1">
-                                <label class="btnA" for="btn-check-11">Parking</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-12" name="reception" value="1">
-                                <label class="btnA" for="btn-check-12">Reception</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-13" name="refrigerator" value="1">
-                                <label class="btnA" for="btn-check-13">Refrigerator</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-14" name="roofdeck" value="1">
-                                <label class="btnA" for="btn-check-14">Roof Deck</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-15" name="security" value="1">
-                                <label class="btnA" for="btn-check-15">Security</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-16" name="sink" value="1">
-                                <label class="btnA" for="btn-check-16">Sink</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-17" name="studyarea" value="1">
-                                <label class="btnA" for="btn-check-17">Study Area</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-18" name="tv" value="1">
-                                <label class="btnA" for="btn-check-18">TV</label>
-                            </div>
-                            </div>
-
-                            <div class="col col-md-4 d-flex justify-content-center mt-2">
-                            <div class="check-amenities">
-                                <input type="checkbox" class="btn-check" id="btn-check-19" name="wifi" value="1">
-                                <label class="btnA" for="btn-check-19">Wifi</label>
-                            </div>
-                            </div>
-                            
-
-                        </div>
+                    <div class="row mt-5 mb-4 ">
+                      <h2>Property Location</h2>
                     </div>
 
-                      <div class="row mt-4">
-                        <h2>Room Details</h2>
+                    <div class="row g-2">
+                      <div class="col-12 col-md-4">
+                        <div class="form-floating fs-5 " >
+                            <input type="text" class="proploc form-control fs-3"  id="property_number" name="property_number" placeholder="property_number">
+                          <label for="property_number" class="form-label ">Bldg/House No.</label>
+                        </div>
                       </div>
-                      <div id="room-container">
+
+                      <div class="col-12 col-md-4">
+                        <div class="form-floating fs-5">
+                            <input type="text" class="proploc form-control fs-3" id="street" name="street" placeholder="housenumber">
+                          <label for="street" class="form-label">Street</label>
+                        </div>
+                      </div>
+
+                      <div class="col-12 col-md-4">
+                        <div class="form-floating ">
+                          <select class="proploc form-select fs-3 " name="region" id="region" required>
+                          </select>
+                          <input type="hidden" class="form-control form-control-md" name="region_text" id="region-text">
+                          <label for="floatingSelectBrgy">Region</label>
+                        </div>
+                      </div>
+
+                      <div class="col-12 col-md-4">
+                        <div class="form-floating ">
+                          <select class="proploc form-select fs-3 " name="province" id="province" required>
+                          </select>
+                          <input type="hidden" class="form-control form-control-md" name="province_text" id="province-text">
+                          <label for="floatingSelectBrgy">Province</label>
+                        </div>
+                      </div>
+
+                      <div class="col-12 col-md-4">
+                        <div class="form-floating ">
+                          <select class="proploc form-select fs-3 " name="city" id="city" required>
+                          </select>
+                          <input type="hidden" class="form-control form-control-md" name="city_text" id="city-text" >
+                          <label for="floatingSelectBrgy">City</label>
+                        </div>
+                      </div>
+
+                      <div class="col-12 col-md-4">
+                        <div class="form-floating ">
+                          <select class="proploc form-select fs-3 " name="barangay" id="barangay" required>
+                          </select>
+                          <input type="hidden" class="form-control form-control-md" name="barangay_text" id="barangay-text" >
+                          <label for="floatingSelectBrgy">Barangay</label>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="row mt-4 mb-4  ">
+                      <h2>Property Owner Details</h2>
+                    </div>
+
+                    <?php if(isset($user_id)){ ?>
                         <div class="row g-2">
-                            <div class="col-12 col-md-4">
-                            <div class="selectRoomType">
-                                <label for="room_type" class="form-label h5">Room type</label>
-                                <select class="form-select" name="room_type[]" id="room_type">
-                                    <option value="" selected disabled> - Select Type of Room - </option>
-                                    <option value="1">Room for 1</option>
-                                    <option value="2">Room for 2</option>
-                                    <option value="3">Room for 3</option>
-                                    <option value="4">Room for 4</option>
-                                    <option value="5">Room for 5</option>
-                                    <option value="6">Room for 6</option>
-                                    <option value="7">Room for 7</option>
-                                    <option value="8">Room for 8</option>
-                                </select>
-                            </div>
-                            </div>
-
-                            <div class="col-12 col-md-4">
-                            <div class="selectRoomType">
-                                <label for="furnished_type" class="form-label h5">Furnished type</label>
-                                <select class="form-select" name="furnished_type[]" id="furnished_type" >
-                                    <option value="" selected disabled> - Select Type of Furnish - </option>
-                                    <option value="Furnished">Furnished</option>
-                                    <option value="Semi-furnished">Semi-furnished</option>
-                                    <option value="Unfurnished">Unfurnished</option>
-                                </select>
-                            </div>
-                            </div>
-                    
-                            <div class="col-12 col-md-4">
-                                <div class="form2">
-                                    <label for="monthly_rent" class="form-label h5">Rate per room</label>
-                                    <input type="number" class="form-control" id="monthly_rent" name="monthly_rent[]" placeholder="₱ 0.00">
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-4">
-                                <div class="form2">
-                                    <label for="total_rooms" class="form-label h5">Number of room/s</label>
-                                    <input type="number" class="form-control" id="total_rooms" name="total_rooms[]" placeholder="0">
-                                </div>
-                            </div>
-                            <button type="button" id="add-room">Add Another Room</button>
-                        </div>
-                    </div>
-                
-                    <div class="row g-2 mt-2">
-                        <div class="col-12 col-md-6">
-                          <div class="form2">
-                            <label for="electric_bill" class="form-label h5">Average electric bill? (if applicable)</label>
-                            <input type="number" class="form-control" id="electric_bill" name="electric_bill" placeholder="₱ 0.00">
-                          </div>
-                        </div>
-                
-                        <div class="col-12 col-md-6">
-                          <div class="form2">
-                            <label for="water_bill" class="form-label h5">Average water bill? (if applicable)</label>
-                            <input type="number" class="form-control" id="water_bill" name="water_bill" placeholder="₱ 0.00">
-                          </div>
+                      <div class="col-12 col-md-6 ">
+                        <div class="form-floating fs-5">
+                          <input type="text" class="propown form-control fs-4 " id="first_name" value="<?= $first_name ?>" name="first_name" placeholder="fname" disabled>
+                          <label for="first_name" class="form-label  ">First Name</label>
                         </div>
                       </div>
-                    
-                      <div class="row g-2 mt-2">
-                        <div class="col-12 col-md-6">
-                          <div class="form2">
-                            <label for="reservation_fee" class="form-label h5">Reservation Fee? (if applicable)</label>
-                            <input type="number" class="form-control" id="reservation_fee" name="reservation_fee" placeholder="₱ 0.00">
-                          </div>
-                        </div>
-                
-                        <div class="col-12 col-md-6">
-                          <div class="form2">
-                            <label for="advance_deposit" class="form-label h5">Advanced Deposit? (if applicable)</label>
-                            <input type="number" class="form-control" id="advance_deposit" name="advance_deposit" placeholder="₱ 0.00">
-                          </div>
-                        </div>
-                      </div>
-                      <!-- <div class="row g-2 mt-3">
-                
-                        <div class="col-12 col-md-5">
-                          <button type="button" class="btn btn-secondary btn-sm">Previous Button</button>
-                          <button type="button" class="btn btn-primary btn-sm">Next Button</button>
-                        </div>
-                
-                      </div> -->
 
-                      <div class="row">
-                        <div class="button-row d-flex mt-4 col-12">
-                          <button class="btn btn-primary js-btn-prev" type="button" title="Prev">Prev</button>
-                          <button class="btn btn-primary ml-auto js-btn-next" type="button" title="Next">Next</button>
+                      <div class="col-12 col-md-6">
+                        <div class="form-floating fs-5">
+                          <input type="text" class="propown form-control fs-4" id="last_name" value="<?= $last_name ?>" name="last_name"  placeholder="lname" disabled>
+                          <label for="last_name" class="form-label">Last Name</label>
                         </div>
                       </div>
-                    
+
                     </div>
+
+                    <div class="row g-2 mt-3 pb-3 ">
+
+                      <div class="col-12 col-md-6">
+                        <div class="form-floating fs-5">
+                          <input type="email" class=" propown form-control fs-4" id="email" value="<?= $email ?>" name="email"  placeholder="email" disabled>
+                          <label for="email" class="form-label">Email</label>
+                        </div>
+                      </div>
+
+                      <div class="col-12 col-md-6">
+                        <div class="form-floating fs-5">
+                            <input type="number" class="propown form-control fs-4" id="contact_number" max="9" value="<?= $contact_number ?>" name="contact_number" placeholder="Contact Number" disabled>
+                          <label for="contact_number" class="form-label">Phone number</label>
+                        </div>
+                      </div>
+
                     </div>
+
+                    <input type="hidden" class=" propown form-control fs-4" id="password" name="password" value="1" placeholder="password">
+
+                    <input type="hidden" class=" propown form-control fs-4" id="confpass" name="confpass" value="1" placeholder="password">
+                      
+                        <?php } else { ?>
+                            <div class="row g-2">
+                      <div class="col-12 col-md-6 ">
+                        <div class="form-floating fs-5">
+                          <input type="text" class="propown form-control fs-4 " id="first_name" name="first_name" placeholder="fname" required>
+                          <label for="first_name" class="form-label  ">First Name</label>
+                        </div>
+                      </div>
+
+                      <div class="col-12 col-md-6">
+                        <div class="form-floating fs-5">
+                          <input type="text" class="propown form-control fs-4" id="last_name" name="last_name"  placeholder="lname" required>
+                          <label for="last_name" class="form-label">Last Name</label>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="row g-2 mt-3 pb-3 ">
+
+                      <div class="col-12 col-md-6">
+                        <div class="form-floating fs-5">
+                          <input type="email" class=" propown form-control fs-4" id="email" name="email"  placeholder="email" required>
+                          <label for="email" class="form-label">Email</label>
+                        </div>
+                        <span id="email-error" style="color: red;"></span><br>
+                      </div>
+
+                      <div class="col-12 col-md-6">
+                        <div class="form-floating fs-5">
+                            <input type="number" class="propown form-control fs-4" id="contact_number" max="9" name="contact_number" placeholder="Contact Number" required>
+                          <label for="contact_number" class="form-label">Phone number</label>
+                        </div>
+                        <span id="contact-error" style="color: red;"></span><br>
+                      </div>
+
+                    </div>
+
+                    <div class="row g-2 mt-3 pb-3 ">
+
+                        <div class="col-12 col-md-6">
+                          <div class="form-floating fs-5">
+                            <input type="password" class=" propown form-control fs-4" id="password" name="password"  placeholder="password">
+                            <label for="password" class="form-label">Password</label>
+                          </div>
+                          <span id="password-error" style="color: red;"></span><br>
+                        </div>
+  
+                        <div class="col-12 col-md-6">
+                          <div class="form-floating fs-5">
+                            <input type="password" class=" propown form-control fs-4" id="confpass" name="confpass"  placeholder="password">
+                            <label for="confpass" class="form-label">Confirm Password</label>
+                          </div>
+                          <span id="confpass-error" style="color: red;"></span><br>
+                        </div>
+  
+                      </div>
+
+                    <?php } ?>
+
+
+                    <div class="row mt-4 mb-3">
+                      <div class="col-12 d-flex justify-content-between ">
+                        <button class="btn btn-primary js-btn-prev" type="button" title="Prev">Previous</button>
+                        <button class=" btn ml-auto js-btn-next " type="button" title="Next" id="next3">Next</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="row justify-content-center">
+              <div class="col-md-11 col-lg-8">
+                <div class="multisteps-form__panel shadow p-4  bg-white" data-animation="fadeIn">
+                  <div class="multisteps-form__content">
+
+                    <!-- Enlist Form -->
+                    <div class="row mt-3 mb-5">
+                      <h2>Locate your Property*</h2>
+                    </div>
+
+                    <input type="text" name="latitude" id="latitude">
+                    <input type="text" name="longitude" id="longitude">
+
+                    <div class = 'wrapper'>
+                        <div id="map"></div>
+                    </div>
+                  </div>
+                  
+
+                    <div class="row mt-4 mb-4">
+                      <div class="col-12 d-flex justify-content-between">
+                        <button class="btn btn-primary js-btn-prev" type="button" title="Prev">Previous</button>
+                        <button class="btn btn-primary ml-auto js-btn-next" type="button" title="Next" id="next4" >Next</button>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               </div>
             
 
-              
-              <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-md-11 col-lg-8">
+
+                <div class="  multisteps-form__panel shadow p-4  bg-white " data-animation="fadeIn">
+
+                  <div class="multisteps-form__content">
+
+
+
+
+                    <div class="row mt-5 mb-5  ">
+                      <h2>Property Amenities*</h2>
+                    </div>
+
+
+                    <div class="checkbox-group mb-5  ">
+
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                          <input type="checkbox" class="checkbox-input" id="btn-check-1" name="aircon" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-light fa-air-conditioner fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-3">Aircon</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-2" name="cabinet" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-light fa-cabinet-filing fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-3">Cabinet</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-3" name="cctv" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-light fa-camera-cctv fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-3">CCTV</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-4" name="drinkingwater" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-regular fa-glass-water fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-4 ps-4">Drinking Water</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-5" name="elevator" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-light fa-elevator fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-3">Elevator</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-6" name="emergency_exit" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-light fa-person-from-portal fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-4 ps-3">Emergency Exit</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-7" name="foodhall" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-regular fa-plate-utensils fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-3">Food Hall</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-8" name="laundry" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-regular fa-washing-machine fa-3x"></i>>
+                            </span>
+                            <span class="checkbox-label fs-3">Laundry</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-9" name="lounge" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-light fa-couch fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-3">Lounge</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-10" name="microwave" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-light fa-microwave fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-3">Microwave</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-11" name="parking" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-light fa-circle-parking fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-3">Parking</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-13" name="refrigerator" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-light fa-refrigerator fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-4">Refrigerator</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-14" name="roofdeck" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-light fa-people-roof fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-3">Roof Deck</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-15" name="security" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-light fa-shield-check fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-3">Security</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-16" name="sink" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-light fa-sink fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-3">Sink</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-17" name="studyarea" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-light fa-lamp-desk fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-4">Study Area</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-18" name="tv" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-light fa-tv fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-3">TV</span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" id="btn-check-19" name="wifi" value="1">
+                          <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                              <i class="fa-light fa-wifi fa-3x"></i>
+                            </span>
+                            <span class="checkbox-label fs-3">Wi-Fi</span>
+                          </span>
+                        </label>
+                      </div>
+                     
+                      </div>
+
+                    <div class="row mt-4 mb-3">
+                      <div class="col-12 d-flex justify-content-between ">
+                        <button class="btn btn-primary js-btn-prev" type="button" title="Prev">Previous</button>
+                        <button class=" btn ml-auto js-btn-next " type="button" title="Next" id="next5" >Next</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+
+            <!-- Room Details -->
+
+
+            <div class="row justify-content-center">
+              <div class="col-md-11 col-lg-8 mx-auto justify-content-center">
+                <div class="multisteps-form__panel shadow p-4  bg-white" data-animation="fadeIn" >
+                  <div class="multisteps-form__content">
+
+                    <!-- Enlist Form -->
+                    <div class="row mt-3 mb-5">
+                      <div class="col-12 d-flex justify-content-between">
+                      <h2>Room Details</h2>
+                      
+
+                      <button class="addForm" id="add-room" onclick="addAnotherForm()">
+                        <span class="addForm__text">Add Room</span>
+                      </button>
+                    </div>
+                    </div>
+
+                    
+                    <div  id="roomForm">
+                    <div class="row g-2 pb-5 ">
+                      <div class="col-12 col-md-6">
+                        <div class="selectRoomType">
+                          <label for="roomType"  class="form-label h5 ">Room Type</label>
+                          <select  class="form-select" name="room_type[]" id="roomFloat" required>
+                            <option value="" selected disabled> - Select Type of Room - </option>
+                            <option value="1">Room for 1</option>
+                            <option value="2">Room for 2</option>
+                            <option value="3">Room for 3</option>
+                            <option value="4">Room for 4</option>
+                            <option value="5">Room for 5</option>
+                            <option value="6">Room for 6</option>
+                            <option value="7">Room for 7</option>
+                            <option value="8">Room for 8</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-12 col-md-6">
+                        <div class="selectRoomType">
+                          <label for="roomType" class="form-label h5">Furnish Type</label>
+                          <select class="form-select" name="furnished_type[]" id="furnishFloat" required>
+                            <option value="" selected disabled> - Select Type of Furnish - </option>
+                            <option value="Furnished">Furnished</option>
+                            <option value="Semi-furnished">Semi-furnished</option>
+                            <option value="Unfurnished">Unfurnished</option>
+                          </select>
+                        </div>
+                      </div>
+
+                       </div>
+
+                      <div class="row g-2  ">
+
+                        <div class="col-12 col-md-6">
+                          <div class="form2">
+                            <label for="roomRate" class="form-label h5">Rate per room</label>
+                            <input type="number" class="form-control" id="roomRate" name="monthly_rent[]" placeholder="₱ 0.00" required>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                          <div class="form2">
+                            <label for="roomRate" class="form-label h5">No. of rooms</label>
+                            <input type="number" class="form-control" id="roomNo" name="total_rooms[]"  placeholder="No. of rooms" required>
+                          </div>
+                        </div>
+                      </div>
+
+
+                          </div>
+
+
+                          <div></div>
+
+
+
+                          
+
+
+
+                            <div class="row mt-4 mb-4">
+                              <div class="col-12 d-flex justify-content-between">
+                                <button class="btn btn-primary js-btn-prev" type="button" title="Prev">Previous</button>
+                                <button class="btn btn-primary ml-auto js-btn-next" type="button" title="Next" id="next6" >Next</button>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+            <!-- Add Images -->
+
+            <div class="row justify-content-center">
+              <div class="col-md-11 col-lg-8 mx-auto justify-content-center">
+                <div class="multisteps-form__panel shadow p-4  bg-white" data-animation="fadeIn">
+                  <div class="multisteps-form__content">
+
+                    <!-- Enlist Form -->
+                    <div class="row mt-3 mb-5">
+                      <h2>Property Images*</h2>
+                    </div>
+
+                    <div class = 'wrapper'>
+                      <div class = "upload">
+                          <div class = "upload-wrapper">
+                              <div class = "upload-img">
+                                  <!-- image here -->
+                              </div>
+                              <div class = "upload-info">
+                                  <p>
+                                      <span class = "upload-info-value">0</span> file(s) uploaded.
+                                  </p>
+                              </div>
+                              <div class = "upload-area">
+                                  <div class = "upload-area-img">
+                                      <img src = "images/upload.png" alt = "">
+                                  </div>
+                                  <p class = "upload-area-text">Select images or <span>browse</span>.</p>
+                              </div>
+                              <input type = "file" name="images[]" class = "visually-hidden" id = "upload-input" multiple>
+                              <div id="image_titles_container"></div>
+                            <div id="image_previews_container"></div>
+                          </div>
+                      </div>
+                  </div>
+
+                    <!-- <div class="imageCon container">
+                      <input type="file" id="file" accept="image/*" multiple hidden>
+                      <div class="img-area" data-img="">
+                        <i class='bx bxs-cloud-upload icon'></i>
+                        <h3>Upload Image</h3>
+                        <p>Image size must be less than <span>2MB</span></p>
+                      </div>
+                      <button class="select-image">Select Image</button>
+                      <button class="add-image" style="display:none;">Add Another Image</button>
+                      <button class="reset-images" style="display:none;">Reset</button>
+                    </div> -->
+
+
+                    <div class="row mt-4 mb-4">
+                      <div class="col-12 d-flex justify-content-between">
+                        <button class="btn btn-primary js-btn-prev" type="button" title="Prev">Previous</button>
+                        <button class="btn btn-primary ml-auto js-btn-next" type="button" title="Next" id="next7" >Next</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            
+
+
+
+            <!-- Property Details -->
+
+
+            <div class="row justify-content-center">
+              <div class="col-md-11 col-lg-8 mx-auto justify-content-center">
+                <div class="multisteps-form__panel shadow p-4  bg-white" data-animation="fadeIn">
+                  <div class="multisteps-form__content">
+
+                    <!-- Enlist Form -->
+                    <div class="row mt-3 mb-4">
+                      <h2>Property Details</h2>
+                    </div>
+
+                    <div class="row g-2 mb-5" >
+                      <div class="col-12" >
+                        <div class="propertyDescrip" >
+                            <textarea class="form-control fs-5"   id="description" name="description" rows="3" placeholder="Please provide a detailed description of your property."></textarea>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row g-2 mt-2 mb-5">
+
+                      <div class="col-12 col-md-6">
+                        <div class="form2">
+                          <label for="totalFloors" class="form-label h5 ">How many floors?</label>
+                            <input type="number" class="howmany form-control fs-3" id="totalFloors" name="total_floors" min="0" placeholder="No. of floors" required>
+                        </div>
+                      </div>
+
+                      <div class="col-12 col-md-6">
+                        <div class="form2">
+                          <label for="reservationFee" class="form-label h5">Add Reservation Fee</label>
+                            <input type="number" class="form-control" id="reservationFee" name="reservation_fee" placeholder="₱ 0.00">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mt-3 mb-3">
+                      <h2>Property Bills</h2>
+                    </div>
+
+                    <div class="row g-2 mt-2 mb-5">
+                      
+                      <div class="col-12 col-md-6">
+                        <div class="form2">
+                          <label for="totalbillWater" class="form-label h5">Average water bill?</label>
+                            <input type="number" class="form-control" id="totalbillWater" name="water_bill" placeholder="₱ 0.00">
+                        </div>
+                      </div>
+
+                      <div class="col-12 col-md-6 mb-3 ">
+                        <div class="form2">
+                          <label for="totalbillElectric" class="form-label h5">Average electric bill?</label>
+                            <input type="number" class="form-control" id="totalbillElectric" name="electric_bill" placeholder="₱ 0.00">
+                        </div>
+                      </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12 d-flex justify-content-between">
+                          <button class="btn btn-primary js-btn-prev" type="button" title="Prev">Previous</button>
+                          <button class="btn btn-primary ml-auto js-btn-next" type="button" title="Next" id="next8">Next</button>
+                        </div>
+                      </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
                 <div class="row">
                   <div class="col-md-11 col-lg-8 mx-auto justify-content-center">
                     <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
@@ -641,8 +914,7 @@ $user_id = $_SESSION['user_id'] ?? NULL;
                         </div>
                         <div class="col-8 col-md-6 ms-md-2 ms-sm-2 selectRoomType">
                             <select class="form-select" name="min_weeks" id="min_weeks">
-                                <option value="" selected disabled>Select minimum no. of week</option>
-                                <option value="1">1 Week</option>
+                                <option value="1" selected>1 Week</option>
                                 <option value="2">2 Weeks</option>
                                 <option value="3">3 Weeks</option>
                                 <option value="4">4 Weeks</option>
@@ -689,8 +961,7 @@ $user_id = $_SESSION['user_id'] ?? NULL;
                         <div class="row g-2 mt-2" id="ifYes1" style="display:none;" >
                           <div class="col-8 col-md-6 ms-md-2 ms-sm-2 selectRoomType">
                             <select class="form-select" name="from_curfew" id="from_curfew">
-                                <option value="none" selected> - From - </option>
-                                <option value="6PM">6PM</option>
+                                <option value="6PM" selected>6PM</option>
                                 <option value="7PM">7PM</option>
                                 <option value="8PM">8PM</option>
                                 <option value="9PM">9PM</option>
@@ -702,8 +973,7 @@ $user_id = $_SESSION['user_id'] ?? NULL;
                           </div>
                           <div class="col-8 col-md-6 ms-md-2 ms-sm-2 selectRoomType">
                             <select class="form-select" name="to_curfew" id="to_curfew">
-                              <option value="none" selected> - To - </option>
-                              <option value="3AM">3AM</option>
+                              <option value="3AM" selected>3AM</option>
                               <option value="4AM">4AM</option>
                               <option value="5AM">5AM</option>
                               <option value="6AM">6AM</option>
@@ -751,8 +1021,7 @@ $user_id = $_SESSION['user_id'] ?? NULL;
                             </div>
                             <div class="col-8 col-md-6 ms-md-2 ms-sm-2 selectRoomType">
                                 <select class="form-select" name="from_visit" id="from_visit">
-                                    <option value="none" selected> - From - </option>
-                                    <option value="3AM">3AM</option>
+                                    <option value="3AM" selected>3AM</option>
                                     <option value="4AM">4AM</option>
                                     <option value="5AM">5AM</option>
                                     <option value="6AM">6AM</option>
@@ -766,8 +1035,7 @@ $user_id = $_SESSION['user_id'] ?? NULL;
                               </div>
                               <div class="col-8 col-md-6 ms-md-2 ms-sm-2 selectRoomType">
                                 <select class="form-select" name="to_visit" id="to_visit">
-                                    <option value="none" selected> - To - </option>
-                                    <option value="4PM">4PM</option>
+                                    <option value="4PM" selected>4PM</option>
                                     <option value="5PM">5PM</option>
                                     <option value="6PM">6PM</option>
                                     <option value="7PM">7PM</option>
@@ -840,7 +1108,7 @@ $user_id = $_SESSION['user_id'] ?? NULL;
                         </div>
 
                         <div class="button-row d-flex mt-4 col-12">
-                        <input class="btn btn-primary ml-auto"  type="submit" name="apply_property" >Submit</input>
+                        <input class="btn btn-primary ml-auto"  type="submit" name="apply_property"></input>
                         </div>
                         
                       </div>
@@ -854,56 +1122,59 @@ $user_id = $_SESSION['user_id'] ?? NULL;
               </div>
               
             </div>
-            
-            <div class="form-group row">
-                    <div class="col-md-4">
-                            <!-- <label for="" class="control-label">Locate your property</label> -->
-                            <!-- <div id='map' style='width: 400px; height: 300px;'></div> -->
-                            <input type="hidden" name="latitude" value="15.145113074763598">
-                            <input type="hidden" name="longitude" value="120.5950306751359">
-                    </div>
-            </div>
             <!-- <button class="btn btn-sm btn-outline-danger" id="submit-button" type="submit">Add</button> -->
 
               </form>
             </div>
-          </div>
-        
-          <!-- <div class="w-100 mb-5"><div class="row m-2"></div></div> -->
-    </section>
-   
+          
+
+  </section>
   </div>
-    
-    <!-- Enlist Form ends -->
-  
 
 
-    
 
 
-    </body>
 
-    <!-- javascript -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-      crossorigin="anonymous"
-    ></script>
+  <!-- Enlist Form ends -->
 
-    <script src="js/property_enlist.js"></script>
 
-    <!-- Radio Button -->
-    <script>
-      function yesnoCheck() {
-          if (document.getElementById('wifiCheck1').checked) {
-              document.getElementById('ifYes').style.visibility = 'visible';
-          }
-          else document.getElementById('ifYes').style.visibility = 'hidden';
 
-      }
-    </script>
-  
-  <script>
+
+
+
+
+</body>
+
+<!-- javascript -->
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+<script src="js/property_enlist.js"></script>
+<!-- Include jQuery library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="js/add_images.js"></script>
+<script src="ph-address-selector.js"></script>
+<script src="geo.js"></script>
+<!-- <script src="form-validate.js"></script> -->
+
+<!-- Radio Button -->
+<script>
+  function yesnoCheck() {
+    if (document.getElementById('wifiCheck1').checked) {
+      document.getElementById('ifYes').style.visibility = 'visible';
+    }
+    else document.getElementById('ifYes').style.visibility = 'hidden';
+
+  }
+</script>
+
+<script>
     function yesnoCheck1() {
         if (document.getElementById('curfew_yes').checked) {
             document.getElementById('ifYes1').style.display = 'block';
@@ -911,52 +1182,395 @@ $user_id = $_SESSION['user_id'] ?? NULL;
         else document.getElementById('ifYes1').style.display = 'none';
 
     }
-  </script>
+</script>
 
 <script>
   function yesnoCheck2() {
-      if (document.getElementById('visitors_yes').checked) {
-          document.getElementById('ifYes2').style.display = 'block';
-      }
-      else document.getElementById('ifYes2').style.display = 'none';
+    if (document.getElementById('visitors_yes').checked) {
+      document.getElementById('ifYes2').style.display = 'block';
+    }
+    else document.getElementById('ifYes2').style.display = 'none';
 
   }
-</script>  
+</script>
+
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const addTitlesButton = document.getElementById("add_titles");
-        const imageTitlesContainer = document.getElementById("image_titles_container");
-        const imagePreviewsContainer = document.getElementById("image_previews_container");
+  function yesnoCheck3() {
+    if (document.getElementById('visitHr1').checked) {
+      document.getElementById('ifYes3').style.display = 'block';
+    }
+    else document.getElementById('ifYes3').style.display = 'none';
 
-        addTitlesButton.addEventListener("click", function() {
-            const selectedImages = document.getElementById("image").files;
-            imageTitlesContainer.innerHTML = ""; // Clear previous titles
-            imagePreviewsContainer.innerHTML = ""; // Clear previous image previews
+  }
+</script>
 
-            for (let i = 0; i < selectedImages.length; i++) {
-                const input = document.createElement("input");
-                input.type = "text";
-                input.name = "image_title[]";
-                input.placeholder = "Insert caption for image " + (i + 1);
-                input.className = "form-control mb-2"; // Add some margin between inputs
-                imageTitlesContainer.appendChild(input);
+<script>
 
-                // Create an image preview
-                const imagePreview = document.createElement("img");
-                imagePreview.src = URL.createObjectURL(selectedImages[i]);
-                imagePreview.className = "img-thumbnail";
-                imagePreview.height = "50";
-                imagePreview.width = "50";
-                imagePreviewsContainer.appendChild(imagePreview);
+let formCount = 1;
+
+        function addAnotherForm() {
+            const roomForm = document.getElementById('roomForm');
+            const clonedForm = roomForm.cloneNode(true);
+            const hrElement = document.createElement('hr');
+            const removeButton = document.createElement('button');
+            const clonedInputs = clonedForm.querySelectorAll('input, select, textarea');
+            clonedInputs.forEach(input => {
+            if (input.type === 'checkbox') {
+                input.checked = false; // Uncheck checkboxes
+            } else {
+                input.value = ''; // Reset other input values
             }
-        });
+            });
+
+            removeButton.classList.add('removeForm');
+            removeButton.style.paddingLeft = "19px";
+            removeButton.style.fontSize = "13px";
+            removeButton.style.fontWeight = "600";
+            removeButton.innerHTML = 'Remove Room';
+            removeButton.onclick = function () {
+                removeForm(clonedForm);
+            };
+            clonedForm.appendChild(removeButton);
+            roomForm.parentNode.insertBefore(clonedForm, roomForm.nextSibling);
+            roomForm.parentNode.insertBefore(hrElement, roomForm.nextSibling);
+            formCount++;
+        }
+
+        function removeForm(form) {
+            if (formCount > 1) {
+                const hrElement = form.nextElementSibling;
+                form.parentNode.removeChild(form);
+                if (hrElement) {
+                    hrElement.parentNode.removeChild(hrElement);
+                }
+                formCount--;
+            }
+        }
+</script>
+<script>
+    // Get the input and radio button elements
+const floatingPropertyName = document.getElementById("floatingPropertyName");
+const propertyType = document.getElementsByName("property_type");
+const nextButton = document.getElementById("next2");
+const locationModal = document.getElementById("location-modal");
+
+// Disable the button at the start
+nextButton.disabled = true;
+locationModal.disabled = true;
+
+// Add event listeners to the input and radio button elements
+floatingPropertyName.addEventListener("input", checkValidity);
+for (let i = 0; i < propertyType.length; i++) {
+  propertyType[i].addEventListener("change", checkValidity);
+}
+
+// Function to check the validity of the input and radio button elements
+function checkValidity() {
+  if (floatingPropertyName.value !== "" && getSelectedRadio(propertyType) !== null) {
+    nextButton.disabled = false;
+    locationModal.disabled = false;
+  } else {
+    nextButton.disabled = true;
+    locationModal.disabled = true;
+  }
+}
+
+// Function to get the selected radio button
+function getSelectedRadio(radioButtons) {
+  for (let i = 0; i < radioButtons.length; i++) {
+    if (radioButtons[i].checked) {
+      return radioButtons[i];
+    }
+  }
+  return null;
+}
+</script>
+<script>
+const propertyNumber = document.getElementById("property_number");
+const street = document.getElementById("street");
+const firstName = document.getElementById("first_name");
+const lastName = document.getElementById("last_name");
+const region = document.getElementById("region");
+const province = document.getElementById("province");
+const city = document.getElementById("city");
+const barangay = document.getElementById("barangay");
+const email = document.getElementById("email");
+const contactNumber = document.getElementById("contact_number");
+const password = document.getElementById("password");
+const confpass = document.getElementById("confpass");
+const nextButton3 = document.getElementById("next3");
+const mapModal = document.getElementById("map-modal");
+
+// Disable the button at the start
+nextButton3.disabled = true;
+mapModal.disabled = true;
+
+// Add event listeners to the input and select elements
+propertyNumber.addEventListener("input", validateForm);
+street.addEventListener("input", validateForm);
+firstName.addEventListener("input", validateForm);
+lastName.addEventListener("input", validateForm);
+region.addEventListener("change", validateForm);
+province.addEventListener("change", validateForm);
+city.addEventListener("change", validateForm);
+barangay.addEventListener("change", validateForm);
+email.addEventListener("input", validateForm);
+contactNumber.addEventListener("input", validateForm);
+password.addEventListener("input", validateForm);
+confpass.addEventListener("input", validateForm);
+
+// Function to validate the form
+function validateForm() {
+  let valid = true;
+
+  // Validate property number
+  if (propertyNumber.value === "") {
+    valid = false;
+  }
+
+  // Validate street
+  if (street.value === "") {
+    valid = false;
+  }
+
+  // Validate first name and last name
+  if (firstName.value === "" || lastName.value === "") {
+    valid = false;
+  } else {
+    const nameRegex = /^[a-zA-Z]+$/;
+    if (!nameRegex.test(firstName.value) || !nameRegex.test(lastName.value)) {
+      valid = false;
+    }
+  }
+
+  // Validate select tags
+  if (region.value === "" || province.value === "" || city.value === "" || barangay.value === "") {
+    valid = false;
+  }
+
+  // Validate email
+  const emailRegex = /^\S+@\S+\.\S+$/;
+  if (!emailRegex.test(email.value)) {
+    valid = false;
+    document.getElementById("email-error").textContent = "Email is invalid";
+  } else {
+    document.getElementById("email-error").textContent = "";
+  }
+
+  // Validate contact number
+  const contactRegex = /^(09|\+639|\+639)\d{9}$/;
+  if (!contactRegex.test(contactNumber.value)) {
+    valid = false;
+    document.getElementById("contact-error").textContent = "Contact number is invalid";
+  } else {
+    document.getElementById("contact-error").textContent = "";
+  }
+
+  // Validate password
+  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+  if (!passwordRegex.test(password.value)) {
+    valid = false;
+    document.getElementById("password-error").textContent = "Password must be at least 8 characters and contain both letters and numbers";
+  } else {
+    document.getElementById("password-error").textContent = "";
+  }
+
+  // Validate confpass
+  if (confpass.value !== password.value) {
+    valid = false;
+    document.getElementById("confpass-error").textContent = "Passwords do not match";
+  } else {
+    document.getElementById("confpass-error").textContent = "";
+  }
+
+  // Enable or disable the button based on validity
+  nextButton3.disabled = !valid;
+  mapModal.disabled = !valid;
+}
+</script>
+<style>
+    #map {height: 600px; width: 1350px }
+</style>
+<script>
+    var latitude = document.getElementById("latitude");
+    var longitude = document.getElementById("longitude");
+    const nextButton4 = document.getElementById("next4");
+    const amenitiesModal = document.getElementById("amenities-modal");
+    
+    nextButton4.disabled = true;
+    amenitiesModal.disabled = true;
+
+    var map_center = [15.145158062165162, 120.59477842687491];
+        var mapOptions = {
+        center: map_center,
+        zoom: 18
+        }
+        var map = L.map('map', mapOptions);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+    // Create a variable to store the marker object
+    var marker = null;
+    
+
+    // Add a click event listener to the map
+    map.on('click', function(e) {
+    // Check if the marker variable is null or not
+    if (marker === null) {
+        // Create a new marker at the clicked point
+        marker = L.marker(e.latlng).addTo(map);
+        
+    } else {
+        // Remove the existing marker from the map
+        marker.remove();
+        marker = null;
+        latitude.value = '';
+        longitude.value = '';
+    }
+
+    // Get the latitude and longitude of the marker
+    if (marker !== null) {
+        var markerLat = marker.getLatLng().lat;
+        var markerLng = marker.getLatLng().lng;
+        
+        latitude.value = markerLat;
+        longitude.value = markerLng;
+
+        nextButton4.disabled = false;
+        amenitiesModal.disabled = false;
+    }
     });
 </script>
-<!-- <script src="form-validate.js"></script> -->
 
-<script src="ph-address-selector.js"></script>
-    <script src="geo.js"></script>
-    <script src="room.js"></script>
-    <script src="map.js"></script>
-    <script src="rules.js"></script>
+<script>
+    const checkboxes = document.querySelectorAll(".checkbox-input");
+const nextButton5 = document.getElementById("next5");
+const roomModal = document.getElementById("room-modal");
+
+// Disable the button at the start
+nextButton5.disabled = true;
+roomModal.disabled = true;
+
+// Add event listeners to the checkbox elements
+for (let i = 0; i < checkboxes.length; i++) {
+  checkboxes[i].addEventListener("change", checkValidity);
+}
+
+// Function to check the validity of the checkbox elements
+function checkValidity() {
+  let checked = false;
+  for (let i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) {
+      checked = true;
+      break;
+    }
+  }
+  nextButton5.disabled = !checked;
+  roomModal.disabled = !checked;
+}
+</script>
+<script>
+const roomFloat = document.getElementById("roomFloat");
+const furnishFloat = document.getElementById("furnishFloat");
+const roomRate = document.getElementById("roomRate");
+const roomNo = document.getElementById("roomNo");
+const nextButton6 = document.getElementById("next6");
+//const imagesModal = document.getElementById("images-modal");
+
+// Disable the button at the start
+nextButton6.disabled = true;
+//imagesModal.disabled = true;
+
+// Add event listeners to the select and number input elements
+roomFloat.addEventListener("change", validateForm);
+furnishFloat.addEventListener("change", validateForm);
+roomRate.addEventListener("input", validateForm);
+roomNo.addEventListener("input", validateForm);
+
+// Function to validate the form
+function validateForm() {
+  let valid = true;
+
+  // Validate roomFloat and furnishFloat
+  if (roomFloat.value === "" || furnishFloat.value === "") {
+    valid = false;
+  }
+
+  // Validate roomRate and roomNo
+  const rateRegex = /^\d+(\.\d{1,2})?$/;
+  const noRegex = /^\d+$/;
+  if (!rateRegex.test(roomRate.value) || !noRegex.test(roomNo.value)) {
+    valid = false;
+  }
+
+  // Enable or disable the button based on validity
+  nextButton6.disabled = !valid;
+  //imagesModal.disabled = !valid;
+}
+</script>
+<script>
+const fileInput = document.getElementById("upload-input");
+const nextButton7 = document.getElementById("next7");
+const descriptionModal = document.getElementById("description-modal");
+
+// Disable the button at the start
+nextButton7.disabled = true;
+descriptionModal.disabled = true;
+
+// Add event listener to the file input element
+fileInput.addEventListener("change", checkValidity);
+
+// Function to check the validity of the file input element
+function checkValidity() {
+  if (fileInput.files.length > 0) {
+    nextButton7.disabled = false;
+    descriptionModal.disabled = false;
+  } else {
+    nextButton7.disabled = true;
+    descriptionModal.disabled = true;
+  }
+}
+</script>
+<script>
+const description = document.getElementById("description");
+const totalFloors = document.getElementById("totalFloors");
+const reservationFee = document.getElementById("reservationFee");
+const totalbillWater = document.getElementById("totalbillWater");
+const totalbillElectric = document.getElementById("totalbillElectric");
+const nextButton8 = document.getElementById("next8");
+const rulesModal = document.getElementById("rules-modal");
+
+// Disable the button at the start
+nextButton8.disabled = true;
+rulesModal.disabled = true;
+
+// Add event listeners to the textarea and number input elements
+description.addEventListener("input", validateForm);
+totalFloors.addEventListener("input", validateForm);
+reservationFee.addEventListener("input", validateForm);
+totalbillWater.addEventListener("input", validateForm);
+totalbillElectric.addEventListener("input", validateForm);
+
+// Function to validate the form
+function validateForm() {
+  let valid = true;
+
+  // Validate description
+  if (description.value === "") {
+    valid = false;
+  }
+
+  // Validate totalFloors, reservationFee, totalbillWater, and totalbillElectric
+  const numberRegex = /^\d+(\.\d{1,2})?$/;
+  if (!numberRegex.test(totalFloors.value) || !numberRegex.test(reservationFee.value) || !numberRegex.test(totalbillWater.value) || !numberRegex.test(totalbillElectric.value)) {
+    valid = false;
+  }
+
+  // Enable or disable the button based on validity
+  nextButton8.disabled = !valid;
+  rulesModal.disabled = !valid;
+}
+</script>
 </html>

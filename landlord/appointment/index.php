@@ -1,8 +1,10 @@
 <?php
 use Models\Appointment;
 include "../../init.php";
-//include ("../../session.php");
-$user_id = 26; //change on session
+include ("../session.php");
+
+$user_id = $_SESSION['user_id'] ?? NULL;
+
 $checkDate = new Appointment('', '', '', '','');
 $checkDate->setConnection($connection);
 $checkDate = $checkDate->checkAppointments();
@@ -10,206 +12,258 @@ $checkDate = $checkDate->checkAppointments();
 $timezone = new DateTimeZone('Asia/Manila');
 $currentTime = new DateTime('now', $timezone);
 
-foreach($checkDate as $update){
-	$appointment_id = $update['appointment_id'];
-	$date = $update['date'];
-	$time = $update['time'];
-	$standardTime = date("H:i", strtotime($time));
-	//var_dump($standardTime);
-	$desiredDateTime = new DateTime("$date $standardTime", $timezone);
-	if($currentTime > $desiredDateTime){
-		//var_dump($appointment_id, $date, $time);
-		$update = new Appointment('', '', '', '','');
-		$update->setConnection($connection);
-		$update->updateAppointment($appointment_id);
-	}
-}
+// foreach($checkDate as $update){
+// 	$appointment_id = $update['appointment_id'];
+// 	$date = $update['date'];
+// 	$time = $update['time'];
+// 	$standardTime = date("H:i", strtotime($time));
+// 	//var_dump($standardTime);
+// 	$desiredDateTime = new DateTime("$date $standardTime", $timezone);
+// 	if($currentTime > $desiredDateTime){
+// 		//var_dump($appointment_id, $date, $time);
+// 		$update = new Appointment('', '', '', '','');
+// 		$update->setConnection($connection);
+// 		$update->updateAppointment($appointment_id);
+// 	}
+// }
 ?>
+
 <!DOCTYPE html>
-<html>
-<head>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apt Iba Pa | Appointments</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="style.css">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<title>Property Appointments</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/868f1fea46.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="../css/appointments_view.css" rel="stylesheet" />
+    <link href="../css/all.css" rel="stylesheet" />
 
-</head>
-<body>
+    <!-- Bootstrap Carousel CSS -->
 
-<nav>
-<div class="container-fluid">
-<nav>
-  <ul class="nav nav-pills nav-justified">
-    <li style="background-color: #FFF8DC"><a  href="../index.php">Dashboard</a></li>
-    <li style="background-color: #FAF0E6"><a  href="../property/index.php">Properties</a></li>
-    <li class="active" style="background-color: #FFFAF0"><a  href="index.php">Appointments</a></li>
-    <li style="background-color: #FFFACD"><a  href="../reservation/index.php">Reservations</a></li>
-    <li style="background-color: #FAFAF0"><a  href="../../logout.php">Logout</a></li>
-  </ul>
-  <a href="../../logout.php">Logout</a>
-  </nav>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+      integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+      integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+      crossorigin="anonymous"
+    />
+
+    <!-- Date Picker -->
+    
+    <link rel="stylesheet" href="../css/datepicker_css/default.css">
+    <link rel="stylesheet" href="../css/datepicker_css/default.date.css">
+
+    
+    <!-- Style -->
+    <link rel="stylesheet" href="../css/datepicker_css/datepicker.css">
+
+  </head>
+  <body>
+    <!-- Navbar -->
+
+    <?php include('navbar.php'); ?>
+  
+      <!-- Navbar ends -->
+
+   
+
+    
+<?php include('appointment-modal.php'); ?>
+      
 
 
-<div class="container-xl">
-	<div class="table table-responsive">
-		<div class="table-wrapper">
-			<div class="table-title">
-				<div class="row">
-					<div class="col-sm-6">
-						<h2><b>Appoinments</b></h2>
-					</div>
-					<div class="col-sm-6">	
-                        <form method="POST" action="sample.php">
-                            <button class="btn btn-success" style="margin-top:10px;">Set a date as unavailable</button>
-                        </form>				
-					</div>
-				</div>
-			</div>
-			<table class="table table-striped table-hover">
-				<thead>
-					<tr>
-                        <th scope="col">Property</th>
-                        <th scope="col">Full Name</th>
-						<th scope="col">Contact Number</th>
-                        <th scope="col">Date of Visit</th>
-                        <th scope="col">Time of Visit</th>
-						<th scope="col">Action</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php
-                    $appointment = new Appointment('', '', '', '','');
-                    $appointment->setConnection($connection);
-                    $retrieveAppointment = $appointment->getPropertyAppointments($user_id);
-                    
-                    foreach($retrieveAppointment as $app){
-                ?>
-            <tr>
-                <td><?php echo $app['property_name']?></td>
-                <td><?php echo $app['first_name'] . " " . $app['last_name']?></td>
-                <td><?php echo $app['contact_number']?></td>
-				<td><?php echo $app['date']?></td>
-                <td><?php echo $app['time']?></td>
-				<td class="text-center">
-					<a class="btn btn-sm btn-outline-primary" type="button" href="view.php?user_id=<?php //echo $app['user_id']?>" >Confirm</a>
-					<a class="btn btn-sm btn-outline-danger" type="button" href="delete.php?user_id=<?php //echo $app['user_id']?>">Reject</a>
-				</td>
-            </tr>
-            <?php } ?>
-				</tbody>
-			</table>
-		</div>
-	</div>        
-</div>
-</body>
+    <!-- Time slots ends -->
 
-<style>
-body {
-	color: #566787;
-	background: #f5f5f5;
-	font-family: 'Varela Round', sans-serif;
-	font-size: 13px;
-}
-.table-responsive {
-    margin: 30px 0;
-}
-.table-wrapper {
-	background: #fff;
-	padding: 20px 25px;
-	border-radius: 3px;
-	min-width: 1000px;
-	box-shadow: 0 1px 1px rgba(0,0,0,.05);
-}
-.table-title {        
-	padding-bottom: 15px;
-	background: #435d7d;
-	color: #fff;
-	padding: 16px 30px;
-	min-width: 100%;
-	margin: -20px -25px 10px;
-	border-radius: 3px 3px 0 0;
-}
-.table-title h2 {
-	margin: 5px 0 0;
-	font-size: 24px;
-}
-.table-title .btn-group {
-	float: right;
-}
-.table-title .btn {
-	color: #fff;
-	float: right;
-	font-size: 13px;
-	border: none;
-	min-width: 50px;
-	border-radius: 2px;
-	border: none;
-	outline: none !important;
-	margin-left: 10px;
-}
-table.table tr th, table.table tr td {
-	border-color: #e9e9e9;
-	padding: 12px 15px;
-	vertical-align: middle;
-}
-table.table tr th:first-child {
-	width: 100px;
-}
-table.table tr th:last-child {
-	width: 100px;
-}
-table.table-striped tbody tr:nth-of-type(odd) {
-	background-color: #fcfcfc;
-}
-table.table-striped.table-hover tbody tr:hover {
-	background: #f5f5f5;
-}
-table.table .avatar {
-	border-radius: 50%;
-	vertical-align: middle;
-	margin-right: 10px;
-}
-.hint-text {
-	float: left;
-	margin-top: 10px;
-	font-size: 13px;
-}    
-</style>
+    
+
+ 
+
+    <!-- Footer -->
+      <footer class="site-footer">
+        <div class="container-fluid">
+          <div class="container">
+          <div class="row">
+              <div class="col-sm-12 col-md-8">
+              <h2>APT IBA PA</h2>
+                <div class="row">
+                  <div class="col-sm-12 col-md-8">
+                    <p class="text-justify">
+                      Our platform serves as a comprehensive guide, providing a vast database of dormitories and apartments in the area surrounding AUF. Through our interactive map interface, users can easily navigate and explore different locations, allowing them to make informed decisions based on their preferences and requirements.
+                    </p>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="col-xs-6 col-md-2 me-auto pt-4">
+              <h6>Pages</h6>
+              <ul class="footer-links">
+                  <li><a href="http://scanfcode.com/category/c-language/">Accomodations</a><li>
+                  <li>
+                  <a href="http://scanfcode.com/category/front-end-development/">About Us</a>
+                  </li>
+                  <li>
+                  <a href="http://scanfcode.com/category/back-end-development/">Apply My Property</a>
+              </ul>
+              </div>
+  
+              <div class="col-xs-6 col-md-2 pt-4">
+              <h6>Features</h6>
+              <ul class="footer-links">
+                  <li><a href="http://scanfcode.com/about/">Favorites</a></li>
+                  <li><a href="http://scanfcode.com/contact/">Reserve a Room</a></li>
+                  <li>
+                  <a href="http://scanfcode.com/contribute-at-scanfcode/">Schedule a Visit</a>
+              </ul>
+              </div>
+          </div>
+          <hr />
+          </div>
+          <div class="container">
+          <div class="row">
+              <div class="col-md-8 col-sm-6 col-xs-12">
+              <p class="copyright-text">
+                  Copyright &copy; 2023 All Rights Reserved by
+                  <a href="#">APT IBA PA</a>.
+              </p>
+              </div>
+  
+              <div class="col-md-4 col-sm-6 col-xs-12">
+              <ul class="social-icons">
+                  <li>
+                  <a class="facebook" href="#"><i class="fa fa-facebook"></i></a>
+                  </li>
+                  <li>
+                  <a class="twitter" href="#"><i class="fa fa-twitter"></i></a>
+                  </li>
+                  <li>
+                  <a class="dribbble" href="#"><i class="fa fa-dribbble"></i></a>
+                  </li>
+                  <li>
+                  <a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a>
+                  </li>
+              </ul>
+              </div>
+          </div>
+          </div>
+        </div>
+      </footer>
+      
+  
+      <!-- Footer ends -->
+  
 <script>
-$(document).ready(function(){
-	// Activate tooltip
-	$('[$class-toggle="tooltip"]').tooltip();
-});
-
-// Get the modal
-var modal = document.getElementById("editModal");
-
-// Get the button that opens the modal
-var btn = document.getElementById("editBtn");
-
-// Get the <span> element that closes the modal
-//var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on the button, open the modal
-btn.onclick = function() {
-  modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
+    $('#viewModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var id = button.data('id'); // Extract info from data-* attributes
+    var modal = $(this);
+    modal.find('#modal-id').val(id);
+    });
 </script>
+
+
+    
+
+
+  </body>
+
+  <!-- javascript -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"
+  ></script>
+
+  <script src="js/accommodations.js"></script>
+  
+
+  <!-- JS of Carousel -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+      integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+      crossorigin="anonymous"></script>
+  <script>
+      $('.carousel-container').owlCarousel({
+          loop: false,
+          margin: 15,
+          nav: true,
+          navText:["<i class='fa-solid fa-arrow-left leftArrow'></i>",
+                   "<i class='fa-solid fa-arrow-right rightArrow'></i>"],
+          responsive: {
+              0: {
+                  items: 1
+              },
+              600: {
+                  items: 2
+              },
+              1000: {
+                  items: 3
+              }
+          }
+      })
+
+      $('.testimonials-container').owlCarousel({
+        loop:true,
+        autoplay:false,
+        autoplayTimeout:6000,
+        margin:10,
+        nav:true,
+        navText:["<i class='fa-solid fa-arrow-left leftArrow'></i>",
+                "<i class='fa-solid fa-arrow-right rightArrow'></i>"],
+        responsive:{
+            0:{
+                items:1,
+                nav:false
+            },
+            600:{
+                items:1,
+                nav:true
+            },
+            768:{
+                items:2
+            },
+        }
+        })
+  </script>
+
+              
+            <!--   *****   JQuery Link   *****   -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+            
+            <!--   *****   Owl Carousel js Link  *****  -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+
+            
+<!-- Date Picker -->
+
+<script src="js/datepicker_js/jquery-3.3.1.min.js"></script>
+<script src="js/datepicker_js/popper.min.js"></script>
+<script src="js/datepicker_js/bootstrap.min.js"></script>
+<script src="js/datepicker_js/picker.js"></script>
+<script src="js/datepicker_js/picker.date.js"></script>
+
+<script src="js/datepicker_js/main-datepicker.js"></script>
+
+
+
 </html>

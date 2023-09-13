@@ -1,8 +1,24 @@
 <?php
+use Models\Appointment;
+use Models\Reservation;
 include "init.php";
 include "session.php";
 
-$user_id = $_SESSION['user_id'] ?? NULL;
+if(isset($_SESSION['user_id'])){
+    $user_id = $_SESSION['user_id'] ?? NULL;
+} else{
+    header('location: index.php');
+    exit();
+}
+
+
+$appointments = new Appointment('','','','','');
+$appointments->setConnection($connection);
+$appointments = $appointments->getUserAppointments($user_id);
+
+$reservations = new Reservation('','','','','');
+$reservations->setConnection($connection);
+$reservations = $reservations->getUserReservations($user_id);
 
 ?>
 <!DOCTYPE html>
@@ -73,22 +89,38 @@ $user_id = $_SESSION['user_id'] ?? NULL;
             <div class="box-container">
               <div class="row gx-5 mb-3 d-flex justify-content-center">
 
+              <?php foreach($appointments as $appointment){ 
+                $property_id = $appointment['property_id'];
+                $property_type = $appointment['property_type'];
+                $property_name = $appointment['property_name'];
+                $full_address = $appointment['property_number'] . ', ' . $appointment['street'] . ', ' . $appointment['barangay'] . ', ' . $appointment['city'];
+                $date = date("F j, Y", strtotime($appointment['date']));
+                $time = $appointment['time'];
+
+                $datetime_str = $appointment['date'] . " " . $time;
+                $timestamp = strtotime($datetime_str);
+                $current_timestamp = time();
+                
+                ?>
                 <div class="col-12 col-sm-6 col-xl-8">
                   <div class="box">
                     <div class="row">
                         <div class="col pt-3 ms-md-4 ps-md-3">
-                            <p class="type"><span>Dormitory</span></p>
-                            <h3 class="name"><i class="fa-solid fa-location-dot"></i> Batac</h3>
-                            <h3 class="address">Blk 59, Upper East Side, AUF Area</h3>
-                            <h6 class="roomStatus">Double Room</h6>
+                            <p class="type"><span><?= $property_type ?></span></p>
+                            <h3 class="name"><i class="fa-solid fa-location-dot"></i> <a href="view.php?<?= $property_id ?>" style="text-decoration: none; color: inherit;"><?= $property_name ?></a> </h3>
+                            <h3 class="address"><?= $full_address ?></h3>
                         </div>
                     
 
                         <div class="col-6 col-md-4">
                         <div class="col mt-4 mt-md-3 pt-3 pt-md-4">
-                            <p class="statusU text-center"><span>Upcoming</span></p>
-                            <h3 class="date text-center">06 Sep 23</h3>
-                            <h3 class="time text-center">10:00AM to 10:30AM</h3>
+                            <?php if ($timestamp > $current_timestamp) {
+                                    echo '<p class="statusU text-center"><span>Upcoming</span></p>';
+                                } else {
+                                    echo '<p class="statusF text-center"><span>Passed</span></p>';
+                                } ?>
+                            <h3 class="date text-center"><?= $date ?></h3>
+                            <h3 class="time text-center"><?= $time ?></h3>
                         </div>
                       </div>
 
@@ -97,31 +129,8 @@ $user_id = $_SESSION['user_id'] ?? NULL;
                   </div>
                 </div>
 
-                <div class="col-12 col-sm-6 col-xl-8">
-                    <div class="box">
-                      <div class="row justify-content-between">
-                          <div class="col pt-3 ms-md-4">
-                              <p class="type"><span>Apartment</span></p>
-                              <h3 class="name"><i class="fa-solid fa-location-dot"></i> Batac</h3>
-                              <h3 class="address">Blk 59, West Side Brooklyn, AUF Area</h3>
-                              <h6 class="roomStatus">Single Room</h6>
-                          </div>
-                      
-  
-                        <div class="col-6 col-md-4">
-                            <div class="col mt-4 mt-md-3 pt-3 pt-md-4">
-                              <p class="statusF text-center">
-                                <span>Finished</span>
-                              </p>
-                              <h3 class="date text-center">07 Sep 23</h3>
-                              <h3 class="time text-center">04:00PM to 04:30PM</h3>
-                          </div>
-                        </div>
-  
-                      </div>
-  
-                    </div>
-                  </div>
+                <?php } ?>
+                  
 
               </div>
             </div>
@@ -137,23 +146,61 @@ $user_id = $_SESSION['user_id'] ?? NULL;
     
             <div class="box-container">
                 <div class="row gx-5 mb-3 d-flex justify-content-center">
-    
+                <?php foreach($reservations as $reservation){ 
+                    $property_id = $reservation['property_id'];
+                    $property_type = $reservation['property_type'];
+                    $property_name = $reservation['property_name'];
+                    $full_address = $reservation['property_number'] . ', ' . $reservation['street'] . ', ' . $reservation['barangay'] . ', ' . $reservation['city'];
+                    $payment = $reservation['payment_status'];
+                    if($payment===1){
+                        $payment_status = "Paid";
+                    }else{
+                        $payment_status = "Unpaid";
+                    }
+                    $room = $reservation['room_type'];
+                    if($room===1){
+                        $room_type = "Single Room";
+                    } elseif($room===2) {
+                        $room_type = "Double Room";
+                    } elseif($room===3) {
+                        $room_type = "Triple Room";
+                    } elseif($room===4) {
+                        $room_type = "Quad Room";
+                    } elseif($room===5) {
+                        $room_type = "5-Bed Room";
+                    } elseif($room===6) {
+                        $room_type = "6-Bed Room";
+                    } elseif($room===7) {
+                        $room_type = "7-Bed Room";
+                    } elseif($room===8) {
+                        $room_type = "8-Bed Room";
+                    }
+
+                    $status = $reservation['status'];
+                    if($status===1){
+                        $reservation_status = "Accepted";
+                    } elseif($status===2) {
+                        $reservation_status = "Pending";
+                    } elseif($status===3) {
+                        $reservation_status = "Declined";
+                    } 
+
+                ?>
                 <div class="col-12 col-sm-6 col-xl-8">
                     <div class="box">
                     <div class="row">
                         <div class="col pt-3 ms-md-4 ps-md-3">
-                            <p class="type"><span>Dormitory</span></p>
-                            <h3 class="name"><i class="fa-solid fa-location-dot"></i> Batac</h3>
-                            <h3 class="address">Blk 59, Upper East Side, AUF Area</h3>
-                            <h6 class="roomStatus">Double Room</h6>
+                            <p class="type"><span><?= $property_type ?></span></p>
+                            <h3 class="name"><i class="fa-solid fa-location-dot"></i> <a href="view.php?<?= $property_id ?>" style="text-decoration: none; color: inherit;"><?= $property_name ?></a> </h3>
+                            <h3 class="address"><?= $full_address ?></h3>
+                            <h6 class="roomStatus"><?= $room_type ?></h6>
                         </div>
                     
     
                         <div class="col-6 col-md-4">
                         <div class="col mt-4 mt-md-3 pt-3 pt-md-4">
-                            <p class="statusR text-center"><span>Reserved</span></p>
-                            <h3 class="date text-center">06 Sep 23</h3>
-                            <h3 class="time text-center">10:00AM to 10:30AM</h3>
+                            <p class="statusR text-center"><span><?= $reservation_status ?></span></p>
+                            <h3 class="date text-center"><?= $payment_status ?></h3>
                         </div>
                         </div>
     
@@ -161,32 +208,7 @@ $user_id = $_SESSION['user_id'] ?? NULL;
     
                     </div>
                 </div>
-    
-                <div class="col-12 col-sm-6 col-xl-8">
-                    <div class="box">
-                        <div class="row justify-content-between">
-                            <div class="col pt-3 ms-md-4">
-                                <p class="type"><span>Apartment</span></p>
-                                <h3 class="name"><i class="fa-solid fa-location-dot"></i> Batac</h3>
-                                <h3 class="address">Blk 59, West Side Brooklyn, AUF Area</h3>
-                                <h6 class="roomStatus">Single Room</h6>
-                            </div>
-                        
-    
-                        <div class="col-6 col-md-4">
-                            <div class="col mt-4 mt-md-3 pt-3 pt-md-4">
-                                <p class="statusP text-center">
-                                <span>Pending</span>
-                                </p>
-                                <h3 class="date text-center">07 Sep 23</h3>
-                                <h3 class="time text-center">04:00PM to 04:30PM</h3>
-                            </div>
-                        </div>
-    
-                        </div>
-    
-                    </div>
-                    </div>
+                <?php } ?>
     
                 </div>
             </div>

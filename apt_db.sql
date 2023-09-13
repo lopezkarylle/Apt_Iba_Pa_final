@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 07, 2023 at 05:02 PM
+-- Generation Time: Sep 13, 2023 at 09:50 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -62,8 +62,8 @@ CREATE TABLE `apt_appointments` (
 --
 
 INSERT INTO `apt_appointments` (`appointment_id`, `property_id`, `user_id`, `date`, `time`, `status`) VALUES
-(9, 26, 33, '1970-01-01', '05:30 PM', 2),
-(10, 26, 33, '2023-09-09', '3:00 PM', 1);
+(10, 26, 33, '2023-09-09', '03:00 PM', 1),
+(11, 26, 40, '2023-09-09', '04:00 PM', 1);
 
 -- --------------------------------------------------------
 
@@ -127,7 +127,8 @@ CREATE TABLE `apt_notifications` (
 --
 
 INSERT INTO `apt_notifications` (`notification_id`, `user_id`, `notification_text`, `timestamp`, `notification_type`, `isRead`, `status`) VALUES
-(1, 36, 'An appointment has been scheduled for your property, Burj\'s Dormitory, on September 9, 2023 at 3:00 PM by Micoh Yabut', '2023-09-07 09:39:35', 'appointment', 0, 1);
+(1, 36, 'An appointment has been scheduled for your property, Burj\'s Dormitory, on September 9, 2023 at 3:00 PM by Micoh Yabut', '2023-09-07 09:39:35', 'appointment', 0, 1),
+(2, 40, 'Your reservation for a Double Room at Burj\'s Dormitory has been confirmed.', '2023-09-13 07:54:35', 'reservation', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -157,7 +158,9 @@ INSERT INTO `apt_password_reset_tokens` (`token_id`, `email`, `token`, `expiry`)
 (8, 'sia.yabut.micohjomarie@gmail.com', 'b628dc8698ae657c4a54acc7a9f2326eeaf06528c63c4d7b028fbd1a71fc6b7d', '2023-09-07 22:57:27'),
 (9, 'sia.yabut.micohjomarie@gmail.com', '02384e9ed1458a3b4fc605a69ebb296e5f44a5a36620b2071138056ee2b161da', '2023-09-07 23:02:31'),
 (10, 'sia.yabut.micohjomarie@gmail.com', '7c36141b384ae2c85293be12e4a1074f47aaf367ffa8378aa143c738ad1e43c8', '2023-09-07 23:03:27'),
-(11, 'sia.yabut.micohjomarie@gmail.com', '21abd0d8f893c520e476d5ac1991c9a788603e3d684d9a84ffd2a2cadbcbd62d', '2023-09-07 23:03:39');
+(11, 'sia.yabut.micohjomarie@gmail.com', '21abd0d8f893c520e476d5ac1991c9a788603e3d684d9a84ffd2a2cadbcbd62d', '2023-09-07 23:03:39'),
+(12, 'sia.yabut.micohjomarie@gmail.com', '2835162124acc52128095c890ae1ba38524ee6b8fb351ad41765c9fe56f2e2d4', '2023-09-08 21:40:14'),
+(13, 'sia.yabut.micohjomarie@gmail.com', 'ef33b4093b69c7ff0f132750a3b54df918cc487808cb29bc576d7691bf0cec6e', '2023-09-08 21:41:05');
 
 -- --------------------------------------------------------
 
@@ -271,10 +274,10 @@ INSERT INTO `apt_property_images` (`image_id`, `property_id`, `image_path`, `tit
 (27, 26, '370598292_988105119116513_8260999782814867466_n.jpg', 'Fire Exit', 1),
 (28, 26, '370598911_1735256210241128_6988875149388136487_n.jpg', 'CR 2', 1),
 (29, 39, '352142478_273638251824393_3861382219506690596_n.jpg', '1', 1),
-(30, 39, '1eb6b65cc5facadab82357963b41904a.jpg', '2', 1),
-(31, 39, '3aef63b5a901f6488b5fe85beab32b52.jpg', '3', 1),
-(32, 39, '3c70c9017ed57198f2a145b3974cc763.jpg', '4', 1),
-(33, 39, '3f6b79d1a5357359268459b6eba8578b.jpg', '5', 1);
+(30, 39, '308563451_509961430950850_6371493704561233138_n.jpg', '2', 1),
+(31, 39, '308837318_621007942751203_160885812613563401_n.jpg', '3', 1),
+(32, 39, '352142478_273638251824393_3861382219506690596_n.jpg', '4', 1),
+(33, 39, '308543326_1253199438813432_3093975124574476285_n.jpg', '5', 1);
 
 -- --------------------------------------------------------
 
@@ -356,7 +359,7 @@ CREATE TABLE `apt_reservations` (
 --
 
 INSERT INTO `apt_reservations` (`reservation_id`, `user_id`, `property_id`, `room_id`, `payment_status`, `status`) VALUES
-(4, 40, 26, 18, 2, 2);
+(4, 33, 26, 18, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -366,13 +369,22 @@ INSERT INTO `apt_reservations` (`reservation_id`, `user_id`, `property_id`, `roo
 
 CREATE TABLE `apt_reviews` (
   `review_id` int(11) NOT NULL,
-  `rating` decimal(2,1) NOT NULL,
+  `rating` int(1) NOT NULL,
   `description` text NOT NULL,
-  `review_date` date NOT NULL,
+  `review_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `user_id` int(11) NOT NULL,
   `property_id` int(11) NOT NULL,
   `status` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `apt_reviews`
+--
+
+INSERT INTO `apt_reviews` (`review_id`, `rating`, `description`, `review_date`, `user_id`, `property_id`, `status`) VALUES
+(3, 5, 'very accommodating vibe', '2023-09-08 12:51:55', 33, 26, 1),
+(4, 4, 'haha', '2023-09-08 13:18:24', 38, 26, 1),
+(5, 3, 'pwede', '2023-09-13 17:55:44', 40, 26, 1);
 
 -- --------------------------------------------------------
 
@@ -662,7 +674,7 @@ ALTER TABLE `apt_application_requests`
 -- AUTO_INCREMENT for table `apt_appointments`
 --
 ALTER TABLE `apt_appointments`
-  MODIFY `appointment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `appointment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `apt_chats`
@@ -680,13 +692,13 @@ ALTER TABLE `apt_messages`
 -- AUTO_INCREMENT for table `apt_notifications`
 --
 ALTER TABLE `apt_notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `apt_password_reset_tokens`
 --
 ALTER TABLE `apt_password_reset_tokens`
-  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `apt_properties`
@@ -722,7 +734,7 @@ ALTER TABLE `apt_reservations`
 -- AUTO_INCREMENT for table `apt_reviews`
 --
 ALTER TABLE `apt_reviews`
-  MODIFY `review_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `review_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `apt_rooms`
@@ -734,7 +746,7 @@ ALTER TABLE `apt_rooms`
 -- AUTO_INCREMENT for table `apt_unavailable_slots`
 --
 ALTER TABLE `apt_unavailable_slots`
-  MODIFY `slot_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `slot_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `apt_users`

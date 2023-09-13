@@ -42,7 +42,16 @@ section {
    margin: 0 auto;
 }
 
-
+.d-flex .btn {
+    background-color: #232A3D;
+    color: #FFF;
+    font-size: 1.5rem;
+ }
+ 
+ .d-flex .btn:hover {
+    background-color: #E4E9F7;
+    color: #232A3D;
+ }
 
 
 

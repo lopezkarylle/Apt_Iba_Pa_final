@@ -75,8 +75,28 @@ class Appointment
 
     public function getPropertyAppointments($user_id){
 		try {
-            $sql = "SELECT * FROM apt_appointments JOIN apt_properties ON  apt_appointments.property_id=apt_properties.property_id JOIN apt_users ON apt_appointments.user_id=apt_users.user_id WHERE apt_properties.landlord_id=$user_id AND apt_appointments.status=1";
+            $sql = "SELECT apt_appointments.*, apt_user_information.* FROM apt_appointments JOIN apt_properties ON apt_appointments.property_id=apt_properties.property_id JOIN apt_user_information ON apt_appointments.user_id=apt_user_information.user_id WHERE apt_properties.landlord_id=$user_id AND apt_appointments.status=1";
             $data = $this->connection->query($sql)->fetchAll();
+            return $data;
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+	}
+
+    public function getPropertyDateAppointments($user_id, $date){
+		try {
+            $sql = "SELECT apt_appointments.*, apt_user_information.* FROM apt_appointments INNER JOIN apt_properties ON apt_appointments.property_id=apt_properties.property_id INNER JOIN apt_user_information ON apt_appointments.user_id=apt_user_information.user_id WHERE apt_appointments.date='$date' AND apt_properties.landlord_id=$user_id AND apt_appointments.status=1";
+            $data = $this->connection->query($sql)->fetchAll();
+            return $data;
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+	}
+
+    public function getPropertyTimeAppointments($user_id, $date, $time){
+		try {
+            $sql = "SELECT apt_appointments.*, apt_user_information.*, apt_users.email FROM apt_appointments INNER JOIN apt_properties ON apt_appointments.property_id=apt_properties.property_id INNER JOIN apt_user_information ON apt_appointments.user_id=apt_user_information.user_id INNER JOIN apt_users ON apt_appointments.user_id=apt_users.user_id WHERE apt_appointments.date='$date' AND apt_appointments.time='$time' AND apt_properties.landlord_id=$user_id AND apt_appointments.status=1";
+            $data = $this->connection->query($sql)->fetch();
             return $data;
         } catch (Exception $e) {
             error_log($e->getMessage());
@@ -85,7 +105,7 @@ class Appointment
 
     public function getUserAppointments($user_id){
 		try {
-            $sql = "SELECT * FROM apt_appointments WHERE user_id=$user_id";
+            $sql = "SELECT apt_appointments.*, apt_properties.property_type, apt_properties.property_name, apt_property_locations.* FROM apt_appointments JOIN apt_properties ON apt_appointments.property_id=apt_properties.property_id JOIN apt_property_locations ON apt_appointments.property_id=apt_property_locations.property_id WHERE user_id=$user_id";
             $data = $this->connection->query($sql)->fetchAll();
             return $data;
         } catch (Exception $e) {

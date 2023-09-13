@@ -11,12 +11,29 @@
    --box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
    --body-color: #E4E9F7;
    --light-bg: #eee;
-   	/* Variables for storing colors */
+      	/* Variables for storing colors */
 	--card-clr: #161922;
 	--body-clr: #191d28;
 	--primary-clr: #f0bf6a;
 	--heading-clr: #dadada;
 	--text-clr: #767a86;
+
+   
+   --dark-jungle-green: hsl(188, 63%, 7%);
+   --prussian-blue: hsl(200, 69%, 14%);
+   --raisin-black-1: hsl(227, 29%, 13%);
+   --raisin-black-2: hsl(229, 17%, 19%);
+   --yellow-green: hsl(89, 72%, 45%);
+   --orange-soda: hsl(9, 100%, 62%);
+   --cultured-1: hsl(0, 0%, 93%);
+   --cultured-2: hsl(192, 24%, 96%);
+   --misty-rose: hsl(7, 56%, 91%);
+   --alice-blue: hsl(210, 100%, 97%);
+   --seashell: hsl(8, 100%, 97%);
+   --cadet: hsl(200, 15%, 43%);
+   --white: hsl(0, 0%, 100%);
+   --black: hsl(0, 0%, 0%);
+   --opal: hsl(180, 20%, 62%);
 }
 
 *::-webkit-scrollbar-thumb {
@@ -55,17 +72,13 @@ section {
 
 .navbar-nav .nav-item {
    font-size: 1.5rem;
+   font-weight: 600;
    padding: 1rem;
    border-radius: 5px;
 }
 
-.nav-item .nav-link:hover {
-   padding-left: 1rem;
-   padding-right: 1rem;
 
-}
-
-.nav-item .nav-link:hover {
+.nav-item .nav-link:hover, .nav-item .nav-link:focus{
    background-color: #232A3D;
    color: #FFF;
    border-radius: 5px;
@@ -73,15 +86,16 @@ section {
 }
 
 .signOutbtn .btn {
-   background-color: #232A3D;
+   background-color: var(--prussian-blue);
    color: #FFF;
    font-size: 1.5rem;
 }
 
 .signOutbtn .btn:hover {
-   background-color: #E4E9F7;
-   color: #232A3D;
+   background-color: var(--orange-soda);
+   color: #E4E9F7;
 }
+
 
 /* .d-flex .btn {
    background-color: #232A3D;
@@ -178,7 +192,7 @@ section {
 }
 
 .reservations .box-container .box {
-   background-color: #E4E9F7;
+   background-color: var(--cultured-2);
    box-shadow: var(--box-shadow);
    padding: 1.5rem;
    overflow-x: hidden;
@@ -194,12 +208,12 @@ section {
     margin-right: .7rem;
     padding: .5rem 1.5rem;
     color: #fff;
-    background-color: #232A3D;
+    background-color: var(--orange-soda);
     font-size: 1.2rem;
  }
 
  .reservations .box-container .box .name {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 600;
     text-overflow: clip;
     overflow-x: hidden;
@@ -282,7 +296,7 @@ section {
  }
 
  .reservations .box-container .box .time {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 400;
     text-overflow: clip;
     overflow-x: hidden;

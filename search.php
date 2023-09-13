@@ -1,6 +1,7 @@
 <?php
 use Models\Property;
 use Models\Image;
+use Models\Review;
 include("init.php");
 include("session.php");
 
@@ -29,7 +30,8 @@ if (isset($_POST['query'])) {
 }
 
 // Handle filtering
-if (isset($_POST['submit_filter'])) {
+if (isset($_POST['price']) || isset($_POST['property_type']) || isset($_POST['barangay'])) {
+    
     $price = $_POST['price'];
 
     if ($price === "high") {
@@ -58,10 +60,8 @@ if (isset($_POST['submit_filter'])) {
 <!-- properties -->
 
 <form action="view.php" method="POST">
-    
             
-            
-        <input type="hidden" value="<?=$property_id?>" name="property_id">
+        
 
         <?php $propertyCounter = 0; ?>
         <?php 
@@ -79,6 +79,29 @@ if (isset($_POST['submit_filter'])) {
         if($images){
             $image = $images['image_path'];
         }
+
+        $reviews = new Review();
+        $reviews->setConnection($connection);
+        $reviews = $reviews->getRatings($property_id);
+        
+        if(count($reviews)>0){
+            $total_ratings = 0;
+            $total_reviews = count($reviews);
+            
+            foreach ($reviews as $review) {
+                $total_ratings += $review["rating"];
+            }
+
+            $average_rating = $total_ratings / $total_reviews;
+
+            if($total_reviews>1){
+                $show_reviews = $average_rating . ' ( ' . $total_reviews . ' Reviews )';
+            } else{
+                $show_reviews = $average_rating . ' ( ' . $total_reviews . ' Review )';
+            }
+        } else{
+            $show_reviews = "No reviews yet";
+        }
     ?>
         <?php if ($propertyCounter % 2 == 0) { ?>
             <div class="row gx-5 mb-3">
@@ -88,6 +111,7 @@ if (isset($_POST['submit_filter'])) {
                     <div class="row">
                         <div class="col-10">
                             <h3 class="name"><?= $property_name ?></h3>
+                            <input type="hidden" value="<?=$property_id?>" name="property_id">
                             <div class="row">
                                 <div class="h4 mt-3 col-sm-8">
                                     <div>
@@ -104,9 +128,6 @@ if (isset($_POST['submit_filter'])) {
                     </div>
 
                   <div class="thumb">
-                    <p class="total-images">
-                      <i class="far fa-image"></i><span>4</span>
-                    </p>
                     <p class="type"><span><?= $property_type ?></span></p>
 
                     <img src="resources/images/properties/<?= $image ?>" alt="" />
@@ -118,7 +139,7 @@ if (isset($_POST['submit_filter'])) {
                       <div class="price">&#8369;<?= $lowest_rate ?></div>
                     </div>
                     <div class="col-sm-6">
-                        <p class="btnRating"><i class="fa-solid fa-star-half-stroke starRating"></i> 4.8 (73 reviews)</p>
+                        <p class="btnRating"><i class="fa-solid fa-star-half-stroke starRating"></i> <?= $show_reviews ?></p>
                       </div>
                   </div>
                   

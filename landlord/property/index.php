@@ -1,6 +1,7 @@
 <?php
 use Models\Property;
 use Models\Image;
+use Models\Review;
 include ("../../init.php");
 include ("session.php");
 
@@ -99,6 +100,29 @@ unset($_SESSION['property_id']);
                         if($images){
                             $image = $images['image_path'];
                         }
+
+                        $reviews = new Review();
+                        $reviews->setConnection($connection);
+                        $reviews = $reviews->getRatings($property_id);
+                        
+                        if(count($reviews)>0){
+                            $total_ratings = 0;
+                            $total_reviews = count($reviews);
+                            
+                            foreach ($reviews as $review) {
+                                $total_ratings += $review["rating"];
+                            }
+
+                            $average_rating = $total_ratings / $total_reviews;
+
+                            if($total_reviews>1){
+                                $show_reviews = $average_rating . ' ( ' . $total_reviews . ' Reviews )';
+                            } else{
+                                $show_reviews = $average_rating . ' ( ' . $total_reviews . ' Review )';
+                            }
+                        } else{
+                            $show_reviews = "No reviews yet";
+                        }
                 ?>
                 <!-- Properties -->
                 <div class="col-md-6">
@@ -122,9 +146,6 @@ unset($_SESSION['property_id']);
                       </div>
   
                     <div class="thumb">
-                      <p class="total-images">
-                        <i class="far fa-image"></i><span>4</span>
-                      </p>
                       <p class="type"><span><?= $property_type ?></span></p>
   
                       <img src="../../resources/images/properties/<?= $image ?>" alt="" />
@@ -133,10 +154,10 @@ unset($_SESSION['property_id']);
                       
                       <div class="col-sm-6 rentName">
                         Rent starts at
-                        <div class="price">&#8369;<?= $lowest_rate ?>></div>
+                        <div class="price">&#8369;<?= $lowest_rate ?></div>
                       </div>
                       <div class="col-sm-6">
-                          <p class="btnRating"><i class="fa-solid fa-star-half-stroke starRating"></i> 4.8 (73 reviews)</p>
+                          <p class="btnRating"><i class="fa-solid fa-star-half-stroke starRating"></i> <?php echo $show_reviews?> </p>
                         </div>
                     </div>
                     

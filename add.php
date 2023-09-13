@@ -187,6 +187,16 @@ try {
         $request = $request->addRequest($user_id, $property_id, $status);
         //add success message
 
+        $admin_id = 22;
+        $notification_text = 'An application has been made for the property ' . $property_name . ' by the user ' . $first_name . ' ' . $last_name;
+        $notification_type = 'application';
+        $isRead = 0;
+        $status = 1;
+
+        $notification = new Notification();
+        $notification->setConnection($connection);
+        $notification->sendNotification($admin_id, $notification_text, $notification_type, $isRead, $status);
+
         echo "<script>window.location.href='index.php?success=1';</script>";
         exit();
     } else {

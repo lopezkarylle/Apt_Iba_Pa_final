@@ -5,7 +5,7 @@ include ("init.php");
 include ("session.php");
 
 $property_id = $_POST['property_id'];
-$property_name = $_POST['property_name'];
+//$property_name = $_POST['property_name'];
 //$property_id = 26;
 $date_time = new Schedule('','','');
 $date_time->setConnection($connection);

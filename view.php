@@ -111,6 +111,28 @@ include ("session.php");
     $date_time->setConnection($connection);
     $date_time = $date_time->getDateTime($property_id);
 
+    $reviews = new Review();
+    $reviews->setConnection($connection);
+    $reviews = $reviews->getRatings($property_id);
+    
+    if(count($reviews)>0){
+        $total_ratings = 0;
+        $total_reviews = count($reviews);
+        
+        foreach ($reviews as $review) {
+            $total_ratings += $review["rating"];
+        }
+
+        $average_rating = $total_ratings / $total_reviews;
+
+        if($total_reviews>1){
+            $show_reviews = $average_rating . ' ( ' . $total_reviews . ' Reviews )';
+        } else{
+            $show_reviews = $average_rating . ' ( ' . $total_reviews . ' Review )';
+        }
+    } else{
+        $show_reviews = "No reviews yet";
+    }
 ?>
 
 <!DOCTYPE html>
@@ -139,8 +161,8 @@ include ("session.php");
       crossorigin="anonymous"
     ></script>
 
-    <link href="css/view_property.css" rel="stylesheet" />
-    <link href="css/all.css" rel="stylesheet" />
+    <!-- <link href="css/view_property.css" rel="stylesheet" />
+    <link href="css/all.css" rel="stylesheet" /> -->
 
     <!-- Vendor Files -->
     <link href="vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
@@ -169,6 +191,12 @@ include ("session.php");
     />
   </head>
   <body>
+    <style>
+        <?php 
+        include('css/view_property.css'); 
+        include('css/all.css');
+        ?>
+    </style>
     <!-- Navbar -->
 <?php include('navbar.php'); ?>
 
@@ -244,8 +272,7 @@ include ("session.php");
       <div class="row">
         <div class="col-sm mb-3">
           <p class="btnRating">
-            <i class="fa-solid fa-star-half-stroke starRating"></i> 4.8 (73
-            reviews)
+            <i class="fa-solid fa-star-half-stroke starRating"></i> <?= $show_reviews ?>
           </p>
         </div>
       </div>

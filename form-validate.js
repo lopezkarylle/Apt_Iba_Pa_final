@@ -4,7 +4,7 @@ const firstNameInput = document.getElementById("first_name");
         const emailInput = document.getElementById("email");
         const passwordInput = document.getElementById("password");
         const confpassInput = document.getElementById("confpass");
-        const submitButton = document.getElementById("submit");
+        const submitButton = document.getElementById("next2");
 
         submitButton.disabled = true;
 
@@ -97,4 +97,4 @@ const firstNameInput = document.getElementById("first_name");
             return password === confirmPassword;
         }
         
-        
+      

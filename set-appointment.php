@@ -7,17 +7,20 @@ use Models\Notification;
 include ("init.php");
 include ("session.php");
 
+if(!isset($_SESSION['user_id']) || $_SESSION['user_type'] != 2){
+    header('location: index.php');
+    exit();
+}
+if(isset($_POST['set_appointment'])){
+   $property_id = $_POST['property_id'];
+   $user_id = $_POST['user_id'];
+   $appointment_date = $_POST['date'];
+   $appointment_time = $_POST['appointment_time'];
 
-//if(isset($_POST['set_appointment'])){
-//   $property_id = $_POST['property_id'];
-//   $user_id = $_POST['user_id'];
-//   $appointment_date = $_POST['date'];
-//   $appointment_time = $_POST['appointment_time'];
-
-$property_id = 26;
-$user_id = 33;
-$appointment_date = '2023-09-09';
-$appointment_time = '3:00 PM';
+// $property_id = 26;
+// $user_id = 33;
+// $appointment_date = '2023-09-09';
+// $appointment_time = '3:00 PM';
 
   $formatted_date = date("F j, Y", strtotime($appointment_date));
   //var_dump($property_id, $user_id, $appointment_date, $appointment_time);
@@ -78,7 +81,7 @@ $appointment_time = '3:00 PM';
     exit();
   //var_dump($unavailable_dates);
   
-//}
+}
 ?>
 
 <!DOCTYPE html>

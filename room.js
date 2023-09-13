@@ -1,6 +1,6 @@
     
   const addRoomButton = document.getElementById('add-room');
-  const roomContainer = document.getElementById('room-container');
+  const roomContainer = document.getElementById('roomForm');
 
   addRoomButton.addEventListener('click', function(event) {
     event.preventDefault();

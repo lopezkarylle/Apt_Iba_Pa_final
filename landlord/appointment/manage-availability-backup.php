@@ -6,6 +6,8 @@ use Models\Schedule;
 use Models\Appointment;
 
 include ("../../init.php");
+include ("../session.php");
+$user_id = $_SESSION['user_id'];
 
 $property_id = 1;
 $dateTime = new Schedule('','','');

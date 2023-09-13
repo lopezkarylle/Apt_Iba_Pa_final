@@ -1,21 +1,33 @@
 <?php 
 include "../../init.php";
 use Models\Reservation;
+use Models\Notification;
 
 try {
     if(isset($_POST['confirm_reservation'])){
-        $array_values = $_POST['reservation_id'];
-        $reservation_id = explode(",", $array_values);
-        var_dump($reservation_id);
+        $reservation_id = $_POST['reservation_id'];
+        $user_id = $_POST['user_id'];
+        $room_type = $_POST['room_type'];
+        $property_name = $_POST['property_name'];
 
-        foreach($reservation_id as $id){
-            $reservation = new Reservation('','','','','');
-            $reservation->setConnection($connection);
-            $reservation = $reservation->acceptReservation($id);
+        $reservation = new Reservation('','','','','');
+        $reservation->setConnection($connection);
+        $reservation = $reservation->acceptReservation($reservation_id);
+        
+        if($reservation){
+            $notification_text = 'Your reservation for a ' . $room_type . ' at ' . $property_name . ' has been confirmed.';
+            $notification_type = 'reservation';
+            $isRead = 0;
+            $status = 1;
+
+            $notification = new Notification();
+            $notification->setConnection($connection);
+            $notification->sendNotification($user_id, $notification_text, $notification_type, $isRead, $status);
+
+            $result = 'success_confirm';
+        } else {
+            $result = 'failed_confirm';
         }
-
-        // Determine the result and set a message
-        $result = ($reservation) ? 'success_confirm' : 'failed_confirm';
 
         // Redirect with a query parameter
         header("Location: index.php?result=$result");
@@ -23,15 +35,23 @@ try {
     } 
     
     elseif (isset($_POST['decline_reservation'])){
-        $array_values = $_POST['reservation_id'];
-        $reservation_id = explode(",", $array_values);
-        var_dump($reservation_id);
+        $reservation_id = $_POST['reservation_id'];
+        $landlord_id = $_POST['user_id'];
+        $room_type = $_POST['room_type'];
+        $property_name = $_POST['property_name'];
 
-        foreach($reservation_id as $id){
-            $reservation = new Reservation('','','','','');
-            $reservation->setConnection($connection);
-            $reservation = $reservation->declineReservation($id);
-        }
+        $reservation = new Reservation('','','','','');
+        $reservation->setConnection($connection);
+        $reservation = $reservation->declineReservation($reservation_id);
+        
+        $notification_text = 'Your reservation for a ' . $room_type . ' at ' . $property_name . ' has been declined.';
+        $notification_type = 'reservation';
+        $isRead = 0;
+        $status = 1;
+
+        $notification = new Notification();
+        $notification->setConnection($connection);
+        $notification->sendNotification($landlord_id, $notification_text, $notification_type, $isRead, $status);
 
         // Determine the result and set a message
         $result = ($reservation) ? 'success_confirm' : 'failed_confirm';

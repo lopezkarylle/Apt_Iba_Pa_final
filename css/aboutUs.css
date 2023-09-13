@@ -17,6 +17,23 @@
 	--primary-clr: #f0bf6a;
 	--heading-clr: #dadada;
 	--text-clr: #767a86;
+
+   
+   --dark-jungle-green: hsl(188, 63%, 7%);
+   --prussian-blue: hsl(200, 69%, 14%);
+   --raisin-black-1: hsl(227, 29%, 13%);
+   --raisin-black-2: hsl(229, 17%, 19%);
+   --yellow-green: hsl(89, 72%, 45%);
+   --orange-soda: hsl(9, 100%, 62%);
+   --cultured-1: hsl(0, 0%, 93%);
+   --cultured-2: hsl(192, 24%, 96%);
+   --misty-rose: hsl(7, 56%, 91%);
+   --alice-blue: hsl(210, 100%, 97%);
+   --seashell: hsl(8, 100%, 97%);
+   --cadet: hsl(200, 15%, 43%);
+   --white: hsl(0, 0%, 100%);
+   --black: hsl(0, 0%, 0%);
+   --opal: hsl(180, 20%, 62%);
 }
 
 *::-webkit-scrollbar-thumb {
@@ -47,40 +64,32 @@ section {
 
 /* Navbar */
 
-.navbarNav .nav-link {
-   background-color: #232A3D;
-   color: #FFF;
-   border-radius: 5px;
-}
 
-.navbar-nav .nav-item {
-   font-size: 1.5rem;
+
+#navbarNav li {
+   font-size: 1.6rem;
+   font-weight: 600;
    padding: 1rem;
    border-radius: 5px;
 }
 
-.nav-item .nav-link:hover {
-   padding-left: 1rem;
-   padding-right: 1rem;
 
-}
-
-.nav-item .nav-link:hover {
+#navbarNav li a:hover, #navbarNav li a:focus{
    background-color: #232A3D;
    color: #FFF;
    border-radius: 5px;
 
 }
 
-.d-flex .btn {
-   background-color: #232A3D;
+.signOutbtn .btn {
+   background-color: var(--prussian-blue);
    color: #FFF;
    font-size: 1.5rem;
 }
 
-.d-flex .btn:hover {
-   background-color: #E4E9F7;
-   color: #232A3D;
+.signOutbtn .btn:hover {
+   background-color: var(--orange-soda);
+   color: #E4E9F7;
 }
 
 /* About Us */

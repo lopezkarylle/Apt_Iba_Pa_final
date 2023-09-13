@@ -114,11 +114,11 @@ section {
 } */
 
 .btnA {
-   display:block;
-   border: solid 1.5px grey;
+   
+   border: solid 1.5px rgb(192, 192, 192);
    width: 100px;
    height:20px;
-   color:rgb(80, 80, 80);
+   color:rgb(59, 59, 59);
    text-align:center;
    font-size: 1rem;
    padding-top: 1px;
@@ -126,7 +126,7 @@ section {
 }
 
 .btnA:hover {
-   display:block;
+  
    width: 100px;
    height:20px;
    border: solid 1.5px #232A3D;
@@ -134,6 +134,16 @@ section {
    font-size: 1rem;
    padding-top: 2px;
 }
+
+/* .btnA:active {
+  
+  width: 100px;
+  height:20px;
+  border: solid 1.5px #232A3D;
+  text-align:center;
+  font-size: 1rem;
+  padding-top: 2px;
+} */
 
 /* .accomJumbuildings {
    background-image:  url('../images/header3.png');
@@ -146,13 +156,16 @@ section {
 /* <!-- hide input --> */
 input[type=checkbox] {
    display: none;
+ 
 }
 
 /* <!--Add styling on check --> */
-input:checked + label {
-    border: solid 1.5px #273353;
-    color: white;
-    background-color: #232A3D;
+input:checked + label#bordercheck  {
+    border: solid 2px #000000;
+    
+    
+    
+    
 }
 
 /* .enlistDetails {
@@ -302,22 +315,121 @@ input[type=number] {
  .multisteps-form__panel {
    position: absolute;
    top:0;
-   left:0;
+   left: 0;
    width: 100%;
    height: 0;
    opacity: 0;
    visibility: hidden;
  }
 
+ .form-floating #floatingPropertyName {
+  height: 65px;
+  border-radius: 10px;
+}
+.row div.col-12 div.radioRoomType {
+  height: 85px;
+}
+h2, h4 {
+  font-size: 30px; /* Set the font size to your desired value */
+  /* Add any other CSS styles as needed */
+}
+.row div.col-12 input.form-control, .row div.col-12 div.form-floating select.form-select{
+  height: 50px;
+}
+
+.btn.ml-auto.js-btn-next {
+  background-color: rgb(31, 31, 34);
+  color:white;
+  height: 40px;
+  width: 80px;
+  font-size: 15px;
+}
+.btn.js-btn-prev {
+  background-color: rgb(31, 31, 34);
+  color:white;
+  height: 40px;
+  width: 80px;
+  font-size: 15px;
+}
+
+.btn.ml-auto.js-btn-next:hover {
+  background-color: #101010;
+}
+.btn.js-btn-prev:hover {
+  background-color: #101010;
+}
+
+.h6 {
+  color: grey;
+}
+
+.row div.col-12 label.radio div.radioRoomType {
+  border-radius: 10px;
+
+}
+.row div.col-12 div.form-floating input.proploc {
+  border-radius: 10px;
+  height: 65px;
+  
+  
+}
+.row div.col-12 div.form-floating select.proploc {
+  border-radius: 10px;
+  height: 65px;
+}
+.row div.col-12 div.form-floating input.propown {
+  border-radius: 10px;
+  height: 65px;
+}
+.row div.col-6 div.check-amenities label.btnA{
+  width: 100%;
+  height: 70px;
+  border-radius: 8px;
+  
+  
+}
+
+.multisteps-form__panel {
+   position: absolute;
+   top:0;
+   left: 0;
+   width: 100%;
+   height: 0;
+   opacity: 0;
+   visibility: hidden;
+ }
+
+
+
+
+
+
+
+
+
+
+
+
  @media screen and (min-width: 992px) {
 
   .multisteps-form__form {
     margin-left: 25%;
+    
   }
 
   .multisteps-form__panel {
-    width: 50%;
+    width: 65%;
+    left: -100px;
   }
+  .multisteps-form__content {
+    padding-right: 50px;
+    padding-left: 50px;
+  }
+
+ 
+  
+  
+  
 
 }
 
@@ -400,7 +512,7 @@ label.radio input {
 }
 
 label.radio input:checked+div#pickRoomType {
-  border-color: #039BE5;
+  border-color: #0f0f0f;
   background-color: #11222b;
   color: #fff;
   border-radius: 9px;
@@ -419,7 +531,7 @@ label.radio input:checked+div#pickRoomType {
 
 .reserveRoomType .radioRoomType{
   border: 1px solid;
-  border-color: rgb(172, 172, 172);
+  border-color: rgb(230, 230, 230);
   border-radius: 5px;
 }
 

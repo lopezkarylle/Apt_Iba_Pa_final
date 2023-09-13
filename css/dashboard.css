@@ -17,6 +17,26 @@
 	--primary-clr: #f0bf6a;
 	--heading-clr: #dadada;
 	--text-clr: #767a86;
+
+   
+   --dark-jungle-green: hsl(188, 63%, 7%);
+   --prussian-blue: hsl(200, 69%, 14%);
+   --prussian-pale: hsl(201, 19%, 42%);
+   --raisin-black-1: hsl(227, 29%, 13%);
+   --raisin-black-2: hsl(229, 17%, 19%);
+   --yellow-green: hsl(89, 72%, 45%);
+   --orange-soda: hsl(9, 100%, 62%);
+   --orange-tangy: hsla(9, 100%, 62%, 0.1);
+   --orange-pale: hsl(9, 100%, 73%);
+   --cultured-1: hsl(0, 0%, 93%);
+   --cultured-2: hsl(192, 24%, 96%);
+   --misty-rose: hsl(7, 56%, 91%);
+   --alice-blue: hsl(210, 100%, 97%);
+   --seashell: hsl(8, 100%, 97%);
+   --cadet: hsl(200, 15%, 43%);
+   --white: hsl(0, 0%, 100%);
+   --black: hsl(0, 0%, 0%);
+   --opal: hsl(180, 20%, 62%);
 }
 
 *::-webkit-scrollbar-thumb {
@@ -32,7 +52,7 @@ html {
 }
 
 body {
-   background-color: var(--body-color);
+   background: var(--white);
 }
 
 section {
@@ -56,32 +76,28 @@ section {
 
 .navbar-nav .nav-item {
    font-size: 1.5rem;
+   font-weight: 600;
    padding: 1rem;
    border-radius: 5px;
 }
 
-.nav-item .nav-link:hover {
-   padding-left: 1rem;
-   padding-right: 1rem;
 
-}
-
-.nav-item .nav-link:hover {
+.nav-item .nav-link:hover, .nav-item .nav-link:focus{
    background-color: #232A3D;
    color: #FFF;
    border-radius: 5px;
 
 }
 
-.signOutbtn .btn {
-   background-color: #232A3D;
+.signInbtn .btn {
+   background-color: var(--prussian-blue);
    color: #FFF;
    font-size: 1.5rem;
 }
 
-.signOutbtn .btn:hover {
-   background-color: #E4E9F7;
-   color: #232A3D;
+.signInbtn .btn:hover {
+   background-color: var(--orange-soda);
+   color: #E4E9F7;
 }
 
 /* .d-flex .btn {
@@ -104,6 +120,31 @@ section {
    /* background-color: rgba(21, 89, 121, 0.3); */
 }
 
+.hero {
+   background: var(--cultured-2);
+}
+
+.hero-title {
+   font-size: 40px;
+   color: var(--orange-soda);
+}
+
+.hero-text {
+   text-align: justify;
+}
+
+.hero .btn{
+   background-color: var(--orange-soda)
+}
+
+.hero .btn i{
+   color: #fff;
+}
+
+.hero .btn:active, .hero .btn:focus{
+   color: #fff;
+}
+
 #headerTitle {
    color: #E4E9F7;
    margin-top: 15px;
@@ -119,7 +160,7 @@ section {
 }
 
 .btnSearch {
-   background-color: #232A3D;
+   background-color: var(--orange-soda);
    color: #FFF;
    font-size: 1.5rem;
    padding: .7rem;
@@ -150,7 +191,7 @@ section {
 }
 
 .info .box-container .box {
-   background-color: #e4e8f3;
+   background-color: var(--prussian-blue);
    box-shadow: var(--box-shadow);
    padding: 4rem;
    text-align: center;
@@ -163,7 +204,7 @@ section {
 }
 
 .info .box-container .box:hover {
-   background-color: #919dc0;
+   background-color: var(--orange-soda);
    /* Change the background color on hover */
    box-shadow: var(--box-shadow);
 }
@@ -176,20 +217,25 @@ section {
 .info .box-container .box h3 {
    font-size: 1.5rem;
    padding: -1rem 0;
-   color: #232A3D;
+   color: #fff;
    text-decoration: none;
 }
 
 /* Featured Section */
 
 
-
 .featureHeading {
    text-align: left;
    margin-bottom: 20px;
-   font-size: 3rem;
-   color: var(--black);
+   font-size: 5rem;
+   font-weight: 600;
+   color: var(--orange-soda);
 }
+
+.listings{
+   background: var(--cultured-2);
+}
+
 
 .listings .box-container {
    justify-content: center;
@@ -201,6 +247,7 @@ section {
    box-shadow: var(--box-shadow);
    padding: 3rem;
    overflow-x: hidden;
+   border-radius: 20px;
 }
 
 .listings .box-container .box .admin {
@@ -258,22 +305,22 @@ section {
 
 .listings .box-container .box .thumb {
    position: relative;
-   height: 20rem;
+   height: 30rem;
    overflow: hidden;
    margin: 1.5rem 0;
 }
 
 .listings .box-container .box .thumb img {
    height: 100%;
-   width: 100%;
-   transition: .2s linear;
+   object-fit: cover;
+   border-radius: 10px;
 }
 
 .listings .box-container .box:hover .thumb img {
    transform: scale(1.1);
 }
 
-.listings .box-container .box .thumb .total-images {
+.listings .box-container .box .thumb .total-rooms-left {
    position: absolute;
    top: 1rem;
    left: 1rem;
@@ -284,7 +331,7 @@ section {
    z-index: 1;
 }
 
-.listings .box-container .box .thumb .total-images i {
+.listings .box-container .box .thumb .total-rooms-left i {
    margin-right: .7rem;
 }
 
@@ -299,7 +346,7 @@ section {
    margin-right: .7rem;
    padding: .5rem 1.5rem;
    color: #fff;
-   background-color: #232A3D;
+   background-color: var(--prussian-blue);
    font-size: 1.6rem;
 }
 
@@ -314,7 +361,7 @@ section {
       background: transparent;
       border: none;
       outline: none;
-      color: grey;
+      color: var(--orange-pale);
    }
 
 
@@ -322,12 +369,10 @@ section {
    background: transparent;
    border: none;
    outline: none;
-   color: var(--primary-clr) !important;
+   color: var(--orange-soda) !important;
 }
 
-.listings .box-container .box .thumb .save button:hover {
-   background-color: var(--main-color);
-}
+
 
 .listings .box-container .box .name {
    font-size: 2rem;
@@ -392,7 +437,7 @@ section {
 .inline-btn {
    margin-top: 1rem;
    padding: 1rem 3rem;
-   background-color: #232A3D;
+   background-color: var(--orange-soda);
    color: #fff;
    cursor: pointer;
    text-align: center;
@@ -402,7 +447,8 @@ section {
 
 .btnView:hover,
 .inline-btn:hover {
-   background-color: #303030;
+   
+   background-color: hsl(9, 97%, 57%);
 
 }
 
@@ -417,8 +463,9 @@ section {
    display: block;
    width: 100%;
    border-radius: 5px;
-   margin-top: 1.5rem;
-   padding-top: 1rem;
+   margin-top: 1rem;
+   padding-top: 1.5rem;
+   padding-bottom: 1rem;
    background-color: #E4E9F7;
    color: #232A3D;
    font-size: 1.5rem;
@@ -437,9 +484,10 @@ section {
 
 .offersHeading {
    text-align: left;
-   margin-bottom: 50px;
-   font-size: 3rem;
-   color: var(--black);
+   margin-bottom: 20px;
+   font-size: 5rem;
+   font-weight: 600;
+   color: var(--prussian-blue);
 }
 
 .offers .box-container {
@@ -448,13 +496,17 @@ section {
 }
 
 .offers .box-container .box {
-   background-color: var(--body-color);
+   background-color: var(--cultured-2);
    box-shadow: var(--box-shadow);
    padding: 3rem;
    text-align: center;
    transition: background-color 0.3s;
    border: none;
    border-radius: 5px;
+}
+
+.fa-circle {
+   color: var(--misty-rose);
 }
 
 .offers .box-container .box h3{
@@ -478,11 +530,11 @@ section {
 /* Footer */
 
 .site-footer {
-   background-color: #DEE7ED;
+   background-color: var(--prussian-blue);
    padding: 45px 0 20px;
    font-size: 15px;
    line-height: 24px;
-   color: #737373;
+   color: var(--cultured-1);
 }
 
 .site-footer hr {
@@ -511,7 +563,7 @@ section {
 }
 
 .site-footer a {
-   color: #737373;
+   color: var(--cultured-1);
 }
 
 .site-footer a:hover {
@@ -529,7 +581,7 @@ section {
 }
 
 .footer-links a {
-   color: #737373
+   color: var(--cultured-1);
 }
 
 .footer-links a:active, .footer-links a:focus, .footer-links a:hover {
@@ -552,7 +604,7 @@ section {
    margin-left: 6px;
    margin-right: 0;
    border-radius: 100%;
-   background-color: #33353d
+   background-color: var(--cultured-1);
 }
 
 .copyright-text {
@@ -595,7 +647,7 @@ section {
 }
 
 .social-icons a {
-   background-color: #eceeef;
+   background-color: var(--cultured-1);
    color: #818a91;
    font-size: 16px;
    display: inline-block;
@@ -931,15 +983,15 @@ section {
 /* View All button */
 
 .btnViewAll:hover {
-   background-color: #323233;
+   background-color: hsl(200, 74%, 10%);;
+   color: #fff;
    border-radius: 5px;
-
 }
 
 .btnViewAll {
    border-radius: 5px;
-   background-color: #232A3D;
-   width: 50%;
+   background-color: var(--prussian-blue);
+   width: 100%;
    padding: 1rem 3rem;
    color: #fff;
    cursor: pointer;
@@ -1092,10 +1144,43 @@ section {
 
 
 
+/* 
+
+
+.header-bottom-actions {
+  background: var(--white);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  padding-block: 15px 10px;
+  box-shadow: -2px 0 30px hsla(237, 71%, 52%, 0.2);
+  z-index: 3;
+}
+
+.header-bottom-actions-btn i{
+  color: hsl(0, 0%, 10%);
+  font-size: 20px;
+  margin-inline: auto;
+  margin-bottom: 5px;
+  --ionicon-stroke-width: 40px;
+  transition: var(--transition);
+}
+
+.header-bottom-actions-btn:is(:hover, :focus) i { color: var(--orange-soda); }
+
+.header-bottom-actions-btn span {
+  color: var(--cadet);
+  font-family: var(--ff-poppins);
+  font-size: var(--fs-7);
+  font-weight: var(--fw-500);
+}
 
 
 
-
+ */
 
 
 
