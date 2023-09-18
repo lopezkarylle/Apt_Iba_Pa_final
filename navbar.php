@@ -49,8 +49,12 @@
               <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
           </li>
-          
-          <form class="d-flex signOutbtn" role="search" action="logout.php" method="POST">
+            <form class="d-flex signOutbtn" role="search" action="apply.php" method="POST">
+              <button class="btn me-2" type="submit">
+              Apply My Property&nbsp;
+              </button>
+            </form>
+            <form class="d-flex signOutbtn" role="search" action="logout.php" method="POST">
               <button class="btn me-2" type="submit">
               Sign Out &nbsp;<i class="fa-solid fa-right-from-bracket"></i> 
               </button>
@@ -68,6 +72,11 @@
               <a class="nav-link" href="about.php">About Us</a>
             </li>
           </ul>
+          <form class="d-flex signInbtn" role="search" action="apply.php" method="POST">
+              <button class="btn me-2" type="submit">
+              Apply My Property&nbsp;
+              </button>
+            </form>
                 <form class="d-flex signInbtn" role="search" action="login.php" method="POST">
               <button class="btn me-2" type="submit">
               Sign In &nbsp;<i class="fa-solid fa-right-from-bracket"></i> 

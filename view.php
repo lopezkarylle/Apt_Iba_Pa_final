@@ -1262,20 +1262,20 @@ var map_center = [15.145763463436099, 120.59339729138502];
                 $row_count = 0;
                 $col_count = 0;
 
-                echo '<div class="row pt-0 pt-md-3 justify-content-center">';
+                echo '<div class="row pt-5 justify-content-center">';
                 foreach ($morning_slots as $time_slot) {
                 if ($col_count == 4) {
-                    echo '</div><div class="row pt-0 pt-md-3 justify-content-center">';
+                    echo '</div><div class="row pt-5 justify-content-center">';
                     $col_count = 0;
                 }
 
                 echo '
-                <div class="col-6 col-sm-auto col-lg-2 mt-2 mt-md-0 d-flex justify-content-center">
-                        
+                <div class="col-5 col-sm-3 col-lg-2 mt-3 mt-lg-0 d-flex justify-content-center">
+                <button class="btnDisabled" disabled>
                         <label class="radio w-100 justify-content-center d-flex">
                           <input type="radio" name="time_slot" id="time_slot" value="' . $time_slot . '" required disabled/>
 
-                          <div class="row justify-content-between radioVisitTime px-2 py-1 align-items-center"
+                          <div class="row justify-content-between radioVisitTime align-items-center"
                             id="pickVisitTime">
 
                             <div class="col-12">
@@ -1313,12 +1313,12 @@ var map_center = [15.145763463436099, 120.59339729138502];
                     $col_count = 0;
                 }
 
-                echo '<div class="col-6 col-sm-auto col-lg-2 mt-2 mt-md-0 d-flex justify-content-center">
-                        
+                echo '<div class="col-5 col-sm-3 col-lg-2 mt-3 mt-lg-0 d-flex justify-content-center">
+                <button class="btnDisabled" disabled>
                         <label class="radio w-100 justify-content-center d-flex">
-                          <input type="radio" name="time_slot" id="time_slot" value="' . $time_slot . '" required />
+                          <input type="radio" name="time_slot" id="time_slot" value="' . $time_slot . '" required disabled/>
 
-                          <div class="row justify-content-between radioVisitTime px-2 py-1 align-items-center"
+                          <div class="row justify-content-between radioVisitTime align-items-center"
                             id="pickVisitTime">
 
                             <div class="col-12">
@@ -1358,13 +1358,13 @@ var map_center = [15.145763463436099, 120.59339729138502];
         <div class="modal-header">
           <h1 class="modal-title fs-3" id="confirmDetailsLabel">Confirmation Details</h1>
         </div>
-        <div class="modal-body overflow-x-hidden  modalConfirmDetails">
+        <div class="modal-body overflow-x-hidden overflow-y-hidden modalConfirmDetails">
 
           <div class="container">
 
             <form>
               <!-- Form start -->
-              <div class="container pt-5 pb-4 bgConfirmDetails confirmSlots">
+              <div class="container pt-3 bgConfirmDetails confirmSlots">
 
                 <!-- <div class="row">
                   <div class="col-12"> -->
@@ -1377,9 +1377,10 @@ var map_center = [15.145763463436099, 120.59339729138502];
                 <div class="row">       
                   <div class="col-md">
                     <h2 class="ms-3 pt-2 mt-3 apptDormName"><?= $property_name ?></h2>
+                    <h2 class="ms-3 pt-2 apptDormAddress"><?= $full_address ?></h2>
                   </div>
                 </div>
-
+                
                 <div class="row ps-md-4 h3 mt-2">
                   <hr>
                   <h2 class="visitDetailsTitle pt-4">
@@ -1395,14 +1396,6 @@ var map_center = [15.145763463436099, 120.59339729138502];
                     Contact Number
                   </h2>
                   <h2 class="visitDetailsSubtitle"><?= $contact_number ?></h2>
-                </div>
-
-                <div class="row ps-md-4 h3 mt-2">
-                  <h2 class="visitDetailsTitle">
-                    <img src="images/dayzone1.png" alt=""/>
-                    Address
-                  </h2>
-                  <h2 class="visitDetailsSubtitle"> <?= $full_address ?></h2> <!-- Paghiwalayin yung brgy sa number/street para di masyadong mahaba sa output/UI-->
                 </div>
 
                 <div class="row ps-md-4 h3 mt-2">
@@ -1443,7 +1436,7 @@ var map_center = [15.145763463436099, 120.59339729138502];
 
           <div class="container">
 
-            <form>
+            <form method="POST" action="appointments.php">
 
               <img class="rounded img-fluid d-block mx-auto mt-5" src="images/success-confirmation.png" width="200">
 
@@ -1465,15 +1458,15 @@ var map_center = [15.145763463436099, 120.59339729138502];
                   <h2 class="successDetailsTime text-center" id="requested_time2"></h2>
                 </div>
                 
-                <div class="row h3 d-flex justify-content-center mt-5">
+                <!-- <div class="row h3 d-flex justify-content-center mt-5">
                   <div class="col-10 col-md-9 d-flex justify-content-center">
                     <button type="button" class="btn w-100 btnConfirmApptGC"><i class="fa-light fa-calendar me-2"></i>Add to Google Calendar</button>
                   </div>
-                </div>
+                </div> -->
 
                 <div class="row h3 d-flex justify-content-center mt-2">
                   <div class="col-10 col-md-9 d-flex justify-content-center">
-                    <button type="button" class="btn w-100 btnConfirmApptGo">Go to Appointments</button>
+                    <button type="submit" class="btn w-100 btnConfirmApptGo">Go to Appointments</button>
                   </div>
                 </div>
               </div>

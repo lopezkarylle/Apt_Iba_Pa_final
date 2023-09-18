@@ -90,24 +90,8 @@ $reservations = $reservations->getPendingReservations($user_id);
                     }else{
                         $payment_status = "Unpaid";
                     }
-                    $room = $reservation['room_type'];
-                    if($room===1){
-                        $room_type = "Single Room";
-                    } elseif($room===2) {
-                        $room_type = "Double Room";
-                    } elseif($room===3) {
-                        $room_type = "Triple Room";
-                    } elseif($room===4) {
-                        $room_type = "Quad Room";
-                    } elseif($room===5) {
-                        $room_type = "5-Bed Room";
-                    } elseif($room===6) {
-                        $room_type = "6-Bed Room";
-                    } elseif($room===7) {
-                        $room_type = "7-Bed Room";
-                    } elseif($room===8) {
-                        $room_type = "8-Bed Room";
-                    }
+                    $room_type = $reservation['room_type'];
+
 
                     $status = $reservation['status'];
                     if($status===1){

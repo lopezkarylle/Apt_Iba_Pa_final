@@ -269,90 +269,90 @@ if(isset($_POST['property_id']) || isset($_SESSION['property_id'])){
 </html>
 
 <?php 
-try {
+// try {
         
-    if(isset($_POST['property_id']) && isset($_POST['update_property']) ){
+//     if(isset($_POST['property_id']) && isset($_POST['update_property']) ){
 
-        $property_id = $_POST['property_id'];
-        $property_type = $_POST['property_type']; 
-        $property_name = ucfirst($_POST['property_name']); 
-        $landlord_id = $_POST['landlord_id']; 
-        $total_rooms = $_POST['total_rooms'];
-        $total_floors = $_POST['total_floors'];
-        $description = $_POST['description'];
-        $property_number = $_POST['property_number'];
-        $street = ucfirst($_POST['street']);
-        $region_text = $_POST['region_text'];
-        $province_text = $_POST['province_text'];
-        $city_text = $_POST['city_text'];
-        $barangay_text = $_POST['barangay_text'];
-        $latitude = $_POST['latitude'];
-        $longitude = $_POST['longitude'];
-        $reservation_fee = $_POST['reservation_fee'];
-        $advance_deposit = $_POST['advance_deposit'];
-        $lowest_rate = $_POST['lowest_rate'];
-        // $rent = $_POST['monthly_rent'];
-        // foreach($rent as $rate){
-        //     if((intval($rate))>=(intval($lowest_rate))){
-        //         $lowest_rate = $rate;
-        //     }
-        // }
-        //Update apt_properties, apt_property_details, apt_property_locations
+//         $property_id = $_POST['property_id'];
+//         $property_type = $_POST['property_type']; 
+//         $property_name = ucfirst($_POST['property_name']); 
+//         $landlord_id = $_POST['landlord_id']; 
+//         $total_rooms = $_POST['total_rooms'];
+//         $total_floors = $_POST['total_floors'];
+//         $description = $_POST['description'];
+//         $property_number = $_POST['property_number'];
+//         $street = ucfirst($_POST['street']);
+//         $region_text = $_POST['region_text'];
+//         $province_text = $_POST['province_text'];
+//         $city_text = $_POST['city_text'];
+//         $barangay_text = $_POST['barangay_text'];
+//         $latitude = $_POST['latitude'];
+//         $longitude = $_POST['longitude'];
+//         $reservation_fee = $_POST['reservation_fee'];
+//         $advance_deposit = $_POST['advance_deposit'];
+//         $lowest_rate = $_POST['lowest_rate'];
+//         // $rent = $_POST['monthly_rent'];
+//         // foreach($rent as $rate){
+//         //     if((intval($rate))>=(intval($lowest_rate))){
+//         //         $lowest_rate = $rate;
+//         //     }
+//         // }
+//         //Update apt_properties, apt_property_details, apt_property_locations
         
-        //var_dump($property_id, $property_type, $property_name, $landlord_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$postal_code,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit);
+//         //var_dump($property_id, $property_type, $property_name, $landlord_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$postal_code,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit);
         
-        $property = new Property();
-        $property->setConnection($connection);
-        $property = $property->updateProperty($property_id, $property_type, $property_name, $landlord_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit);
+//         $property = new Property();
+//         $property->setConnection($connection);
+//         $property = $property->updateProperty($property_id, $property_type, $property_name, $landlord_id, $total_rooms,$total_floors,$description,$property_number,$street,$region_text,$province_text,$city_text,$barangay_text,$latitude,$longitude,$lowest_rate,$reservation_fee,$advance_deposit);
         
-    //     //add to property amenities table but status=2=pending
-        $amenities = $_POST['amenities'];
-        $amenities_csv = implode(",", $amenities);
-        $status = 1;
+//     //     //add to property amenities table but status=2=pending
+//         $amenities = $_POST['amenities'];
+//         $amenities_csv = implode(",", $amenities);
+//         $status = 1;
 
-        $property_amenities = new Amenity('','','');
-        $property_amenities->setConnection($connection);
-        $property_amenities->updateAmenities($property_id, $amenities_csv);
+//         $property_amenities = new Amenity('','','');
+//         $property_amenities->setConnection($connection);
+//         $property_amenities->updateAmenities($property_id, $amenities_csv);
 
-    //     //add to property rules table but status=2=pending
-    //     $status = 1;
-    //     $rules = new Rule($property_id, $_POST['short_term'], $_POST['min_weeks'], $_POST['mix_gender'], $_POST['curfew'], $_POST['from_curfew'], $_POST['to_curfew'], $_POST['cooking'], $_POST['pets'], $_POST['visitors'],$status);
-    //     $rules->setConnection($connection);
-    //     $rules->addRules();
+//     //     //add to property rules table but status=2=pending
+//     //     $status = 1;
+//     //     $rules = new Rule($property_id, $_POST['short_term'], $_POST['min_weeks'], $_POST['mix_gender'], $_POST['curfew'], $_POST['from_curfew'], $_POST['to_curfew'], $_POST['cooking'], $_POST['pets'], $_POST['visitors'],$status);
+//     //     $rules->setConnection($connection);
+//     //     $rules->addRules();
 
-    //     //add to rooms table but status=2=pending
-    //     $beds = $_POST['total_beds']; 
-    //     $rent = $_POST['monthly_rent']; 
-    //     $type = $_POST['furnished_type']; 
-    //     $occupied_beds = 0;
+//     //     //add to rooms table but status=2=pending
+//     //     $beds = $_POST['total_beds']; 
+//     //     $rent = $_POST['monthly_rent']; 
+//     //     $type = $_POST['furnished_type']; 
+//     //     $occupied_beds = 0;
 
-    //     $selected_amenities = $_POST['selected_amenities'];
-    //     $amenities = json_decode($selected_amenities, true); 
+//     //     $selected_amenities = $_POST['selected_amenities'];
+//     //     $amenities = json_decode($selected_amenities, true); 
 
-    //         for ($x = 0; $x < (count($beds)); $x++) {
-    //             $total_beds = $beds[$x];
-    //             $monthly_rent = $rent[$x];
-    //             $furnished_type = $type[$x];
-    //             $status = 1;
+//     //         for ($x = 0; $x < (count($beds)); $x++) {
+//     //             $total_beds = $beds[$x];
+//     //             $monthly_rent = $rent[$x];
+//     //             $furnished_type = $type[$x];
+//     //             $status = 1;
                 
-    //             $room = new Room($property_id, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, $status);
-    //             $room->setConnection($connection);
-    //             $room_id = $room->addRoom();
+//     //             $room = new Room($property_id, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, $status);
+//     //             $room->setConnection($connection);
+//     //             $room_id = $room->addRoom();
 
-    //             $room_amenities = $amenities[$x];
-    //             $room_amenities_csv = implode(",", $room_amenities);
+//     //             $room_amenities = $amenities[$x];
+//     //             $room_amenities_csv = implode(",", $room_amenities);
 
-    //             $room_amenities = new RoomAmenity($room_id, $room_amenities_csv, $status);
-    //             $room_amenities->setConnection($connection);
-    //             $room_amenities->addRoomAmenities();
-    //         }
+//     //             $room_amenities = new RoomAmenity($room_id, $room_amenities_csv, $status);
+//     //             $room_amenities->setConnection($connection);
+//     //             $room_amenities->addRoomAmenities();
+//     //         }
 
-        echo "<script>window.location.href='view.php';</script>";
-        exit();
-    } else {
-        echo "<script>alert('Failed to add property. Please check your inputs.</script>";
-    }
-} catch (Exception $e) {
-    echo "<script>window.location.href='index.php?error='" . $e->getMessage() . ";</script>";
-    exit();
-}
+//         echo "<script>window.location.href='view.php';</script>";
+//         exit();
+//     } else {
+//         echo "<script>alert('Failed to add property. Please check your inputs.</script>";
+//     }
+// } catch (Exception $e) {
+//     echo "<script>window.location.href='index.php?error='" . $e->getMessage() . ";</script>";
+//     exit();
+// }

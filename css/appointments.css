@@ -282,7 +282,7 @@ section {
    font-weight: 500;
    color: white;
    height: 50px;
-   border-radius: 50px;
+   border-radius: 10px;
 }
 
 .btnConfirmApptGo:hover{
@@ -550,7 +550,7 @@ section {
    font-size: 14px;
    font-weight: 500;
    color: white;
-   height: 50px;
+   height: 40px;
 }
 
 .btnConfirmApptGC:hover{

@@ -63,7 +63,7 @@ if(isset($_SESSION['user_id'])){
 </head>
 
 <body>
-  
+<?php include('navbar.php')?>
 <style>
     <?php include('css/property_enlist.css')?>
 </style>
@@ -1043,7 +1043,7 @@ if(isset($_SESSION['user_id'])){
                                     <option value="9AM">9AM</option>
                                     <option value="10AM">10AM</option>
                                     <option value="10AM">11AM</option>
-                                    <option value="10AM">12AM</option>
+                                    <option value="10AM">12NN</option>
                                 </select>
                               </div>
                               <div class="col-8 col-md-6 ms-md-2 ms-sm-2 selectRoomType">
@@ -1483,11 +1483,11 @@ function validateOwner(event) {
 <script>
     const checkboxes = document.querySelectorAll(".checkbox-input");
 const nextButton5 = document.getElementById("next5");
-// const roomModal = document.getElementById("room-modal");
+const roomModal = document.getElementById("room-modal");
 
 // Disable the button at the start
 nextButton5.disabled = true;
-// roomModal.disabled = true;
+roomModal.disabled = true;
 
 // Add event listeners to the checkbox elements
 for (let i = 0; i < checkboxes.length; i++) {
@@ -1504,7 +1504,7 @@ function checkValidity() {
     }
   }
   nextButton5.disabled = !checked;
-//   roomModal.disabled = !checked;
+  roomModal.disabled = !checked;
 }
 </script>
 <script>
@@ -1549,11 +1549,11 @@ function validateForm() {
 <script>
 const fileInput = document.getElementById("upload-input");
 const nextButton7 = document.getElementById("next7");
-// const descriptionModal = document.getElementById("description-modal");
+const descriptionModal = document.getElementById("description-modal");
 
 // Disable the button at the start
 nextButton7.disabled = true;
-// descriptionModal.disabled = true;
+descriptionModal.disabled = true;
 
 // Add event listener to the file input element
 fileInput.addEventListener("change", checkValidity);
@@ -1562,10 +1562,10 @@ fileInput.addEventListener("change", checkValidity);
 function checkValidity() {
   if (fileInput.files.length > 0) {
     nextButton7.disabled = false;
-    // descriptionModal.disabled = false;
+    descriptionModal.disabled = false;
   } else {
     nextButton7.disabled = true;
-    // descriptionModal.disabled = true;
+    descriptionModal.disabled = true;
   }
 }
 </script>
@@ -1577,11 +1577,11 @@ const advanceDeposit = document.getElementById("advanceDeposit");
 const totalbillWater = document.getElementById("totalbillWater");
 const totalbillElectric = document.getElementById("totalbillElectric");
 const nextButton8 = document.getElementById("next8");
-// const rulesModal = document.getElementById("rules-modal");
+const rulesModal = document.getElementById("rules-modal");
 
 // Disable the button at the start
 nextButton8.disabled = true;
-// rulesModal.disabled = true;
+rulesModal.disabled = true;
 
 // Add event listeners to the textarea and number input elements
 description.addEventListener("input", validateForm);
@@ -1608,7 +1608,7 @@ function validateForm() {
 
   // Enable or disable the button based on validity
   nextButton8.disabled = !valid;
-//   rulesModal.disabled = !valid;
+  rulesModal.disabled = !valid;
 }
 </script>
 </html>

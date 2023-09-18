@@ -84,15 +84,15 @@ $barangay_list = array('Lourdes Sur East', 'Salapungan', 'Claro M. Recto'); //ca
 
         <div class="row">
           <p class="hero-text fs-5">
-            Don’t spend hours online searching for apartments/dorms, with Apt.
-            Iba Pa you’ll find your new home in no time
+            Don’t spend hours online searching for an accommodation. With Apt.
+            Iba Pa, you’ll find your new home in no time
           </p>
           <form action="accommodations.php" method="POST">
           <div class="row mt-3">
             <div class="input-group mb-3">
             
               <input type="text" class="form-control" placeholder="Search for your home" aria-label="search-loc" aria-describedby="button-addon2" name="query" id="search_bar">
-              <button class="btn" type="button" name="search" id="button-addon2"><i class="fa-regular fa-magnifying-glass-location fa-2x"></i></button>
+              <button class="btn" type="submit" name="search" id="button-addon2"><i class="fa-regular fa-magnifying-glass-location fa-2x"></i></button>
 
             </div>
           </div>
@@ -134,11 +134,13 @@ $barangay_list = array('Lourdes Sur East', 'Salapungan', 'Claro M. Recto'); //ca
 
               <div class="col ">
                 <div class="box-container">
-                  <a href="your-link-1" class="box">
-                    <img src="images/icon-21.png" alt="" />
-                    <h3>Dormitories and Apartments located around AUF</h3>
-                  </a>
-                </div>
+                        <form action="accommodations.php" method="POST">
+                      <button type="submit" class="box">
+                        <img src="resources/images/icon-21.png" alt="" />
+                        <h3>Dormitories and Apartments located around AUF></h3>
+                    </button>
+                    </form>
+                    </div>
               </div>
 
             

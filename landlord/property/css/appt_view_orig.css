@@ -7,37 +7,16 @@
    font-family: 'Poppins', sans-serif;
 }
 
-
 :root {
    --box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
    --body-color: #E4E9F7;
    --light-bg: #eee;
-      	/* Variables for storing colors */
+   	/* Variables for storing colors */
 	--card-clr: #161922;
 	--body-clr: #191d28;
 	--primary-clr: #f0bf6a;
 	--heading-clr: #dadada;
 	--text-clr: #767a86;
-
-   
-   --dark-jungle-green: hsl(188, 63%, 7%);
-   --prussian-blue: hsl(200, 69%, 14%);
-   --prussian-pale: hsl(201, 19%, 42%);
-   --raisin-black-1: hsl(227, 29%, 13%);
-   --raisin-black-2: hsl(229, 17%, 19%);
-   --yellow-green: hsl(89, 72%, 45%);
-   --orange-soda: hsl(9, 100%, 62%);
-   --orange-tangy: hsla(9, 100%, 62%, 0.1);
-   --orange-pale: hsl(9, 100%, 73%);
-   --cultured-1: hsl(0, 0%, 93%);
-   --cultured-2: hsl(192, 24%, 96%);
-   --misty-rose: hsl(7, 56%, 91%);
-   --alice-blue: hsl(210, 100%, 97%);
-   --seashell: hsl(8, 100%, 97%);
-   --cadet: hsl(200, 15%, 43%);
-   --white: hsl(0, 0%, 100%);
-   --black: hsl(0, 0%, 0%);
-   --opal: hsl(180, 20%, 62%);
 }
 
 *::-webkit-scrollbar-thumb {
@@ -65,6 +44,7 @@ section {
 
 
 
+
 /* Navbar */
 
 .navbarNav .nav-link {
@@ -75,13 +55,17 @@ section {
 
 .navbar-nav .nav-item {
    font-size: 1.5rem;
-   font-weight: 600;
    padding: 1rem;
    border-radius: 5px;
 }
 
+.nav-item .nav-link:hover {
+   padding-left: 1rem;
+   padding-right: 1rem;
 
-.nav-item .nav-link:hover, .nav-item .nav-link:focus{
+}
+
+.nav-item .nav-link:hover {
    background-color: #232A3D;
    color: #FFF;
    border-radius: 5px;
@@ -90,198 +74,128 @@ section {
 
 
 .signOutbtn .btn {
-   background-color: var(--prussian-blue);
-   color: #FFF;
-   font-size: 1.5rem;
-}
-
-.signOutbtn .btn:hover {
-   background-color: var(--orange-soda);
-   color: #E4E9F7;
-}
-
-/* .d-flex .btn {
    background-color: #232A3D;
    color: #FFF;
    font-size: 1.5rem;
 }
 
-.d-flex .btn:hover {
+.signOutbtn .btn:hover {
    background-color: #E4E9F7;
    color: #232A3D;
-} */
-
-.form-control{
-   font-size: 1.5rem;
 }
 
+/* Appointment */
 
-/* Featured Buttons */
-
-.btnStatusC,
-.inline-btn {
-   margin-top: 1rem;
-   padding: 1rem 3rem;
-   color: #fff;
-   cursor: pointer;
-   text-align: center;
-   font-size: 1.6rem;
-   border: none;
+.accomJumbuildings {
+   background: url('../images/header3.png') no-repeat bottom fixed;
+   background-size: 100%;
 }
 
-.btnStatusC:hover,
-.inline-btn:hover {
-   color:green;
-   background-color: transparent;
-   border-color: green;
-   border: 1px solid;
-
-}
-
-.btnStatusC {
-   background-color:#003E1F;
-   display: block;
-   width: 100%;
-   border-radius: 15px;
-   text-decoration: none;
-}
-
-.btnStatusD,
-.inline-btn {
-   margin-top: 1rem;
-   color: #fff;
-   cursor: pointer;
-   text-align: center;
-   font-size: 1.6rem;
-   padding-left: 25px;
-   padding-right: 27px;
-   padding-top: 1rem;
-   padding-bottom: 1rem;
-   border-color: transparent;
-}
-
-.btnStatusD:hover,
-.inline-btn:hover {
-   color:#8B0000;
-   background-color: transparent;
-   border-color: #8B0000;
-   border: 1px solid;
-
-}
-
-.btnStatusD {
-   background-color:#AC202E;
-   display: block;
-   width: 100%;
-   border-radius: 15px;
-   text-decoration: none;
-}
-
-/* Accommodations */
-
-.reservationBg {
+.bgTimeSlots{
    background: url('../images/header3.png') no-repeat bottom;
    background-size: 100%;
 }
 
-/* Reservations */
-
-
-.reservations .box-container {
-   gap: 4rem;
-   justify-content: center;
-   align-items: flex-start;
-   margin-bottom: 150px;
+.datePicker #pick-date{
+   text-align: center;
 }
 
-.reservations .box-container .box {
-   background-color: #E4E9F7;
-   box-shadow: var(--box-shadow);
-   padding: 3rem;
-   overflow-x: hidden;
-   margin-top: 2.2rem;
-   border-radius: 10px;
-   max-height: 100%;
-   height: auto;
+/* Waves */
+
+.custom-shape-divider-top-1691000602 {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   overflow: hidden;
+   line-height: 0;
+   transform: rotate(180deg);
 }
-/* height: 400px; */
 
+.custom-shape-divider-top-1691000602 svg {
+   position: relative;
+   display: block;
+   width: calc(134% + 1.3px);
+   height: 314px;
+}
 
-.reservations .box-container .box .type span {
-    margin-right: .7rem;
-    padding: .5rem 1.5rem;
-    color: #fff;
-    background-color: #232A3D;
-    font-size: 1.2rem;
- }
- 
- .reservations .box-container .box .name {
-    font-size: 2.6rem;
-    font-weight: 600;
-    text-overflow: clip;
-    overflow-x: hidden;
+.custom-shape-divider-top-1691000602 .shape-fill {
+   fill: #d5def7;
+}
+
+/* Time Slots content */
+
+.viewAppoint {
+    text-align: left;
+    font-size: 3rem;
     color: var(--black);
-    overflow-y: hidden;
-    margin-top: 2rem;
- }
- 
- .reservations .box-container .box .roomStatus {
-    font-size: 1.6rem;
-    font-weight: 600;
-    text-overflow: clip;
-    overflow-x: hidden;
-    color: grey;
-    overflow-y: hidden;
- }
- 
- .reservations .box-container .box .address {
-    font-size: 1.1rem;
-    font-weight: 400;
-    text-overflow: clip;
-    overflow-x: hidden;
-    color: grey;
-    overflow-y: hidden;
- }
- 
- .reservations .box-container .box .h6 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    text-overflow: clip;
-    overflow-x: hidden;
-    color: grey;
-    overflow-y: hidden;
- }
- 
- .reservations .box-container .box .fullName {
-    font-size: 1.6rem;
-    font-weight: 500;
-    text-overflow: clip;
-    color: var(--black);
-    overflow-y: hidden;
- }
- 
- .reservations .box-container .box .email {
-    font-size: 1.6rem;
-    font-weight: 500;
-    text-overflow: clip;
-    color: var(--black);
-    overflow-y: hidden;
- }
- 
- .reservations .box-container .box .phoneNumber {
-    font-size: 1.6rem;
-    font-weight: 500;
-    text-overflow: clip;
-    color: var(--black);
-    overflow-y: hidden;
  }
 
- 
- 
+.appointments .apptDate{
+   font-size: 50px;
+   color: #232A3D;
+   font-weight: 600;
+}
+
+.timeSlots {
+   background-color: #FFF;
+   margin-bottom: 100px;
+}
+
+.timeSlots .dayzone{
+   font-size: 30px;
+   color: #232A3D;
+   font-weight: 700;
+}
+
+.timeSlots .timezone{
+   font-size: 15px;
+   color: #232A3D;
+}
+
+/* margin-left: 230px;
+margin-left: 230px; */
+.avatar {
+   position: absolute;
+   margin: 0 auto;
+   left: 0;
+   right: 0;
+   top: -50px;
+   width: 95px;
+   height: 95px;
+   border-radius: 50%;
+   z-index: 9;
+   background: #70c5c0;
+   padding: 15px;
+   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
 
 
-/* Modal */
+/* If user has an appointment the tag is activated */
+.scheduled{
+   background-color: #232A3D;
+   color: #FFF;
+}
 
+.timeSlots .btn {
+   background-color: #232A3D;
+   color: #FFF;
+   font-size: 1.5rem;
+   border-radius: 25px;
+   width: 150px;
+   height: 40px;
+   padding-top: 9px;
+   text-align: center;
+   border: none;
+}
+
+.timeSlots .btn:hover {
+   background-color: var(--primary-clr) !important;
+   color: #e9e9e9;
+}
+
+
+/* Time slots Modal */
 /* #modal{
    width: 500px;
    height: 1600px;
@@ -290,14 +204,13 @@ section {
 
 .modal-title{
    font-size: 16px;
-   font-weight: 600;
 }
 
 .modal-Section{
    width: 1500px;
 }
 
-.form-control{
+.modal-body .h5{
    font-size: 16px;
 }
 
@@ -305,21 +218,8 @@ section {
    font-size: 15px;
 }
 
-.modal-footer .btn{
-   color: #FFF;
-   font-size: 1.5rem;
-   border-radius: 25px;
-   width: 150px;
-   height: 40px;
-   text-align: center;
-   border: none;
-   box-shadow: var(--box-shadow);
-}
 
-.modal-footer .btn:hover{
-   background-color: var(--primary-clr) !important;
-   color: #e9e9e9;
-}
+
 
 /* Footer */
 
@@ -491,6 +391,27 @@ section {
        font-weight: 600
     }
  }
+ 
 
- 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

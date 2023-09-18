@@ -38,8 +38,8 @@ unset($_SESSION['property_id']);
       crossorigin="anonymous"
     ></script>
 
-    <link href="../css/my_property.css" rel="stylesheet" />
-    <link href="../css/all.css" rel="stylesheet" />
+    <link href="css/my_property.css" rel="stylesheet" />
+    <link href="css/all.css" rel="stylesheet" />
 
     <!-- Bootstrap Carousel CSS -->
 
@@ -77,10 +77,9 @@ unset($_SESSION['property_id']);
 
             <div class="box-container">
               <div class="row gx-5 mb-3">
-
                 <?php 
                     foreach($properties as $property){
-                        $full_address = $property['street'] . " " . $property['street'] . ", Barangay " . $property['barangay'] . ", " . $property['city'];
+                        $full_address = $property['property_number'] . " " . $property['street'] . ", Barangay " . $property['barangay'] . ", " . $property['city'];
                         $property_name = $property['property_name'];
                         $barangay = $property['barangay'];
                         $lowest_rate = $property['lowest_rate'];
@@ -148,7 +147,7 @@ unset($_SESSION['property_id']);
                     <div class="thumb">
                       <p class="type"><span><?= $property_type ?></span></p>
   
-                      <img src="../../resources/images/properties/<?= $image ?>" alt="" />
+                      <img class="w-100" src="../../resources/images/properties/<?= $image ?>" alt="" />
                     </div>
                     <div class="row">
                       
@@ -163,7 +162,7 @@ unset($_SESSION['property_id']);
                     
                     <div class="row">
                       <div class="col-sm d-flex align-items-center">
-                        <a href="view.php?property_id=<?= $property_id ?>" class="linkViewProperty"><button type="button" class="btn btnViewMyP">View</button></a>
+                        <a href="view.php?property_id=<?= $property_id ?>" class="linkViewProperty"><button type="button" class="btn btnViewMyP">Edit</button></a>
                       </div>
                       <div class="col-sm d-flex align-items-center">
                         <button type="button" class="btn btn-danger btnDelete">Delete</button>

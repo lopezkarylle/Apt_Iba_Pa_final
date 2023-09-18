@@ -1487,10 +1487,6 @@ section {
    font-weight: 600;
  }
 
- .modalTimeslots .timeSlots .requestVisitTime:hover{
-   color: var(--orange-soda);
- }
- 
  
 .modalTimeslots .timeSlots .radioVisitTime{
    border: 3px solid;
@@ -1502,6 +1498,10 @@ section {
    border: 2px solid;
    border-color: black;
    border-radius: 5px;
+ }
+
+ .btnDisabled {
+   border: none;
  }
  
 
@@ -1766,6 +1766,13 @@ label.radio input:checked+div#pickRoomType {
    font-size: 35px;
    color: #232A3D;
    font-weight: 600;
+   text-align: center;
+}
+
+.modalConfirmDetails .apptDormAddress{
+   font-size: 14px;
+   color: var(--cadet);
+   font-weight: 400;
    text-align: center;
 }
 

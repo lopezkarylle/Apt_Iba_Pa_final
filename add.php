@@ -133,9 +133,25 @@ try {
         $property_amenities->addAmenities($property_id,$aircon, $cabinet,$cctv,$drinking_water,$elevator,$emergency_exit,$food_hall,$laundry, $lounge, $microwave, $parking,$refrigerator,$roof_deck,$security, $sink,$study_area, $tv,$wifi,$status);
 
         //add to property rules table but status=2=pending
+        if($_POST['curfew']===1){
+            $from_curfew =$_POST['from_curfew'];
+            $to_curfew =$_POST['to_curfew'];
+        } elseif($_POST['curfew']===2){
+            $from_curfew = NULL;
+            $to_curfew = NULL;
+        }
+
+        if($_POST['visitors']===1){
+            $from_visit =$_POST['from_visit'];
+            $to_visit =$_POST['to_visit'];
+        } elseif($_POST['visitors']===2){
+            $from_visit = NULL;
+            $to_visit = NULL;
+        }
+
         $rules = new Rule();
         $rules->setConnection($connection);
-        $rules->addRules($property_id, $_POST['short_term'], $_POST['min_weeks'], $_POST['mix_gender'], $_POST['curfew'], $_POST['from_curfew'], $_POST['to_curfew'], $_POST['cooking'], $_POST['pets'], $_POST['visitors'], $_POST['from_visit'], $_POST['to_visit'], $_POST['alcohol'], $_POST['smoking'], $status);
+        $rules->addRules($property_id, $_POST['short_term'], $_POST['min_weeks'], $_POST['mix_gender'], $_POST['curfew'], $from_curfew, $to_curfew, $_POST['cooking'], $_POST['pets'], $_POST['visitors'], $from_visit, $to_visit, $_POST['alcohol'], $_POST['smoking'], $status);
 
         //Room Details
         $bed_per_room = $_POST['bed_per_room'];

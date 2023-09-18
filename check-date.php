@@ -93,17 +93,17 @@ if ($col_count == 4) {
 }
 
 if(in_array($time_slot, $unavailable_morning) || in_array($time_slot, $passed_time_slots)){
-    $unavailable = 'disabled';
+    $unavailable = '<button class="btnDisabled" disabled>';
   } else {
     $unavailable = '';
   }
 
-echo '<div class="col-6 col-sm-auto col-lg-2 mt-2 mt-md-0 d-flex justify-content-center">
-                        
+echo '<div class="col-5 col-sm-3 col-lg-2 mt-3 mt-lg-0 d-flex justify-content-center">
+ ' . $unavailable . '                       
 <label class="radio w-100 justify-content-center d-flex">
-  <input type="radio" name="time_slot" id="time_slot" value="' . $time_slot . '" required ' . $unavailable . '/>
+  <input type="radio" name="time_slot" id="time_slot" value="' . $time_slot . '" required/>
 
-  <div class="row justify-content-between radioVisitTime px-2 py-1 align-items-center"
+  <div class="row justify-content-between radioVisitTime align-items-center"
     id="pickVisitTime">
 
     <div class="col-12">
@@ -160,17 +160,17 @@ if ($col_count == 4) {
 }
 
 if(in_array($time_slot, $unavailable_afternoon)){
-    $unavailable = 'disabled';
+    $unavailable = '<button class="btnDisabled" disabled>';
   } else {
     $unavailable = '';
   }
   
-echo '<div class="col-6 col-sm-auto col-lg-2 mt-2 mt-md-0 d-flex justify-content-center">
-                        
+echo '<div class="col-5 col-sm-3 col-lg-2 mt-3 mt-lg-0 d-flex justify-content-center">
+' . $unavailable . '                          
 <label class="radio w-100 justify-content-center d-flex">
-  <input type="radio" name="time_slot" id="time_slot" value="' . $time_slot . '" required ' . $unavailable . '/>
+  <input type="radio" name="time_slot" id="time_slot" value="' . $time_slot . '" required/>
 
-  <div class="row justify-content-between radioVisitTime px-2 py-1 align-items-center"
+  <div class="row justify-content-between radioVisitTime align-items-center"
     id="pickVisitTime">
 
     <div class="col-12">

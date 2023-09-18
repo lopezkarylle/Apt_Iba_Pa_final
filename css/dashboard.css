@@ -1182,15 +1182,60 @@ section {
 
  */
 
+ /* Top Navbar Styles - Initially displayed */
+.top-navbar {
+   display: block;
+ }
+ 
+ /* Bottom Navbar Styles - Initially hidden */
+ .mobile-nav {
+   display: none;
+   background: #F1F1F1;
+   position: fixed;
+   bottom: 0;
+   height: 65px;
+   width: 100%;
+   display: flex;
+   justify-content: space-around;
+ }
+ 
+ /* Media Query for Screens <576px (Phone View) */
+ @media screen and (max-width: 575px) {
+   /* Hide top navbar and show bottom navbar */
+   .top-navbar {
+     display: none;
+   }
+ 
+   .mobile-nav {
+     display: flex;
+   }
+ }
 
+ /* .mobile-nav {
+   background: #F1F1F1;
+   position: fixed;
+   bottom: 0;
+   height: 65px;
+   width: 100%;
+   display: flex;
+   justify-content: space-around;
+ } */
 
+ .bloc-icon {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+ }
 
+ .bloc-icon img {
+   width: 30px;
+ }
 
-
-
-
-
-
+ @media only screen and (min-width: 600px) {
+   .mobile-nav {
+   display: none;
+   }
+ }
 
 
 
