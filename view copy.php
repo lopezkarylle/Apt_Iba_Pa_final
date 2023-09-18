@@ -2,28 +2,16 @@
 use Models\Property;
 use Models\Amenity;
 use Models\Room;
+use Models\RoomAmenity;
 use Models\Image;
 use Models\Review;
 use Models\Rule;
 use Models\Schedule;
 use Models\Appointment;
-use Models\User;
 include ("init.php");
 include ("session.php");
 
-    
-    if(isset($_SESSION['user_id'])){
-        $user_id = $_SESSION['user_id'];
-        $user = new User();
-        $user->setConnection($connection);
-        $user = $user->getById($user_id);
-        $full_name = $user['first_name'] . ' ' . $user['last_name'];
-        $contact_number = $user['contact_number'];
-        $email = $user['email'];
-    } else {
-        $user_id = NULL;
-    }
-
+    $user_id = $_SESSION['user_id'] ?? NULL;
     if(isset($_GET['property_id'])){
         $_SESSION['property_view_id'] = $_GET['property_id'];
     } else{
@@ -217,7 +205,6 @@ include ("session.php");
 
 <input type="hidden" value="<?php echo $property_id ?>" name="property_id" id="property_id">
 <input type="hidden" value="<?php echo $property_name ?>" name="property_name" id="property_name">
-<input type="hidden" value="<?php echo $landlord_id ?>" name="landlord_id" id="landlord_id">
     <!-- Carousel code starts here -->
     <div class="container-fluid">
       <h1 class="text-center fw-bold display-1 mt-5 mb-5"> <?= $property_name ?> </h1>
@@ -558,37 +545,67 @@ include ("session.php");
     <hr />
   <div class="row row-gap-3 ">
 
-  <?php 
-  $counter = 0;
-  foreach($rooms as $room_list){
-    $counter++;
-    if ($counter % 2 == 1) {
-      // Add a new row before displaying the next room
-      echo '<div class="row column-gap-3 justify-content-center">';
-    }
-?>
-    <div class="col-md-5 text-center">
-      <div class="row justify-content-between">
-        <div class="col-6 col-md-6 mt-3 d-flex justify-content-start amenitiesTitle">
-          <?= $room_list['room_type']; ?>
-        </div>
-        <div class="col-5 col-md-6 mt-3 d-flex justify-content-end amenitiesTitle">
-          ₱<?= $room_list['monthly_rent']; ?>
-        </div>
+    <div class="row column-gap-3 justify-content-center ">
+      
+      <div class="col-md-5 text-center" >
+        
+          <div class="row justify-content-between">
+            <div class="col-6 col-md-6 mt-3 d-flex justify-content-start amenitiesTitle">
+              Single Bed Room
+            </div>
+
+            <div class="col-5 col-md-6 mt-3 d-flex justify-content-end amenitiesTitle" >
+              ₱5000
+            </div>
+          </div>
+
       </div>
+      
+
+      <div class="col-md-5 text-center" >
+        
+        <div class="row justify-content-between">
+          <div class="col-6 col-md-6 mt-3 d-flex justify-content-start amenitiesTitle">
+            Double Bed Room
+          </div>
+
+          <div class="col-5 col-md-6 mt-3 d-flex justify-content-end amenitiesTitle" >
+            ₱5000
+          </div>
+        </div>
     </div>
-<?php
-    if ($counter % 2 == 0) {
-      // Close the row after displaying two columns
-      echo '</div>';
-    }
-  }
-  if ($counter % 2 == 1) {
-    // Close the row if there is an odd number of columns
-    echo '</div>';
-  }
-?>
-<!--  -->
+    </div>
+
+    <div class="row column-gap-3 justify-content-center ">
+      
+      <div class="col-md-5 text-center" >
+        
+          <div class="row justify-content-between">
+            <div class="col-6 col-md-6 mt-3 d-flex justify-content-start amenitiesTitle">
+              Triple Bed Room
+            </div>
+
+            <div class="col-5 col-md-6 mt-3 d-flex justify-content-end amenitiesTitle" >
+              ₱5000
+            </div>
+          </div>
+
+      </div>
+      
+
+      <div class="col-md-5 text-center" >
+        
+        <div class="row justify-content-between">
+          <div class="col-6 col-md-6 mt-3 d-flex justify-content-start amenitiesTitle">
+            Quad Bed Room
+          </div>
+
+          <div class="col-5 col-md-6 mt-3 d-flex justify-content-end amenitiesTitle" >
+            ₱5000
+          </div>
+        </div>
+
+        
     </div>
 
 
@@ -1273,7 +1290,7 @@ var map_center = [15.145763463436099, 120.59339729138502];
                 <div class="col-6 col-sm-auto col-lg-2 mt-2 mt-md-0 d-flex justify-content-center">
                         
                         <label class="radio w-100 justify-content-center d-flex">
-                          <input type="radio" name="time_slot" id="time_slot" value="' . $time_slot . '" required disabled/>
+                          <input type="radio" name="add" value="' . $time_slot . '" required disabled/>
 
                           <div class="row justify-content-between radioVisitTime px-2 py-1 align-items-center"
                             id="pickVisitTime">
@@ -1316,7 +1333,7 @@ var map_center = [15.145763463436099, 120.59339729138502];
                 echo '<div class="col-6 col-sm-auto col-lg-2 mt-2 mt-md-0 d-flex justify-content-center">
                         
                         <label class="radio w-100 justify-content-center d-flex">
-                          <input type="radio" name="time_slot" id="time_slot" value="' . $time_slot . '" required />
+                          <input type="radio" name="add" value="' . $time_slot . '" required />
 
                           <div class="row justify-content-between radioVisitTime px-2 py-1 align-items-center"
                             id="pickVisitTime">
@@ -1342,11 +1359,10 @@ var map_center = [15.145763463436099, 120.59339729138502];
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" class="btnConfirmDetails" data-bs-toggle="modal" data-bs-target="#confirmDetails" id="btnConfirm">Next</button>
+          <button type="button" class="btn btn-primary" class="btnConfirmDetails" data-bs-toggle="modal" data-bs-target="#confirmDetails">Next</button>
         </div>
       </div>
     </div>
-  </div>
   </div>
 
   <!-- Visit Confirmation Details -->
@@ -1376,7 +1392,7 @@ var map_center = [15.145763463436099, 120.59339729138502];
 
                 <div class="row">       
                   <div class="col-md">
-                    <h2 class="ms-3 pt-2 mt-3 apptDormName"><?= $property_name ?></h2>
+                    <h2 class="ms-3 pt-2 mt-3 apptDormName">Batac Dormitory</h2>
                   </div>
                 </div>
 
@@ -1386,7 +1402,7 @@ var map_center = [15.145763463436099, 120.59339729138502];
                     <img src="images/dayzone2.png" alt=""/>
                     Contact Person
                   </h2>
-                  <h2 class="visitDetailsSubtitle"><?= $full_name ?></h2>
+                  <h2 class="visitDetailsSubtitle">Serena Van Der Woodsen</h2>
                 </div>
 
                 <div class="row ps-md-4 h3 mt-2">
@@ -1394,7 +1410,7 @@ var map_center = [15.145763463436099, 120.59339729138502];
                     <img src="images/dayzone2.png" alt=""/>
                     Contact Number
                   </h2>
-                  <h2 class="visitDetailsSubtitle"><?= $contact_number ?></h2>
+                  <h2 class="visitDetailsSubtitle">+63 935 612 8143</h2>
                 </div>
 
                 <div class="row ps-md-4 h3 mt-2">
@@ -1402,7 +1418,8 @@ var map_center = [15.145763463436099, 120.59339729138502];
                     <img src="images/dayzone1.png" alt=""/>
                     Address
                   </h2>
-                  <h2 class="visitDetailsSubtitle"> <?= $full_address ?></h2> <!-- Paghiwalayin yung brgy sa number/street para di masyadong mahaba sa output/UI-->
+                  <h2 class="visitDetailsSubtitle"> 452 Cuatro de Julio Street, 
+                    <br>Barangay Salapungan</h2> <!-- Paghiwalayin yung brgy sa number/street para di masyadong mahaba sa output/UI-->
                 </div>
 
                 <div class="row ps-md-4 h3 mt-2">
@@ -1410,8 +1427,8 @@ var map_center = [15.145763463436099, 120.59339729138502];
                     <img src="images/dayzone1.png" alt=""/>
                     Schedule of Visit
                   </h2>
-                  <h2 class="visitDetailsSubtitle" id="requested_time"></h2>
-                  <h2 class="visitDetailsSubtitle" id="requested_date"></h2>
+                  <h2 class="visitDetailsSubtitle">5:00 PM to 5:30 PM</h2>
+                  <h2 class="visitDetailsSubtitle">29 September, 2023</h2>
                 </div>
 
 
@@ -1424,7 +1441,7 @@ var map_center = [15.145763463436099, 120.59339729138502];
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#requestVisit">Previous</button>
-          <button type="button" class="btn btn-primary" class="btnConfirmSuccess" data-bs-toggle="modal" data-bs-target="#confirmSuccess" id="set_appointment" value="set_appointment">Confirm</button>
+          <button type="button" class="btn btn-primary" class="btnConfirmSuccess" data-bs-toggle="modal" data-bs-target="#confirmSuccess">Confirm</button>
         </div>
       </div>
     </div>
@@ -1459,10 +1476,152 @@ var map_center = [15.145763463436099, 120.59339729138502];
 
 
                 <div class="row h3 mt-4 mb-3">
-                  <h2 class="successDetailsDate text-center" id="requested_date2">
-                    
+                  <h2 class="successDetailsDate text-center">
+                    Sat, 29 September, 2023
                   </h2>
-                  <h2 class="successDetailsTime text-center" id="requested_time2"></h2>
+                  <h2 class="successDetailsTime text-center">8:00 AM to 8:30 AM</h2>
+                </div>
+                
+                <div class="row h3 d-flex justify-content-center mt-5">
+                  <div class="col-10 col-md-9 d-flex justify-content-center">
+                    <button type="button" class="btn w-100 btnConfirmApptGC"><i class="fa-light fa-calendar me-2"></i>Add to Google Calendar</button>
+                  </div>
+                </div>
+
+                <div class="row h3 d-flex justify-content-center mt-2">
+                  <div class="col-10 col-md-9 d-flex justify-content-center">
+                    <button type="button" class="btn w-100 btnConfirmApptGo">Go to Appointments</button>
+                  </div>
+                </div>
+              </div>
+          </form>
+          <!-- form end -->
+
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visit Confirmation Details -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="confirmDetails" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmDetailsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal overflow-x-hidden ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-3" id="confirmDetailsLabel">Confirmation Details</h1>
+        </div>
+        <div class="modal-body overflow-x-hidden  modalConfirmDetails">
+
+          <div class="container">
+
+            <form>
+              <!-- Form start -->
+              <div class="container pt-5 pb-4 bgConfirmDetails confirmSlots">
+
+                <!-- <div class="row">
+                  <div class="col-12"> -->
+                    
+                      <img class="rounded img-fluid d-block mx-auto" src="images/hall-img-1.webp" width="400">
+                    
+                  <!-- </div>
+                </div> -->
+
+                <div class="row">
+                  <div class="col-md">
+                    <h2 class="ms-3 pt-2 mt-3 apptDormName">Batac Dormitory</h2>
+                  </div>
+                </div>
+
+                <div class="row ps-md-4 h3 mt-2">
+                  <hr>
+                  <h2 class="visitDetailsTitle pt-4">
+                    <img src="images/dayzone2.png" alt=""/>
+                    Contact Person
+                  </h2>
+                  <h2 class="visitDetailsSubtitle">Serena Van Der Woodsen</h2>
+                </div>
+
+                <div class="row ps-md-4 h3 mt-2">
+                  <h2 class="visitDetailsTitle pt-4">
+                    <img src="images/dayzone2.png" alt=""/>
+                    Contact Number
+                  </h2>
+                  <h2 class="visitDetailsSubtitle">+63 935 612 8143</h2>
+                </div>
+
+                <div class="row ps-md-4 h3 mt-2">
+                  <h2 class="visitDetailsTitle">
+                    <img src="images/dayzone1.png" alt=""/>
+                    Address
+                  </h2>
+                  <h2 class="visitDetailsSubtitle"> 452 Cuatro de Julio Street, 
+                    <br>Barangay Salapungan</h2> <!-- Paghiwalayin yung brgy sa number/street para di masyadong mahaba sa output/UI-->
+                </div>
+
+                <div class="row ps-md-4 h3 mt-2">
+                  <h2 class="visitDetailsTitle">
+                    <img src="images/dayzone1.png" alt=""/>
+                    Schedule of Visit
+                  </h2>
+                  <h2 class="visitDetailsSubtitle">5:00 PM to 5:30 PM</h2>
+                  <h2 class="visitDetailsSubtitle">29 September, 2023</h2>
+                </div>
+
+
+              </div>
+          </form>
+          <!-- form end -->
+
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#requestVisit">Previous</button>
+          <button type="button" class="btn btn-primary" class="btnConfirmSuccess" data-bs-toggle="modal" data-bs-target="#confirmSuccess">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Details Success -->
+
+  <div class="modal fade" id="confirmSuccess" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmSuccessLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable  overflow-x-hidden ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-3" id="confirmSuccessLabel">Successful Confirmation</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body overflow-x-hidden  modalSuccessAppt">
+
+          <div class="container">
+
+            <form>
+
+              <img class="rounded img-fluid d-block mx-auto mt-5" src="images/success-confirmation.png" width="200">
+
+              <!-- Form start -->
+              <div class="container pb-5 bgSuccessAppt successSlots">
+
+                <div class="row">
+                  <div class="col mb-3">
+                    <h2 class="apptGreetings">Appointment Confirmed</h2>
+                    <h2 class="apptGreetingsSub">Schedule for visit is lined up!</h2>
+                  </div>
+                </div>
+
+
+                <div class="row h3 mt-4 mb-3">
+                  <h2 class="successDetailsDate text-center">
+                    Sat, 29 September, 2023
+                  </h2>
+                  <h2 class="successDetailsTime text-center">8:00 AM to 8:30 AM</h2>
                 </div>
                 
                 <div class="row h3 d-flex justify-content-center mt-5">
@@ -1542,301 +1701,17 @@ var map_center = [15.145763463436099, 120.59339729138502];
             }
         });
     }
-    var confirmDetailsModal = document.getElementById('btnConfirm');
-    confirmDetailsModal.addEventListener('click', function() {
-        var requestedTime = $('#requested_time');
-        var requestedDate = $('#requested_date');
-        var requestedTime2 = $('#requested_time2');
-        var requestedDate2 = $('#requested_date2');
-        var selectedDate = document.querySelector('input[name="time_slot"]:checked').value;
-
-        requestedTime.text(selectedDate);
-        requestedDate.text(selectedDateH2.text());
-        requestedTime2.text(selectedDate);
-        requestedDate2.text(selectedDateH2.text());
-    });
-    
-    var setAppointment = $('#set_appointment');
-    setAppointment.on('click', function() {
-        //var setAppointment = setAppointment.val();
-        var property_id = $('#property_id').val();
-        var inputDate = pickDateInput.val();
-        var inputTime = $('#time_slot').val();
-
-        performAjaxAppointment({ 
-            set_appointment: setAppointment.val(),
-            set_date: inputDate, 
-            set_time: inputTime,
-            property_id: property_id
-        });
-
-        function performAjaxAppointment(data) {
-        $.ajax({
-            url: 'set-appointment.php',
-            type: 'POST',
-            data: data,
-            success: function(response) {
-                alert(response);
-            }
-        }); 
-        }
-     });
 });
 
     </script>
 
 
+
+  <?php //include('confirm-appointment.php'); ?>
+
   <!-- Reserve a Room Modal -->
 
-  <div class="modal fade" id="reserveRoom" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reserveRoomLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-3" id="reserveRoomLabel">Reservation</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body modalReserveroom">
-
-          <div class="container">
-
-            <form>
-              <!-- Form start -->
-              <div class="container pt-5 pb-5 bgReserveroom reserveRoomType">
-
-                <div class="row">
-                  <h3 class="text-center">Reserve a Room</h3>
-                </div>
-
-                <div class="row justify-content-center mt-2">
-                  <div class="col-md-6">
-
-                    <form action="#">
-                      <?php 
-                      foreach($rooms as $room_list){
-                      ?>
-                      <div class="row mt-2">
-                        <div class="col-12">
-                          <label class="radio w-100">
-                            <input type="radio" name="room_id" id="room_id" value="<?= $room_list['room_id'] ?>" checked />
-                            <div
-                              class="row justify-content-between p-3 radioRoomType" id="pickRoomType">
-                              <div class="col-8">
-                                  <span class="roomTypeName"><?= $room_list['room_type'] ?></span>
-                                <div class="row">
-                                  <span class="roomTypeDetails">₱<?= $room_list['monthly_rent'] ?></span>
-                                </div>
-                              </div>
-                      
-                              <div class="col-3">
-                                <i class="fa-solid fa-bed fa-4x float-end"></i>
-                              </div>
-                            </div>
-                          </label>
-                        </div>
-                      </div>
-                      <?php } ?>
-                        
-                      </form>
-
-                  </div>
-                  
-                </div>
-
-              </div>
-          </form>
-          <!-- form end -->
-
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reserveDetails" id="confirmReserveBtn">Next</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Reserve Details -->
-
-  <div class="modal fade" id="reserveDetails" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reserveDetailsLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-3" id="reserveDetailsLabel">Reservation Details</h1>
-        </div>
-        <div class="modal-body overflow-x-hidden modalReserveDetails">
-
-          <div class="container">
-
-            <form>
-              <!-- Form start -->
-              <div class="container pt-5 pb-4 bgReserveDetails reserveDetailsSlots">
-
-                <div class="row">
-                  <div class="col-md-5 pb-3">
-                    <img class="rounded img-fluid d-block mx-auto" src="images/hall-img-1.webp" width="200">
-                    </h2>
-                  </div>
-                  <div class="col-md">
-                    <h2 class="ms-3 pt-2 mt-3 reserveDormName"><?= $property_name ?></h2>
-                    <h2 class="ms-3 mt-3 reserveDormAddress"><i class="fa-regular fa-location-dot"></i> <?= $full_address ?></h2>
-                    <h2 class="ms-3 pt-2 mt-3 reserveDormType">
-                      <span class="ms-3 pt-2 mt-3 reserveDormSlash"></span>
-                      <span class="ms-3 pt-2 mt-3 reserveDormPrice"></span>
-                    </h2>
-                  </div>
-                </div>
-
-                <div class="row ps-md-4 h3 mt-2">
-                  <hr>
-                  <h2 class="reserveDetailsTitle pt-4">
-                    <i class="fa-regular fa-user fa-3"></i>
-                    Contact Person
-                  </h2>
-                  <h2 class="reserveDetailsSubtitle"><?= $full_name ?></h2>
-                </div>
-
-                <div class="row ps-md-4 h3 mt-2">
-                  <h2 class="reserveDetailsTitle pt-4">
-                    <i class="fa-regular fa-phone fa-3"></i>
-                    Contact Number
-                  </h2>
-                  <h2 class="reserveDetailsSubtitle"><?= $contact_number ?></h2>
-                </div>
-
-                <div class="row ps-md-4 h3 mt-2">
-                  <h2 class="reserveDetailsTitle">
-                    <i class="fa-regular fa-at fa-3"></i>
-                    Email
-                  </h2>
-                  <h2 class="reserveDetailsSubtitle"><?= $email ?></h2>
-                </div>
-
-              </div>
-          </form>
-          <!-- form end -->
-
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reserveRoom">Previous</button>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reserveConfirm" id="reserveBtn">Confirm</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Reserve sent to landlord = Pending -->
-
-  <div class="modal fade" id="reserveConfirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reserveConfirm" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-3" id="reserveConfirm">Reservation Confirmation</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body modalReserveConfirm">
-
-          <div class="container">
-
-            <form>
-
-              <img class="rounded img-fluid d-block mx-auto mt-5" src="resources/images/pending-confirmation.webp" width="250">
-
-              <!-- Form start -->
-              <div class="container pb-5 bgReserveConfirm pendingReserveConfirm">
-
-                <div class="row">
-                  <div class="col mb-4">
-                    <h2 class="apptGreetings">Reservation Pending</h2>
-                    <h2 class="apptGreetingsSub">Reservation Request is now sent to the landlord. <br>Waiting for the response and you're all set!</h2>
-                  </div>
-                </div>
-
-
-                <div class="row h3 mt-5 mb-3">
-                  <h2 class="pendingDetailsTitle text-center">
-                    For the mean time you can check the status here:
-                  </h2>
-                  <h2 class="pendingDetailsSubtitle text-center">
-                    The owner of the property will respond within 3 days. If not, reservation is <b>declined</b>.</h2>
-                </div>
-                
-                <div class="row h3 d-flex justify-content-center mt-3">
-                  <div class="col-10 col-md-9 d-flex justify-content-center">
-                    <button type="button" class="btn w-100 btnConfirmApptGC"><i class="fa-light fa-calendar me-2"></i>Add to Google Calendar</button>
-                  </div>
-                </div>
-
-                <div class="row h3 d-flex justify-content-center mt-2">
-                  <div class="col-10 col-md-9 d-flex justify-content-center">
-                    <button type="button" class="btn w-100 btnConfirmApptGo">Go to Appointments</button>
-                  </div>
-                </div>
-              </div>
-          </form>
-          <!-- form end -->
-
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reserveDetails">Previous</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<script>
-    var confirmReserveBtn = $('#confirmReserveBtn');
-    confirmReserveBtn.on('click', function() {
-        //var setAppointment = setAppointment.val();
-        var roomTypeName = document.querySelector('.roomTypeName').textContent;
-        var roomTypeDetails = document.querySelector('.roomTypeDetails').innerHTML;
-        //alert(roomTypeDetails);
-        var reserveDormType = document.querySelector('.reserveDormType');
-        var reserveDormPrice = document.querySelector('.reserveDormPrice');
-
-        reserveDormType.textContent = roomTypeName + ' | ' + roomTypeDetails;
-     });
-
-    var reserveBtn = $('#reserveBtn');
-    reserveBtn.on('click', function() {
-        //var setAppointment = setAppointment.val();
-        var property_id = $('#property_id').val();
-        var property_name = $('#property_name').val();
-        var landlord_id = $('#landlord_id').val();
-        var room_id = $('#room_id').val();
-        var room_type = document.querySelector('.roomTypeName').textContent;
-        var full_name = document.querySelector('.reserveDetailsSubtitle').textContent;
-
-        performAjaxReservation({ 
-            property_id: property_id,
-            landlord_id: landlord_id, 
-            property_name: property_name,
-            room_id: room_id,
-            room_type: room_type,
-            full_name: full_name
-        });
-
-        function performAjaxReservation(data) {
-        $.ajax({
-            url: 'reserve.php',
-            type: 'POST',
-            data: data,
-            success: function(response) {
-                alert(response);
-            }
-        }); 
-        }
-     });
-</script>
-
-
-
+  <?php include('reservation-modal.php'); ?>
   </body>
 
 

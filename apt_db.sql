@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 13, 2023 at 09:50 PM
+-- Generation Time: Sep 18, 2023 at 03:30 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -40,7 +40,8 @@ CREATE TABLE `apt_application_requests` (
 
 INSERT INTO `apt_application_requests` (`application_id`, `user_id`, `property_id`, `status`) VALUES
 (4, 38, 26, 1),
-(5, 43, 39, 1);
+(5, 43, 39, 1),
+(6, 47, 42, 2);
 
 -- --------------------------------------------------------
 
@@ -63,7 +64,8 @@ CREATE TABLE `apt_appointments` (
 
 INSERT INTO `apt_appointments` (`appointment_id`, `property_id`, `user_id`, `date`, `time`, `status`) VALUES
 (10, 26, 33, '2023-09-09', '03:00 PM', 1),
-(11, 26, 40, '2023-09-09', '04:00 PM', 1);
+(11, 26, 40, '2023-09-09', '04:00 PM', 1),
+(12, 26, 33, '2023-09-22', '08:00 AM', 1);
 
 -- --------------------------------------------------------
 
@@ -128,7 +130,13 @@ CREATE TABLE `apt_notifications` (
 
 INSERT INTO `apt_notifications` (`notification_id`, `user_id`, `notification_text`, `timestamp`, `notification_type`, `isRead`, `status`) VALUES
 (1, 36, 'An appointment has been scheduled for your property, Burj\'s Dormitory, on September 9, 2023 at 3:00 PM by Micoh Yabut', '2023-09-07 09:39:35', 'appointment', 0, 1),
-(2, 40, 'Your reservation for a Double Room at Burj\'s Dormitory has been confirmed.', '2023-09-13 07:54:35', 'reservation', 0, 1);
+(2, 40, 'Your reservation for a Double Room at Burj\'s Dormitory has been confirmed.', '2023-09-13 07:54:35', 'reservation', 0, 1),
+(3, 36, 'An appointment has been scheduled for your property, Burj\'s Dormitory, on September 22, 2023 at 08:00 AM by Micoh Yabut', '2023-09-17 14:34:41', 'appointment', 0, 1),
+(4, 36, 'An reservation has been request for a Double Bed Room on your property, Burj\'s Dormitory by ', '2023-09-17 15:50:07', 'reservation', 0, 1),
+(5, 36, 'An reservation has been request for a Double Bed Room on your property, Burj\'s Dormitory by ', '2023-09-17 15:50:48', 'reservation', 0, 1),
+(6, 36, 'An reservation has been request for a Double Bed Room on your property, Burj\'s Dormitory by Micoh Yabut', '2023-09-17 15:52:53', 'reservation', 0, 1),
+(7, 36, 'An reservation has been request for a Double Bed Room on your property, Burj\'s Dormitory by Micoh Yabut', '2023-09-17 15:53:30', 'reservation', 0, 1),
+(8, 36, 'An reservation has been request for a Double Bed Room on your property, Burj\'s Dormitory by Micoh Yabut', '2023-09-17 15:54:05', 'reservation', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -182,7 +190,8 @@ CREATE TABLE `apt_properties` (
 
 INSERT INTO `apt_properties` (`property_id`, `property_type`, `property_name`, `landlord_id`, `status`) VALUES
 (26, 'Dormitory', 'Burj\'s Dormitory', 36, 1),
-(39, 'Dormitory', 'Batac', 43, 1);
+(39, 'Dormitory', 'Batac', 43, 1),
+(42, 'Dormitory', 'Sample Lang', 47, 2);
 
 -- --------------------------------------------------------
 
@@ -220,7 +229,8 @@ CREATE TABLE `apt_property_amenities` (
 
 INSERT INTO `apt_property_amenities` (`amenity_id`, `property_id`, `aircon`, `cabinet`, `cctv`, `drinking_water`, `elevator`, `emergency_exit`, `food_hall`, `laundry`, `lounge`, `microwave`, `parking`, `refrigerator`, `roof_deck`, `security`, `sink`, `study_area`, `tv`, `wifi`, `status`) VALUES
 (38, 26, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1),
-(39, 39, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1);
+(39, 39, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1),
+(40, 42, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 2);
 
 -- --------------------------------------------------------
 
@@ -247,7 +257,8 @@ CREATE TABLE `apt_property_details` (
 
 INSERT INTO `apt_property_details` (`property_id`, `description`, `total_floors`, `total_rooms`, `lowest_rate`, `electric_bill`, `water_bill`, `reservation_fee`, `advance_deposit`, `status`) VALUES
 (26, 'Burj\'s Dormitory is a conveniently located accommodation situated in front of Angeles University Foundation. It offers a practical and accessible living space for students and individuals looking to reside near the university. With its prime location, residents have easy access to the campus facilities and activities.', 4, 10, 4500, '', '', 4500, 4500, 1),
-(39, 'description', 5, 5, 2500, '1000', '1000', 1000, 1000, 1);
+(39, 'description', 5, 5, 2500, '1000', '1000', 1000, 1000, 1),
+(42, 'asdf', 3, 32, 123, '321', '23', 3000, 1000, 2);
 
 -- --------------------------------------------------------
 
@@ -277,7 +288,8 @@ INSERT INTO `apt_property_images` (`image_id`, `property_id`, `image_path`, `tit
 (30, 39, '308563451_509961430950850_6371493704561233138_n.jpg', '2', 1),
 (31, 39, '308837318_621007942751203_160885812613563401_n.jpg', '3', 1),
 (32, 39, '352142478_273638251824393_3861382219506690596_n.jpg', '4', 1),
-(33, 39, '308543326_1253199438813432_3093975124574476285_n.jpg', '5', 1);
+(33, 39, '308543326_1253199438813432_3093975124574476285_n.jpg', '5', 1),
+(34, 42, '376518430_826832135787680_4200050595538403632_n.png', NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -304,7 +316,8 @@ CREATE TABLE `apt_property_locations` (
 
 INSERT INTO `apt_property_locations` (`property_id`, `property_number`, `street`, `barangay`, `city`, `province`, `region`, `latitude`, `longitude`, `status`) VALUES
 (26, '452', 'Cuatro de Hulyo', 'Salapungan', 'Angeles City', 'Pampanga', 'Region III (Central Luzon)', '15.14611952781827', '120.59573897890535', 1),
-(39, '12', 'Roxas', 'Lourdes Sur East', 'Angeles City', 'Pampanga', 'Region III (Central Luzon)', '15.145756876093449', '120.5934106242363', 1);
+(39, '12', 'Roxas', 'Lourdes Sur East', 'Angeles City', 'Pampanga', 'Region III (Central Luzon)', '15.145756876093449', '120.5934106242363', 1),
+(42, '99', 'Som', 'Barangay II (Pob.)', 'Amadeo', 'Cavite', 'Region IV-A (CALABARZON)', '15.144424926874573', '120.59539451449712', 2);
 
 -- --------------------------------------------------------
 
@@ -337,7 +350,8 @@ CREATE TABLE `apt_property_rules` (
 
 INSERT INTO `apt_property_rules` (`id`, `property_id`, `short_term`, `min_weeks`, `mix_gender`, `curfew`, `from_curfew`, `to_curfew`, `cooking`, `pets`, `visitors`, `from_visit`, `to_visit`, `alcohol`, `smoking`, `status`) VALUES
 (14, 26, 1, 4, 0, 1, '12mn', '5am', 1, 1, 1, '8am', '11pm', 1, 0, 1),
-(15, 39, 0, 4, 1, 1, '8PM', '7AM', 1, 0, 1, '5AM', '9PM', 0, 0, 1);
+(15, 39, 0, 4, 1, 1, '8PM', '7AM', 1, 0, 1, '5AM', '9PM', 0, 0, 1),
+(16, 42, 0, 1, 0, 2, '6PM', '3AM', 0, 0, 0, '3AM', '4PM', 0, 0, 2);
 
 -- --------------------------------------------------------
 
@@ -359,7 +373,11 @@ CREATE TABLE `apt_reservations` (
 --
 
 INSERT INTO `apt_reservations` (`reservation_id`, `user_id`, `property_id`, `room_id`, `payment_status`, `status`) VALUES
-(4, 33, 26, 18, 2, 2);
+(4, 33, 26, 18, 2, 2),
+(5, 33, 26, 18, 0, 2),
+(6, 33, 26, 18, 0, 2),
+(7, 33, 26, 18, 0, 2),
+(8, 33, 26, 18, 0, 2);
 
 -- --------------------------------------------------------
 
@@ -395,7 +413,8 @@ INSERT INTO `apt_reviews` (`review_id`, `rating`, `description`, `review_date`, 
 CREATE TABLE `apt_rooms` (
   `room_id` int(11) NOT NULL,
   `property_id` int(11) NOT NULL,
-  `room_type` int(11) NOT NULL,
+  `room_type` varchar(255) NOT NULL,
+  `bed_per_room` int(2) NOT NULL,
   `total_rooms` int(11) NOT NULL,
   `total_beds` int(11) NOT NULL,
   `occupied_beds` int(11) NOT NULL,
@@ -408,9 +427,10 @@ CREATE TABLE `apt_rooms` (
 -- Dumping data for table `apt_rooms`
 --
 
-INSERT INTO `apt_rooms` (`room_id`, `property_id`, `room_type`, `total_rooms`, `total_beds`, `occupied_beds`, `furnished_type`, `monthly_rent`, `status`) VALUES
-(18, 26, 2, 10, 20, 0, 'Furnished', '4500', 1),
-(19, 39, 2, 5, 10, 0, 'Semi-furnished', '2500', 1);
+INSERT INTO `apt_rooms` (`room_id`, `property_id`, `room_type`, `bed_per_room`, `total_rooms`, `total_beds`, `occupied_beds`, `furnished_type`, `monthly_rent`, `status`) VALUES
+(18, 26, 'Double Bed Room', 2, 10, 20, 0, 'Furnished', '4500', 1),
+(19, 39, 'Double Bed Room', 2, 5, 10, 0, 'Semi-furnished', '2500', 1),
+(20, 42, 'Triple Bed Room', 3, 32, 96, 0, 'Furnished', '123', 2);
 
 -- --------------------------------------------------------
 
@@ -431,7 +451,8 @@ CREATE TABLE `apt_unavailable_slots` (
 
 INSERT INTO `apt_unavailable_slots` (`slot_id`, `property_id`, `date`, `time`) VALUES
 (16, 26, '2023-09-05', '\"08:00 AM\",\"08:30 AM\",\"09:00 AM\",\"09:30 AM\",\"10:00 AM\",\"10:30 AM\",\"11:00 AM\"'),
-(18, 26, '2023-09-09', '08:00 AM,08:30 AM,09:00 AM,09:30 AM,10:00 AM,10:30 AM,11:00 AM,11:30 AM,12:00 NN,12:30 PM,01:00 PM,01:30 PM,02:00 PM,02:30 PM,03:00 PM,03:30 PM,04:00 PM,04:30 PM,05:00 PM,05:30 PM,06:00 PM, 3:00 PM');
+(18, 26, '2023-09-09', '08:00 AM,08:30 AM,09:00 AM,09:30 AM,10:00 AM,10:30 AM,11:00 AM,11:30 AM,12:00 NN,12:30 PM,01:00 PM,01:30 PM,02:00 PM,02:30 PM,03:00 PM,03:30 PM,04:00 PM,04:30 PM,05:00 PM,05:30 PM,06:00 PM, 3:00 PM'),
+(20, 26, '2023-09-22', '08:00 AM');
 
 -- --------------------------------------------------------
 
@@ -462,7 +483,8 @@ INSERT INTO `apt_users` (`user_id`, `email`, `password`, `salt`, `status`) VALUE
 (41, 'arnold@apt.com', '0b9a2f1ab2ca937a731dc7141844b392f25e5fb7ad8ea0e99cc5c4bb81aef785', '9d41a3cd4533161b0e924b274cac094b', 1),
 (42, 'superadmin@apt.com', '5dcd2298c52249c5ca02a817b19f939541ce35c39d3ad67049967d2e2274b0e4', '451b87672ce7d2be1cbe8a97afdb4fa4', 1),
 (43, 'batac@apt.com', 'ee1b2000ab986ce826383937a70848a6a3fefa3e947ac52b5388ecfc3d2d99e7', '8991bc59a4e00105b48f265e09449008', 1),
-(44, 'sia.yabut.micohjomarie@gmail.com', 'deeb7b8ec590eb646145aa9e83b4a243655598e2d64752cce81ac8859b221244', 'e98504d646109d6523fe7876ba0cb28a', 1);
+(44, 'sia.yabut.micohjomarie@gmail.com', 'deeb7b8ec590eb646145aa9e83b4a243655598e2d64752cce81ac8859b221244', 'e98504d646109d6523fe7876ba0cb28a', 1),
+(47, 'son@apt.com', '56934d46a398264003533eabd944526de17a16d3f480507ceb8ac572b04969e8', 'd24e944d57308ef9d898ea2d12873208', 1);
 
 -- --------------------------------------------------------
 
@@ -517,7 +539,8 @@ INSERT INTO `apt_user_information` (`user_id`, `first_name`, `last_name`, `conta
 (41, 'Arnold', 'Lim', '09010652356', 2, 1),
 (42, 'Apt', 'Superadmin', '', 4, 1),
 (43, 'Jude', 'Batac', '096555666532', 1, 1),
-(44, 'Meko', 'Yabt', '09656565656', 2, 1);
+(44, 'Meko', 'Yabt', '09656565656', 2, 1),
+(47, 'Son', 'Goku', '09233213213', 2, 1);
 
 --
 -- Indexes for dumped tables
@@ -668,13 +691,13 @@ ALTER TABLE `apt_user_information`
 -- AUTO_INCREMENT for table `apt_application_requests`
 --
 ALTER TABLE `apt_application_requests`
-  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `apt_appointments`
 --
 ALTER TABLE `apt_appointments`
-  MODIFY `appointment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `appointment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `apt_chats`
@@ -692,7 +715,7 @@ ALTER TABLE `apt_messages`
 -- AUTO_INCREMENT for table `apt_notifications`
 --
 ALTER TABLE `apt_notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `apt_password_reset_tokens`
@@ -704,31 +727,31 @@ ALTER TABLE `apt_password_reset_tokens`
 -- AUTO_INCREMENT for table `apt_properties`
 --
 ALTER TABLE `apt_properties`
-  MODIFY `property_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `property_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `apt_property_amenities`
 --
 ALTER TABLE `apt_property_amenities`
-  MODIFY `amenity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `amenity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `apt_property_images`
 --
 ALTER TABLE `apt_property_images`
-  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `apt_property_rules`
 --
 ALTER TABLE `apt_property_rules`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `apt_reservations`
 --
 ALTER TABLE `apt_reservations`
-  MODIFY `reservation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `reservation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `apt_reviews`
@@ -740,19 +763,19 @@ ALTER TABLE `apt_reviews`
 -- AUTO_INCREMENT for table `apt_rooms`
 --
 ALTER TABLE `apt_rooms`
-  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `apt_unavailable_slots`
 --
 ALTER TABLE `apt_unavailable_slots`
-  MODIFY `slot_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `slot_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `apt_users`
 --
 ALTER TABLE `apt_users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `apt_user_images`

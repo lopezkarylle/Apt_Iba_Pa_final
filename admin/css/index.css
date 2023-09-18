@@ -440,7 +440,7 @@ header .image-text .profession{
  
  body {
     background-color: var(--body-color);
-    background-image:  url('../images/header3.png');
+    background-image:  url('../../images/header3.png');
     background-size: cover;
     background-position: center center;
     background-repeat:  no-repeat;

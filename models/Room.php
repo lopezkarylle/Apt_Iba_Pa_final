@@ -9,6 +9,7 @@ class Room
     protected $room_id;
 	protected $property_id;
     protected $room_type;
+    protected $bed_per_room;
     protected $total_rooms;
 	protected $total_beds;
 	protected $occupied_beds;
@@ -27,30 +28,6 @@ class Room
     public function getId() {
         return $this->room_id;
     }
-
-    public function getPropertyId() {
-        return $this->property_id;
-    }
-
-    public function getTotalBeds() {
-        return $this->total_beds;
-    }
-
-    public function getOccupiedBeds() {
-        return $this->occupied_beds;
-    }
-
-    public function getFurnishedType() {
-        return $this->furnished_type;
-    }
-
-    public function getMonthlyRent() {
-        return $this->monthly_rent;
-    }
-
-    public function getStatus() {
-        return $this->status;
-    }
     
 	public function setConnection($connection)
 	{
@@ -68,33 +45,7 @@ class Room
 		}
 	}
 
-    public function getById($id){
-        try {
-            $sql = 'SELECT * FROM apt_users WHERE user_id=:user_id AND user_type=1 AND status=1';
-			$statement = $this->connection->prepare($sql);
-            
-			$statement->execute([
-				':user_id' => $id
-			]);
-
-            $row = $statement->fetch();
-            
-			$this->user_id = $row['user_id'];
-            $this->first_name = $row['first_name'];
-            $this->last_name = $row['last_name'];
-            $this->contact_number = $row['contact_number'];
-            $this->email = $row['email'];
-            $this->password = $row['password'];
-            $this->user_type = $row['user_type'];
-            $this->status = $row['status'];
-
-
-        } catch (Exception $e) {
-			error_log($e->getMessage());
-		}
-    }
-
-    public function addRoom($property_id, $room_type, $total_rooms, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, $status){
+    public function addRoom($property_id, $room_type, $bed_per_room, $total_rooms, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, $status){
         try {
 			//$encrypted_password = sha1($this->getPassword());
 			$sql = "INSERT INTO apt_rooms SET property_id=?, room_type=?, total_rooms=?, total_beds=?, occupied_beds=?, furnished_type=?, monthly_rent=?, status=?"; 
@@ -102,6 +53,7 @@ class Room
 			$statement->execute([
 				$property_id, 
                 $room_type, 
+                $bed_per_room,
                 $total_rooms, 
                 $total_beds, 
                 $occupied_beds, 

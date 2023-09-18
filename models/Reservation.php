@@ -96,7 +96,7 @@ class Reservation
         }
 	}
 
-	public function addReservationaddReservation($user_id, $property_id, $room_id, $payment_status, $status){
+	public function addReservation($user_id, $property_id, $room_id, $payment_status, $status){
         try {
 			$sql = "INSERT INTO apt_reservations SET user_id=?, property_id=?, room_id=?, payment_status=?, status=?"; 
 			$statement = $this->connection->prepare($sql);

@@ -14,7 +14,7 @@ $(document).ready(function(){
                     let html = `
                         <div class = "uploaded-img">
                             <img src = "${event.target.result}"><br>
-                            <input type="text" name="add_title[]" placeholder="Title" required>
+                            <input type="text" name="image_title[]" id="imageTitle" placeholder="Titles" required>
                             <button type = "button" class = "remove-btn">
                                 <i class = "fas fa-times"></i>
                             </button>

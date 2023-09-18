@@ -1604,6 +1604,143 @@ label.radio input:checked+div#pickRoomType {
    border-radius: 5px;
 }
 
+/* Reserve Details */
+
+.modalReserveDetails{
+   background-color: var(--cultured-2);
+}
+
+.bgReserveDetails{
+   background: url('../images/header3.png') no-repeat bottom;
+   background-size: 100%;
+}
+
+.modalReserveDetails .reserveDormName{
+   font-size: 35px;
+   color: var(--prussian-blue);
+   font-weight: 600;
+   text-align: center;
+}
+
+.modalReserveDetails .reserveDormAddress{
+   font-size: 14px;
+   color: var(--cadet);
+   font-weight: 400;
+   text-align: center;
+}
+
+.modalReserveDetails .reserveDormType{
+   font-size: 25px;
+   color: var(--prussian-blue);
+   font-weight: 600;
+   text-align: center;
+}
+
+.modalReserveDetails .reserveDormPrice{
+   font-size: 20px;
+   color: var(--prussian-blue);
+   font-weight: 600;
+   text-align: center;
+}
+
+.modalReserveDetails .reserveDormSlash{
+   font-size: 20px;
+   color: var(--prussian-blue);
+   font-weight: 600;
+   text-align: center;
+}
+
+
+.modalReserveDetails .reserveDetailsSlots .reserveDetailsTitle{
+   font-size: 17px;
+   color: var(--cadet);
+   font-weight: 500;
+}
+
+.modalReserveDetails .reserveDetailsSlots .reserveDetailsSubtitle{
+   font-size: 19px;
+   color: var(--prussian-blue);
+   margin-left: 20px;
+   font-weight: 600;
+}
+
+
+/* Confirmation Details */
+
+
+/* Successful Appointment */
+
+.modalReserveConfirm {
+   background-color: var(--cultured-2);
+}
+
+.bgReserveConfirm {
+   background: url('../images/header3.png') no-repeat bottom;
+   background-size: 100%;
+}
+
+.modalReserveConfirm .apptGreetings{
+   font-size: 30px;
+   color: var(--prussian-blue);
+   font-weight: 600;
+   text-align: center;
+}
+
+.modalReserveConfirm .apptGreetingsSub{
+   font-size: 16px;
+   color: var(--prussian-blue);
+   font-weight: 600;
+   text-align: center;
+}
+
+.modalReserveConfirm .apptDate{
+   font-size: 25px;
+   color: var(--prussian-blue);
+   font-weight: 600;
+   text-align: center;
+}
+
+.modalReserveConfirm .pendingReserveConfirm .pendingDetailsTitle{
+   font-size: 16px;
+   color: var(--prussian-blue);
+   font-weight: 700;
+}
+
+.modalReserveConfirm .pendingReserveConfirm .pendingDetailsSubtitle{
+   font-size: 12px;
+   color: var(--cadet);
+}
+
+.btnConfirmApptGC{
+   background-color: var(--orange-soda);
+   font-size: 14px;
+   font-weight: 500;
+   color: white;
+   height: 50px;
+}
+
+.btnConfirmApptGo{
+   background-color: var(--prussian-blue);
+   font-size: 14px;
+   font-weight: 500;
+   color: white;
+   height: 50px;
+}
+
+.btnConfirmApptGC:hover{
+   border: 1px solid var(--orange-soda);
+   background-color: hsl(9, 98%, 59%);   color: white;
+}
+
+.btnConfirmApptGo:hover{
+   border: 1px solid  var(--prussian-blue);
+   background-color: hsl(199, 77%, 9%);   color: white;
+}
+
+
+
+/* FAQs */
+
 #faqsAccord button.accordion-button{
    font-size: 14px;
    font-weight: 600;
@@ -1633,13 +1770,13 @@ label.radio input:checked+div#pickRoomType {
 }
 
 .modalConfirmDetails .confirmSlots .visitDetailsTitle{
-   font-size: 18px;
+   font-size: 17px;
    color: grey;
    font-weight: 500;
 }
 
 .modalConfirmDetails .confirmSlots .visitDetailsSubtitle{
-   font-size: 20px;
+   font-size: 19px;
    color: #232A3D;
    margin-left:50px;
    font-weight: 600;

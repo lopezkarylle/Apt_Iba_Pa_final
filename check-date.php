@@ -98,7 +98,21 @@ if(in_array($time_slot, $unavailable_morning) || in_array($time_slot, $passed_ti
     $unavailable = '';
   }
 
-echo '<div class="col-5 col-sm-3 col-lg-2 d-flex justify-content-center"><a class="btn btn-outline-secondary ' . $unavailable . ' " data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> ' . $time_slot . '</a></div>';
+echo '<div class="col-6 col-sm-auto col-lg-2 mt-2 mt-md-0 d-flex justify-content-center">
+                        
+<label class="radio w-100 justify-content-center d-flex">
+  <input type="radio" name="time_slot" id="time_slot" value="' . $time_slot . '" required ' . $unavailable . '/>
+
+  <div class="row justify-content-between radioVisitTime px-2 py-1 align-items-center"
+    id="pickVisitTime">
+
+    <div class="col-12">
+      <span class="requestVisitTime"><i class="fa-regular fa-clock-eight me-2"></i>' . $time_slot . '</span>
+    </div>
+
+  </div>
+</label>
+</div>';
 $col_count++;
 }
 echo '</div>';
@@ -151,7 +165,21 @@ if(in_array($time_slot, $unavailable_afternoon)){
     $unavailable = '';
   }
   
-echo '<div class="col-5 col-sm-3 col-lg-2 d-flex justify-content-center"><a class="btn btn-outline-secondary ' . $unavailable . ' " data-bs-toggle="modal" data-bs-target="#modal" role="button"><i class="fa-regular fa-clock"></i> ' . $time_slot . '</a></div>';
+echo '<div class="col-6 col-sm-auto col-lg-2 mt-2 mt-md-0 d-flex justify-content-center">
+                        
+<label class="radio w-100 justify-content-center d-flex">
+  <input type="radio" name="time_slot" id="time_slot" value="' . $time_slot . '" required ' . $unavailable . '/>
+
+  <div class="row justify-content-between radioVisitTime px-2 py-1 align-items-center"
+    id="pickVisitTime">
+
+    <div class="col-12">
+      <span class="requestVisitTime"><i class="fa-regular fa-clock-eight me-2"></i>' . $time_slot . '</span>
+    </div>
+
+  </div>
+</label>
+</div>';
 $col_count++;
 }
 echo '</div>';

@@ -9,6 +9,7 @@ use Models\User;
 use Models\Auth;
 use Models\Image;
 use Models\UserImage;
+use Models\Notification;
 include "init.php";
 include "session.php";
 
@@ -137,14 +138,31 @@ try {
         $rules->addRules($property_id, $_POST['short_term'], $_POST['min_weeks'], $_POST['mix_gender'], $_POST['curfew'], $_POST['from_curfew'], $_POST['to_curfew'], $_POST['cooking'], $_POST['pets'], $_POST['visitors'], $_POST['from_visit'], $_POST['to_visit'], $_POST['alcohol'], $_POST['smoking'], $status);
 
         //Room Details
-        $room_type = $_POST['room_type']; 
+        $bed_per_room = $_POST['bed_per_room'];
         $type = $_POST['furnished_type']; 
         $rent = $_POST['monthly_rent']; 
         $total_rooms = $_POST['total_rooms']; 
         $occupied_beds = 0;
 
-        for ($x = 0; $x < (count($room_type)); $x++) {
-            $bed_count = $room_type[$x];
+        for ($x = 0; $x < (count($bed_per_room)); $x++) {
+            $bed_count = $bed_per_room[$x];
+            if($bed_count===1){
+                $room_type='Single Bed Room';
+            } elseif($bed_count===2){
+                $room_type='Double Bed Room';
+            } elseif($bed_count===3){
+                $room_type='Triple Bed Room';
+            } elseif($bed_count===4){
+                $room_type='Quad Bed Room';
+            } elseif($bed_count===5){
+                $room_type='5-Bed Room';
+            } elseif($bed_count===6){
+                $room_type='6-Bed Room';
+            } elseif($bed_count===7){
+                $room_type='7-Bed Room';
+            } elseif($bed_count===8){
+                $room_type='8-Bed Room';
+            }
             $room_total = $total_rooms[$x];
             $total_beds = intval($bed_count) * intval($room_total);
             $furnished_type = $type[$x];
@@ -152,7 +170,7 @@ try {
 
             $room = new Room();
             $room->setConnection($connection);
-            $room_id = $room->addRoom($property_id, $bed_count, $room_total, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, $status);
+            $room_id = $room->addRoom($property_id, $type_room, $bed_count, $room_total, $total_beds, $occupied_beds, $furnished_type, $monthly_rent, $status);
         }
 
         $imageData = $_FILES["images"] ?? NULL;
@@ -163,7 +181,7 @@ try {
                 // Get the image properties
                 $imageName = $imageData['name'][$i];
                 $imageTmpName = $imageData['tmp_name'][$i];
-                $title = $_POST['image_title'][$i];
+                $title = $_POST['add_title'][$i];
             
                 // Move the uploaded image to a directory on the server
                 $uploadDirectory = "resources/images/properties/";
