@@ -29,8 +29,8 @@
               <a class="nav-link" href="../reservation/index.php">Reservations</a>
             </li>
           </ul>
-          <form class="signOutbtn" role="search" action="../logout.php" action="POST">
-              <button class="btn btn-outline-secondary me-2" type="button">
+          <form class="signOutbtn" role="search" action="../../logout.php" method="POST">
+              <button class="btn btn-outline-secondary me-2" type="submit">
               Sign Out &nbsp;<i class="fa-solid fa-right-from-bracket"></i> 
               </button>
             </form>

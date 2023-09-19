@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 18, 2023 at 06:09 PM
+-- Generation Time: Sep 19, 2023 at 06:38 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -77,8 +77,19 @@ CREATE TABLE `apt_bookmarks` (
   `bookmark_id` int(11) NOT NULL,
   `property_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `status` int(11) NOT NULL
+  `status` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `apt_bookmarks`
+--
+
+INSERT INTO `apt_bookmarks` (`bookmark_id`, `property_id`, `user_id`, `status`) VALUES
+(1, 26, 33, 2),
+(7, 39, 33, 2),
+(8, 43, 33, 2),
+(9, 26, 33, 2),
+(10, 26, 33, 1);
 
 -- --------------------------------------------------------
 
@@ -91,6 +102,19 @@ CREATE TABLE `apt_chats` (
   `property_id` int(11) NOT NULL,
   `landlord_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `apt_faqs`
+--
+
+CREATE TABLE `apt_faqs` (
+  `faq_id` int(11) NOT NULL,
+  `question` text NOT NULL,
+  `answer` text NOT NULL,
+  `status` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -260,6 +284,20 @@ INSERT INTO `apt_property_details` (`property_id`, `description`, `total_floors`
 (26, 'Burj\'s Dormitory is a conveniently located accommodation situated in front of Angeles University Foundation. It offers a practical and accessible living space for students and individuals looking to reside near the university. With its prime location, residents have easy access to the campus facilities and activities.', 4, 10, 4500, '', '', 4500, 4500, 1),
 (39, 'description', 5, 5, 2500, '1000', '1000', 1000, 1000, 1),
 (43, 'Tridia Dormitory is a comfortable space offering a lot of amenities for students and employees. It is close to nearby establishments like Mcdonald\'s, Jollibee, laundry shops, etc.', 3, 12, 4000, '500', '500', 1000, 1000, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `apt_property_faqs`
+--
+
+CREATE TABLE `apt_property_faqs` (
+  `faq_id` int(11) NOT NULL,
+  `property_id` int(11) NOT NULL,
+  `question` text NOT NULL,
+  `answer` text NOT NULL,
+  `status` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -573,6 +611,7 @@ ALTER TABLE `apt_appointments`
 -- Indexes for table `apt_bookmarks`
 --
 ALTER TABLE `apt_bookmarks`
+  ADD PRIMARY KEY (`bookmark_id`),
   ADD KEY `property_id` (`property_id`),
   ADD KEY `apt_bookmarks_ibfk_2` (`user_id`);
 
@@ -581,6 +620,12 @@ ALTER TABLE `apt_bookmarks`
 --
 ALTER TABLE `apt_chats`
   ADD PRIMARY KEY (`chat_id`);
+
+--
+-- Indexes for table `apt_faqs`
+--
+ALTER TABLE `apt_faqs`
+  ADD PRIMARY KEY (`faq_id`);
 
 --
 -- Indexes for table `apt_messages`
@@ -620,6 +665,13 @@ ALTER TABLE `apt_property_amenities`
 --
 ALTER TABLE `apt_property_details`
   ADD PRIMARY KEY (`property_id`);
+
+--
+-- Indexes for table `apt_property_faqs`
+--
+ALTER TABLE `apt_property_faqs`
+  ADD PRIMARY KEY (`faq_id`),
+  ADD KEY `property_id` (`property_id`);
 
 --
 -- Indexes for table `apt_property_images`
@@ -707,10 +759,22 @@ ALTER TABLE `apt_appointments`
   MODIFY `appointment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
+-- AUTO_INCREMENT for table `apt_bookmarks`
+--
+ALTER TABLE `apt_bookmarks`
+  MODIFY `bookmark_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT for table `apt_chats`
 --
 ALTER TABLE `apt_chats`
   MODIFY `chat_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `apt_faqs`
+--
+ALTER TABLE `apt_faqs`
+  MODIFY `faq_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `apt_messages`
@@ -741,6 +805,12 @@ ALTER TABLE `apt_properties`
 --
 ALTER TABLE `apt_property_amenities`
   MODIFY `amenity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+
+--
+-- AUTO_INCREMENT for table `apt_property_faqs`
+--
+ALTER TABLE `apt_property_faqs`
+  MODIFY `faq_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `apt_property_images`
@@ -838,6 +908,12 @@ ALTER TABLE `apt_property_amenities`
 --
 ALTER TABLE `apt_property_details`
   ADD CONSTRAINT `apt_property_details_ibfk_1` FOREIGN KEY (`property_id`) REFERENCES `apt_properties` (`property_id`);
+
+--
+-- Constraints for table `apt_property_faqs`
+--
+ALTER TABLE `apt_property_faqs`
+  ADD CONSTRAINT `apt_property_faqs_ibfk_1` FOREIGN KEY (`property_id`) REFERENCES `apt_properties` (`property_id`);
 
 --
 -- Constraints for table `apt_property_images`

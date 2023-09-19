@@ -1,3 +1,4 @@
+<!-- User appointments and reservations page -->
 <?php
 use Models\Appointment;
 use Models\Reservation;
@@ -104,7 +105,7 @@ $reservations = $reservations->getUserReservations($user_id);
                 ?>
                 <div class="col-12 col-sm-6 col-xl-8">
                   <div class="box">
-                    <div class="row">
+                    <div class="row"> <!-- DISPLAY IF NO APPOINTMENTS -->
                         <div class="col pt-3 ms-md-4 ps-md-3">
                             <p class="type"><span><?= $property_type ?></span></p>
                             <h3 class="name"><i class="fa-solid fa-location-dot"></i> <a href="view.php?<?= $property_id ?>" style="text-decoration: none; color: inherit;"><?= $property_name ?></a> </h3>
@@ -157,24 +158,7 @@ $reservations = $reservations->getUserReservations($user_id);
                     }else{
                         $payment_status = "Unpaid";
                     }
-                    $room = $reservation['room_type'];
-                    if($room===1){
-                        $room_type = "Single Room";
-                    } elseif($room===2) {
-                        $room_type = "Double Room";
-                    } elseif($room===3) {
-                        $room_type = "Triple Room";
-                    } elseif($room===4) {
-                        $room_type = "Quad Room";
-                    } elseif($room===5) {
-                        $room_type = "5-Bed Room";
-                    } elseif($room===6) {
-                        $room_type = "6-Bed Room";
-                    } elseif($room===7) {
-                        $room_type = "7-Bed Room";
-                    } elseif($room===8) {
-                        $room_type = "8-Bed Room";
-                    }
+                    $room_type = $reservation['room_type'];
 
                     $status = $reservation['status'];
                     if($status===1){
@@ -188,7 +172,7 @@ $reservations = $reservations->getUserReservations($user_id);
                 ?>
                 <div class="col-12 col-sm-6 col-xl-8">
                     <div class="box">
-                    <div class="row">
+                    <div class="row"> <!-- DISPLAY IF NO RESERVATIONS -->
                         <div class="col pt-3 ms-md-4 ps-md-3">
                             <p class="type"><span><?= $property_type ?></span></p>
                             <h3 class="name"><i class="fa-solid fa-location-dot"></i> <a href="view.php?<?= $property_id ?>" style="text-decoration: none; color: inherit;"><?= $property_name ?></a> </h3>

@@ -1,3 +1,4 @@
+<!-- Browse All Properties Page -->
 <?php
 use Models\Property;
 use Models\Image;

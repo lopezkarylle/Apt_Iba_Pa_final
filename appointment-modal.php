@@ -1,3 +1,4 @@
+<!-- Change appointment time based on selected date -->
 <?php 
 use Models\Schedule; //remove when included in php page
 use Models\Appointment; //remove when included in php page

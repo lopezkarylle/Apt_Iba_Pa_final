@@ -1,5 +1,5 @@
+<!-- For Apply Property -->
 <?php
-
 use Models\Property;
 use Models\Amenity;
 use Models\Rule;

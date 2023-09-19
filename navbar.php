@@ -25,6 +25,9 @@
             <li class="nav-item">
               <a class="nav-link" href="appointments.php">Appointments</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="faqs.php">Appointments</a>
+            </li>
           </ul>
 
           <button class="btnNotif me-5 position-relative" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" aria-label="Inbox">
@@ -49,11 +52,7 @@
               <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
           </li>
-            <form class="d-flex signOutbtn" role="search" action="apply.php" method="POST">
-              <button class="btn me-2" type="submit">
-              Apply My Property&nbsp;
-              </button>
-            </form>
+            
             <form class="d-flex signOutbtn" role="search" action="logout.php" method="POST">
               <button class="btn me-2" type="submit">
               Sign Out &nbsp;<i class="fa-solid fa-right-from-bracket"></i> 
@@ -70,6 +69,9 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="about.php">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="faqs.php">Appointments</a>
             </li>
           </ul>
           <form class="d-flex signInbtn" role="search" action="apply.php" method="POST">

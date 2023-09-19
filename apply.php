@@ -1,3 +1,4 @@
+<!-- First Page for Apply Property -->
 <?php 
 include ("init.php");
 include ("session.php");

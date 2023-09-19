@@ -18,20 +18,20 @@
               <div class="col-xs-6 col-md-2 me-auto pt-4">
               <h6>Pages</h6>
               <ul class="footer-links">
-                  <li><a href="http://scanfcode.com/category/c-language/">Accomodations</a><li>
+                  <li><a href="accommodations.php">Accomodations</a><li>
                   <li>
-                  <a href="http://scanfcode.com/category/front-end-development/">About Us</a>
+                  <a href="about.php">About Us</a>
                   </li>
                   <li>
-                  <a href="http://scanfcode.com/category/back-end-development/">Apply My Property</a>
+                  <a href="apply.php">Apply My Property</a>
               </ul>
               </div>
   
               <div class="col-xs-6 col-md-2 pt-4">
               <h6>Features</h6>
               <ul class="footer-links">
-                  <li><a href="http://scanfcode.com/about/">Favorites</a></li>
-                  <li><a href="http://scanfcode.com/contact/">Reserve a Room</a></li>
+                  <li><a href="accommodations.php">Favorites</a></li>
+                  <li><a href="accommodations.php">Reserve a Room</a></li>
                   <li>
                   <a href="http://scanfcode.com/contribute-at-scanfcode/">Schedule a Visit</a>
               </ul>

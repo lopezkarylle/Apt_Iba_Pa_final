@@ -329,7 +329,7 @@ include ("session.php");
       <div class="row pt-5">
         <div class="col-sm availRoom">
           <div class="room">Available Rooms</div>
-          <span> 3 out of 9 room/s available </span>
+          <span> 3 out of 9 room/s available </span> <!-- CHANGE PHP -->
         </div>
       </div>
     </div>

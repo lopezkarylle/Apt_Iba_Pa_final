@@ -3,9 +3,9 @@ use Models\Property;
 use Models\Image;
 use Models\User;
 use Models\Review;
+use Models\Bookmark;
 include ("init.php");
 include ("session.php");
-
 
 if(isset($_SESSION['user_id'])){
     $user_id = $_SESSION['user_id'];
@@ -124,7 +124,7 @@ $barangay_list = array('Lourdes Sur East', 'Salapungan', 'Claro M. Recto'); //ca
                         <form action="accommodations.php" method="POST">
                             <input type="hidden" name="barangay" value="<?= $barangay ?>">
                       <button type="submit" class="box">
-                        <img src="resources/images/icon-20.png" alt="" />
+                        <img src="resources/images/icon-20.png" alt="" /> <!-- change number icon -->
                         <h3>Dormitories and Apartments located in <?= $barangay ?></h3>
                     </button>
                     </form>
@@ -137,7 +137,7 @@ $barangay_list = array('Lourdes Sur East', 'Salapungan', 'Claro M. Recto'); //ca
                         <form action="accommodations.php" method="POST">
                       <button type="submit" class="box">
                         <img src="resources/images/icon-21.png" alt="" />
-                        <h3>Dormitories and Apartments located around AUF></h3>
+                        <h3>Dormitories and Apartments located around AUF</h3>
                     </button>
                     </form>
                     </div>
@@ -206,18 +206,52 @@ $barangay_list = array('Lourdes Sur East', 'Salapungan', 'Claro M. Recto'); //ca
                         $show_reviews = "No reviews yet";
                     }
                     
+                    $bookmark = new Bookmark();
+                    $bookmark->setConnection($connection);
+                    $bookmark = $bookmark->checkBookmark($property_id, $user_id);
                     ?>
               <div class="col-12 col-md-6 col-xl-4 ">
                 <div class="box">
                   <div class="thumb">
+                    <input type="hidden" value="<?= $property_id ?>" name="property_id" id="property_id">
                     <p class="type"><span><?= $property_type ?></span></p>
-                    <form action="" method="post" class="save">
+                    <?php if(isset($_SESSION['user_id'])) {?>
+                    <form class="save">
+                    <?php if (isset($bookmark['status']) && $bookmark['status']===1) {?>
+                      <button
+                        type="button"
+                        class="fa-solid fa-bookmark fa-3x"
+                        value="1"
+                        id="bookmarkBtn-<?= $property_id ?>"
+                        onclick="bookmark(<?= $property_id ?>)"
+                        ></button>
+                    <?php } elseif(isset($bookmark['status']) && $bookmark['status']===2) { ?>
+                        <button
+                        type="button"
+                        class="fa-regular fa-bookmark fa-3x"
+                        value="2"
+                        id="bookmarkBtn-<?= $property_id ?>"
+                        onclick="bookmark(<?= $property_id ?>)"
+                        ></button>
+                    <?php } else {?>
+                        <button
+                        type="button"
+                        class="fa-regular fa-bookmark fa-3x"
+                        value="0"
+                        id="bookmarkBtn-<?= $property_id ?>"
+                        onclick="bookmark(<?= $property_id ?>)"
+                        ></button>
+                    <?php } ?>
+                    </form>
+                    <?php } else { ?>
+                        <form action="login.php" method="post" class="save">
                       <button
                         type="submit"
                         name="save"
-                        class="fa-solid fa-bookmark fa-3x"
-                      ></button>
+                        class="fa-regular fa-bookmark fa-3x"
+                      ></button> <!-- class="fa-regular fa-bookmark fa-3x" -->
                     </form>
+                    <?php } ?>
                     <img class="w-100" src="resources/images/properties/<?=$image?>" alt=""/>
                   </div>
                   <div class="row justify-content-between">
@@ -394,12 +428,47 @@ $barangay_list = array('Lourdes Sur East', 'Salapungan', 'Claro M. Recto'); //ca
             marker.bindPopup("<b>" + propertyNames[i] + "</b><br>" + full_address[i] + "<br><a href='view.php?property_id'>View</a>").openPopup();
             }
     </script>
+    <script>  
+        function bookmark(propertyId) {
+            const bookmarkBtn = document.getElementById(`bookmarkBtn-${propertyId}`);
+            const bookmarkBtnVal = bookmarkBtn.value;
+
+            ajaxBookmark({ 
+                property_id: propertyId,
+                status: bookmarkBtnVal
+            });
+        };
+
+        function ajaxBookmark(data) {
+            $.ajax({
+                url: 'bookmark.php',
+                type: 'POST',
+                data: data,
+                success: function(response) {
+                    const bookmarkBtnChange = document.getElementById(`bookmarkBtn-${data.property_id}`);
+                    if (response === '1') {
+                        bookmarkBtnChange.classList.replace("fa-regular", "fa-solid");
+                        bookmarkBtnChange.setAttribute("value", "1");
+                    } else {
+                        bookmarkBtnChange.classList.replace("fa-solid", "fa-regular");
+                        bookmarkBtnChange.setAttribute("value", "0");
+                    }
+                    bookmarkBtnChange.setAttribute("onclick", `bookmark(${data.property_id})`);
+                }
+            }); 
+        }
+    </script>
 
 <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
     crossorigin="anonymous"
   ></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
     </body>
     </html>
   

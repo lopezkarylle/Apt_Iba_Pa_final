@@ -81,10 +81,10 @@ unset($_SESSION['login_error']);
                   <label>Password</label>
                 </div>
 
-                <!-- <p class="text ">
+                <p class="text ">
                   Forgot password?
                   <a href="forgot-password.php" class="resetBtn"><b>Reset Password</b></a>
-                </p> -->
+                </p>
 
                 <input type="submit" value="Sign In" id="loginBtn" class="sign-btn" name="login"  />
 
@@ -159,7 +159,7 @@ unset($_SESSION['login_error']);
                   />
                   <label for="contact_number">Contact Number *</label>
                 </div>
-                <span id="contact-error" style="color: red;"></span><br>
+                <span id="contact-error" style="color: red;"></span>
 
                 
 
@@ -174,7 +174,7 @@ unset($_SESSION['login_error']);
                   />
                   <label>Email</label>
                 </div>
-                <span id="email-error-register" style="color: red;"></span><br>
+                <span id="email-error-register" style="color: red;"></span>
 
                 <div class="input-wrap">
                   <input
@@ -187,7 +187,7 @@ unset($_SESSION['login_error']);
                   />
                   <label for="password">Password *</label>
                 </div>
-                <span id="password-error-register" style="color: red;"></span><br>
+                <span id="password-error-register" style="color: red;"></span>
                 
 
 
@@ -203,7 +203,7 @@ unset($_SESSION['login_error']);
                   />
                   <label for="confirm_password">Confirm Password *</label>
                 </div>
-                <span id="confpass-error" style="color: red;"></span><br>
+                <span id="confpass-error" style="color: red;"></span>
                 
                 <input type="submit" name="register" value="Register" id="registerBtn" class="sign-btn" />
 
@@ -243,9 +243,9 @@ unset($_SESSION['login_error']);
             <div class="text-slider">
               <div class="text-wrap">
                 <div class="text-group">
-                  <h2>Create your own courses</h2>
-                  <h2>Customize as you like</h2>
-                  <h2>Invite students to your class</h2>
+                  <h2>Look for an accommodation</h2>
+                  <h2>Filter your browsing</h2>
+                  <h2>Visit and reserve your new home</h2>
                 </div>
               </div>
 
