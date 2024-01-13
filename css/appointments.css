@@ -64,6 +64,15 @@ section {
 
 /* Navbar */
 
+.nav-item img{
+	width: 36px;
+	height: 36px;
+	object-fit: cover;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+
 .navbarNav .nav-link {
    background-color: #232A3D;
    color: #FFF;
@@ -192,7 +201,7 @@ section {
 }
 
 .reservations .box-container .box {
-   background-color: var(--cultured-2);
+   background-color: var(--white);
    box-shadow: var(--box-shadow);
    padding: 1.5rem;
    overflow-x: hidden;
@@ -212,8 +221,8 @@ section {
     font-size: 1.2rem;
  }
 
- .reservations .box-container .box .name {
-    font-size: 2rem;
+ .reservations .box-container .box .apptNum {
+    font-size: 3rem;
     font-weight: 600;
     text-overflow: clip;
     overflow-x: hidden;
@@ -221,6 +230,36 @@ section {
     overflow-y: hidden;
     margin-top: 2rem;
  }
+
+ .reservations .box-container .box .name {
+    font-size: 2rem;
+    font-weight: 600;
+    text-overflow: clip;
+    overflow-x: hidden;
+    color: var(--black);
+    overflow-y: hidden;
+    margin-top: 1rem;
+ }
+
+ .reservations .box-container .box .subtitleNoAppt {
+   font-size: 1.5rem;
+   font-weight: 600;
+   text-overflow: clip;
+   overflow-x: hidden;
+   color: var(--black);
+   overflow-y: hidden;
+   margin-top: 1rem;
+}
+
+.reservations .box-container .box .noApptYet {
+   font-size: 2rem;
+   font-weight: 600;
+   text-overflow: clip;
+   overflow-x: hidden;
+   color: var(--black);
+   overflow-y: hidden;
+   margin-top: 1rem;
+}
  
  .reservations .box-container .box .roomStatus {
     font-size: 1.4rem;
@@ -263,6 +302,15 @@ section {
     padding: .5rem 2rem;
     color: #13853f;
     background-color: #b7e6c9;
+    font-size: 1.2rem;
+    border-radius: 25px;
+ }
+
+ /* Pending */
+ .reservations .box-container .box .statusC span {
+    padding: .5rem 2rem;
+    color: #761607;
+    background-color: #ff3010;
     font-size: 1.2rem;
     border-radius: 25px;
  }
@@ -738,4 +786,44 @@ section {
  }
 
  
+
+.emptyContainer{
+    height: 150px;
+ }
+ 
+
+
+  
+ 
+@media(min-width:320px) and (max-width:767px){
+   .extraContainer{
+      height: 200px;
+   }
+}
+
+@media(min-width:768px){
+   .extraContainer{
+      height: 320px;
+   }
+}
+
+@media (min-width:991px){
+   .extraContainer{
+      height: 455px;
+   }
+}
+
+@media(max-width:1200px){
+   .extraContainer{
+      height: 580px;
+   }
+}
+
+@media(min-width:2561px){
+   .extraContainer{
+      height: 600px;
+   }
+}
+
+
  

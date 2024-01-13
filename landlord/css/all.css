@@ -6,3 +6,55 @@
 :host,:root{--fa-style-family-sharp:"Font Awesome 6 Sharp";--fa-font-sharp-light:normal 300 1em/1 "Font Awesome 6 Sharp"}@font-face{font-family:"Font Awesome 6 Sharp";font-style:normal;font-weight:300;font-display:block;src:url(../webfonts/fa-sharp-light-300.woff2) format("woff2"),url(../webfonts/fa-sharp-light-300.ttf) format("truetype")}.fa-light,.fasl{font-weight:300}
 :host,:root{--fa-style-family-sharp:"Font Awesome 6 Sharp";--fa-font-sharp-regular:normal 400 1em/1 "Font Awesome 6 Sharp"}@font-face{font-family:"Font Awesome 6 Sharp";font-style:normal;font-weight:400;font-display:block;src:url(../webfonts/fa-sharp-regular-400.woff2) format("woff2"),url(../webfonts/fa-sharp-regular-400.ttf) format("truetype")}.fa-regular,.fasr{font-weight:400}
 :host,:root{--fa-style-family-sharp:"Font Awesome 6 Sharp";--fa-font-sharp-solid:normal 900 1em/1 "Font Awesome 6 Sharp"}@font-face{font-family:"Font Awesome 6 Sharp";font-style:normal;font-weight:900;font-display:block;src:url(../webfonts/fa-sharp-solid-900.woff2) format("woff2"),url(../webfonts/fa-sharp-solid-900.ttf) format("truetype")}.fa-solid,.fass{font-weight:900}
+
+
+.pre-loader{
+	background: #ffffff;
+	background-position: center center;
+	background-size: 13%;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 12345;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+}
+.pre-loader .loader-logo{
+	padding-bottom: 15px;
+}
+.pre-loader .loader-progress{
+	height: 8px;
+	border-radius: 15px;
+	max-width: 200px;
+	margin: 0 auto;
+	display: block;
+	background: #ecf0f4;
+	overflow: hidden;
+}
+.pre-loader .bar{
+	width: 0%;
+	height: 8px;
+	display: block;
+	background: var(--orange-soda);
+}
+.pre-loader .percent{
+	text-align: center;
+	font-size: 24px;
+	display: none;
+}
+.pre-loader .loading-text{
+	text-align: center;
+	font-size: 18px;
+	font-weight: 500;
+	padding-top: 15px;
+}
+
+@media (max-width:767px) {
+
+   .pre-loader{background-size: 43%;}
+
+}

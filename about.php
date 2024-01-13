@@ -4,8 +4,6 @@ use Models\Property;
 include ("init.php");
 include ("session.php");
 
-$user_id = $_SESSION['user_id'] ?? NULL;
-
 $current_page = "| About";
 ?>
 
@@ -26,24 +24,56 @@ $current_page = "| About";
         crossorigin="anonymous"
         ></script>
         <link href="css/aboutUs.css" rel="stylesheet" />
+        <link href="css/dashboard.css" rel="stylesheet" />
         <link href="css/all.css" rel="stylesheet" />
+
+        <link rel="icon" href="resources/favicon/faviconlogo.ico" type="image/x-icon">
     </head>
 
   <body>
     <!-- Navbar -->
     
-        <?php include('navbar.php'); ?>
+    <?php if(isset($user_id)) {
+      include('navbar_logged.php'); 
+
+      } else {
+         include('navbar.php'); 
+        } ?>
+
 
     <!-- Navbar ends -->
 
-    <!-- Services -->
-    <div class="container-fluid pt-5 pb-5">
-      
-        <div class="row aboutUsTitle">
-          <div class="col">
-          <h2 class="section-heading">About Us</h2>
-          </div>
+    <section class="hero" id="home">
+    <div class="container mt-0">
+
+    <div class="row my-5 gap-5 gap-md-0">
+      <div class="col-12 col-md-6 py-auto my-auto order-5 order-md-0" >
+
+        <h1 class="hero-title text-center text-md-start fw-bold display-1" style="font-size: 72px">ABOUT <span class="text" style="color:hsl(200, 69%, 14%)">US</span></h1>
+
+        <div class="row">
+          <p class="hero-text fs-4">
+            At APT. IBA PA, we are dedicated to addressing the challenges faced by students at Angeles University Foundation (AUF) when it comes to finding suitable accommodations in close proximity to the University. With the limited availability of dormitories and apartments near AUF, students often struggle to secure the ideal living space.
+          </p>
         </div>
+
+      </div>
+      <div class="col-12 col-md-6 order-1 order-md-0" >
+        <img src="resources/images/AipSingle2.png" alt="Modern house model" class="w-100">
+      </div>
+    </div>
+
+    </div>
+</section>
+
+    <!-- Services -->
+    <div class="container-fluid pt-5 pb-5" style="background-color: #f2f6f7">
+      
+        <!-- <div class="row aboutUsTitle"> -->
+          <div class="col">
+          <hr>
+          </div>
+        <!-- </div> -->
         <div class="row aboutUsText">
           <p class="about-info"></p>
         </div>
@@ -53,235 +83,147 @@ $current_page = "| About";
         <section class="aboutUs">
 
           <div class="row justify-content-center">
-            <div class="column">
+
+              <div style=" padding-bottom: 50px; " class="container">
+                
+
+                  <div class="row mt-5 justify-content-center align-items-center">
+                    <div class="col-12 d-flex justify-content-center  align-items-center">
+                      <h1 style="font-weight:600; font-size:45px; margin-right:10px;" >Mission</h1>
+                      
+                    </div>
+                    <!-- <div class="col-1">
+                        
+                    </div> -->
+                    
+                    <div class="row justify-content-center ">
+                      <div class="col-12 col-md-7 col-lg-8">
+                        <p style=" font-size:20px;" class="text-center ">
+                        At Apt. Iba Pa, our mission is to transform the way individuals discover ideal dormitories and apartments near Angeles University Foundation (AUF). Committed to simplicity, we strive to offer a user-friendly platform that streamlines the search, reservation, and property management procedures. By doing so, we aim to enhance the convenience for tenants and landlords alike, revolutionizing the accommodation experience.  </div>
+                      <div class="col col-lg-7 d-flex justify-content-center mt-5">
+                      <img style="width:50%;" src="resources/images/mission.png">
+                      </div>
+                     
+                      
+                    </div>
+  
+                   
+                    
+                  </div>
+                 
+              </div>
+
+              <hr class="mt-5">
+
+              <div style="padding-bottom:50px; " class="container">
+                
+
+                  <div class="row mt-5 justify-content-center align-items-center">
+                    <div class="col-12 d-flex justify-content-center  align-items-center">
+                      <h1 style="font-weight:600; font-size:45px; margin-right:10px;" >Vision</h1>
+                      
+                    </div>
+                    
+                    <div class="row justify-content-center ">
+                      <div class="col-12 col-md-7 col-lg-8">
+                      <p style=" font-size:20px;" class="text-center">
+                      To become the go-to platform for students and property owners seeking or offering accommodations within the vicinity of AUF, expanding our reach locally and potentially nationally.</p>
+                      </div>
+                      <div class="col-lg-7 col-md-8 d-flex justify-content-center">
+                      <img  style="width:60%;" src="resources/images/vision.png">
+                      </div>
+                    </div>
+                    
+                  </div>
+              </div>
+
+              <hr >
+
+              <div style=" padding-bottom:25px; " class="container">
+                
+
+                  <div class="row mt-5 justify-content-center align-items-center">
+                    <div class="col-12 d-flex justify-content-center  align-items-center mb-5">
+                      <h1 style="font-weight:600; font-size:45px; margin-right:10px;" >Core Values</h1>
+                    </div>
+                    
+                    <div class="row justify-content-center ">
+                    <div class="row justify-content-center">
+            <div class="column mb-3">
               <div class="card">
                 <div class="icon-wrapper">
-                  <i class="fa-solid fa-map-location-dot"></i>
+                <i class="fa-solid fa-lightbulb-gear"></i>
                 </div>
-                <h3>Map-based Directory</h3>
+                <h3>Innovation</h3>
                 <p>
-                  Our map interface allows users to visualize the exact locations of dormitories and apartments near to AUF. 
+                  Embrace technological advancements to enhance user experiences.
                 </p>
               </div>
             </div>
-            <div class="column">
+            <div class="column mb-3" >
               <div class="card">
                 <div class="icon-wrapper">
-                  <i class="fa-solid fa-list"></i>
+                <i class="fa-sharp fa-regular fa-magnifying-glass-location"></i>
                 </div>
-                <h3>Extensive Listings</h3>
+                <h3>Accessibility</h3>
                 <p>
-                  Our listings include detailed information such as rental rates, facilities, nearby amenities, and contact details.
-              </div>
+                Ensure that the accommodation search process is easy and convenient for all users.              </div>
             </div>
-            <div class="column">
+            <div class="column mb-3">
               <div class="card">
                 <div class="icon-wrapper">
-                  <i class="fa-solid fa-comments"></i>
+                <i class="fa-sharp fa-solid fa-circle-info"></i>
                 </div>
-                <h3>Community Reviews</h3>
+                <h3>Transparency</h3>
                 <p>
-                  This helps create an active community where individuals can exchange valuable insights, fostering a reliable platform.
-                </p>
+                Foster open communication and provide accurate information to both tenants and landlords.                </p>
               </div>
             </div>
           
             
-          <!-- <div class="row justify-content-center"> -->
-            <div class="column">
+            <!-- <div class="row justify-content-center"> -->
+            <div class="column mb-3">
               <div class="card">
                 <div class="icon-wrapper">
                   <i class="fa-solid fa-sliders"></i>
                 </div>
-                <h3>Customized Living</h3>
+                <h3>Collaboration</h3>
                 <p>
-                  Users can narrow down their options based on preferences such as rental budget, room types, amenities, and more.
-                </p>
+                Work closely with property owners and users to create a supportive community.                </p>
               </div>
             </div>
-            <div class="column">
+            <div class="column mb-3">
               <div class="card">
                 <div class="icon-wrapper">
-                  <i class="fa-solid fa-phone-volume"></i>
+                <i class="fa-solid fa-comments"></i>
                 </div>
-                <h3>Easy Communication</h3>
+                <h3>Continuous Improvement</h3>
                 <p>
-                  Users can easily connect with the relevant contacts for inquiries, booking appointments, and securing their desired accommodations.
-                </p>
+                Adapt and evolve based on feedback and changing needs of the community                </p>
               </div>
             </div>
-          <!-- </div> -->
-
-            <!-- <div class="column">
-              <div class="card">
-                <div class="icon-wrapper">
-                  <i class="fa-solid fa-plug"></i>
-                </div>
-                <h3>Service Heading</h3>
-                <p>
-                  Users can easily connect with the relevant contacts for inquiries, booking appointments, and securing their desired accommodations.
-                </p>
+                    </div>
+                    
+                  </div>
               </div>
-            </div> -->
-
+            
           </div>
         </section>
       </div>
-  </div>
+      
+          
+        
+
+          
+
+      
+ 
+  
 
     <!-- Services ends -->
 
-<hr>
-    
-    <!-- FAQs -->
-  <div class="container-fluid pt-5 pb-5">
-      
-    <div class="row faqSectionTitle">
-      <div class="col">
-        <h2 class="section-heading">Frequently Asked Questions</h2>
-      </div>
-    </div>
-    
-    <div class="row faqSectionText">
-      <p class="about-info"></p>
-    </div>
-        
-    <div class="container-md pt-3">
-      <section class="faqSection">
 
-        <div class="accordion p-3 m-0 border-0 m-0 border-0" id="accordionExample">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                What is the deposit amount?
-              </button>
-            </h2>
-            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                A <strong>&#8369;3,000</strong> deposit is required at the time of application.
-              </div>
-            </div>
-          </div>
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                Are pets allowed?
-              </button>
-            </h2>
-            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                <strong>No.</strong> Pets are not allowed in the apartments. The only pets allowed are aquarium-bound fish in a tank no larger than 10 gallons. Residents must maintain responsibility for the aquariums at all times.
-              </div>
-            </div>
-          </div>
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                What is the lease/contract term?
-              </button>
-            </h2>
-            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                The term of the contract is <strong>month-to-month.</strong> The student may remain as long as he/she is eligible to occupy a University on-campus apartment. 
-              </div>
-            </div>
-          </div>
-        </div>
 
-      </section>
-    </div>
-
-        
-  </div>
-  <!-- FAQs ends -->
-
-<hr>
-
-    <!-- offers starts  -->
-        <div class="container-fluid jumbuildings">
-          <section class="offers">
-            <h1 class="offersTitle">Latest Offers</h1>
-            <p class="offersInfo">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-              consequatur necessitatibus eaque. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-              consequatur necessitatibus eaque. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-              consequatur necessitatibus eaque. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-              consequatur necessitatibus eaque.</p>
-
-            <div class="container-md mb-5">
-              <div class="box-container">
-                <div class="row mt-5">
-
-                  <div class="col-md-4 p-3">
-                    <div class="box">
-                      <img src="images/icon-6.png" alt="">
-                      <h3>Online Catalogue</h3>
-                      <p>Choose from different spaces, reserve, and schedule
-                      your second home with one click</p>
-                  </div>
-                  </div>
-
-                  <div class="col-md-4 p-3">
-                    <div class="box">
-                      <img src="images/icon-7.png" alt="">
-                      <h3>Customer Support</h3>
-                      <p>Ask for help from the team, anytime. 
-                      Just send us a message and get back to you 
-                      immediately.</p>
-                    </div>
-                  </div>
-
-                  <div class="col-md-4 p-3">
-                    <div class="box">
-                      <img src="images/icon-8.png" alt="">
-                      <h3>A space to call Home</h3>
-                      <p>A place you can call home, somewhere you can
-                      work and relax at the same time.</p>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div class="row">
-
-                  <div class="col-md-4 p-3">
-                    <div class="box">
-                      <img src="images/icon-9.png" alt="">
-                      <h3>Built-In Comfort</h3>
-                      <p>Functional spaces with amenities that cater to 
-                      your basic needs and comfortability.</p>
-                    </div>
-                  </div>
-
-                  <div class="col-md-4 p-3">
-                    <div class="box">
-                      <img src="images/icon-10.png" alt="">
-                      <h3>Well-secured Spaces</h3>
-                      <p>Our homes come with CCTV, caretakers, and security
-                      personnel you can rely on for your safety.</p>
-                    </div>
-                  </div>
-
-                  <div class="col-md-4 p-3">
-                    <div class="box">
-                      <img src="images/icon-11.png" alt="">
-                      <h3>Regular Maintenance</h3>
-                      <p>Regular maintenance to your spaces that cater to 
-                      your basic needs and comfortability.</p>
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
-            </div>
-            
-          </section>
-        </div>
-
-    <!-- offers section ends -->
-
-    <hr>
 
 
   <!-- Footer -->

@@ -1,25 +1,17 @@
-<!-- User appointments and reservations page -->
+<!-- User appointments page -->
 <?php
 use Models\Appointment;
-use Models\Reservation;
 include "init.php";
 include "session.php";
 
-if(isset($_SESSION['user_id'])){
-    $user_id = $_SESSION['user_id'] ?? NULL;
-} else{
+if(!isset($user_id)){
     header('location: index.php');
     exit();
-}
+} 
 
-
-$appointments = new Appointment('','','','','');
+$appointments = new Appointment();
 $appointments->setConnection($connection);
-$appointments = $appointments->getUserAppointments($user_id);
-
-$reservations = new Reservation('','','','','');
-$reservations->setConnection($connection);
-$reservations = $reservations->getUserReservations($user_id);
+$appointments = array_reverse($appointments->getUserAppointments($user_id));
 
 ?>
 <!DOCTYPE html>
@@ -27,7 +19,7 @@ $reservations = $reservations->getUserReservations($user_id);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Manage Reservations</title>
+    <title>Manage Appointments</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -66,19 +58,26 @@ $reservations = $reservations->getUserReservations($user_id);
 
     <link href="css/appointments.css" rel="stylesheet" />
     <link href="css/all.css" rel="stylesheet" />
+
+    <link rel="icon" href="resources/favicon/faviconlogo.ico" type="image/x-icon">
   </head>
-  <body>
+  <body style="background-color: #f2f6f7">
     <!-- Navbar -->
 
-<?php include('navbar.php'); ?>
+    <?php if(isset($user_id)) {
+      include('navbar_logged.php'); 
+
+      } else {
+         include('navbar.php'); 
+        } ?>
+
   
       <!-- Navbar ends -->
 
     <!-- Featured section starts -->
-
+    <?php if(count($appointments) != 0){?>
     <div class="container-fluid reservationBg">
         <section class="reservations">
-  
           <div class="container-md">
             <div class="row">
                 <div class="col-md-2"></div>
@@ -92,8 +91,11 @@ $reservations = $reservations->getUserReservations($user_id);
 
               <?php foreach($appointments as $appointment){ 
                 $property_id = $appointment['property_id'];
+                $appointment_id = $appointment['appointment_id'];
+                $appointment_number = $appointment['appointment_number'];
                 $property_type = $appointment['property_type'];
                 $property_name = $appointment['property_name'];
+                $status = $appointment['status'];
                 $full_address = $appointment['property_number'] . ', ' . $appointment['street'] . ', ' . $appointment['barangay'] . ', ' . $appointment['city'];
                 $date = date("F j, Y", strtotime($appointment['date']));
                 $time = $appointment['time'];
@@ -103,22 +105,28 @@ $reservations = $reservations->getUserReservations($user_id);
                 $current_timestamp = time();
                 
                 ?>
-                <div class="col-12 col-sm-6 col-xl-8">
+                <div class="col-12 col-sm-7 col-xl-8">
                   <div class="box">
-                    <div class="row"> <!-- DISPLAY IF NO APPOINTMENTS -->
+                    <div class="row"> 
                         <div class="col pt-3 ms-md-4 ps-md-3">
-                            <p class="type"><span><?= $property_type ?></span></p>
+                            <p class="type"><span><?= $property_type?></span></p>
+                            <h3 class="apptNum"><?= $appointment_number ?></h3>
                             <h3 class="name"><i class="fa-solid fa-location-dot"></i> <a href="view.php?<?= $property_id ?>" style="text-decoration: none; color: inherit;"><?= $property_name ?></a> </h3>
                             <h3 class="address"><?= $full_address ?></h3>
                         </div>
-                    
+
+                        <!-- <a type="button" class="btn btn-primary btnCancel"  data-bs-toggle="modal" data-bs-target="#cancelAppointment" data-id=' . $appointment_id . ' id="cancelBtn">Cancel</a> -->
 
                         <div class="col-6 col-md-4">
                         <div class="col mt-4 mt-md-3 pt-3 pt-md-4">
-                            <?php if ($timestamp > $current_timestamp) {
+                            <?php if ($timestamp > $current_timestamp && $status !=2) {
+                                    
                                     echo '<p class="statusU text-center"><span>Upcoming</span></p>';
+                                    echo '<button type="button" class="btn btn-primary btnCancel"  data-bs-toggle="modal" data-bs-target="#cancelAppointment" data-id=' . $appointment_id . ' id="cancelBtn">Cancel</button>';
+                                } elseif($status == 2){
+                                    echo '<p class="statusC text-center"><span>Cancelled</span></p>';
                                 } else {
-                                    echo '<p class="statusF text-center"><span>Passed</span></p>';
+                                    echo '<p class="statusF text-center"><span>Finished</span></p>';
                                 } ?>
                             <h3 class="date text-center"><?= $date ?></h3>
                             <h3 class="time text-center"><?= $time ?></h3>
@@ -135,252 +143,114 @@ $reservations = $reservations->getUserReservations($user_id);
 
               </div>
             </div>
-            
-            <hr style="border: 1px solid black; border-radius: 50px;">
 
-            <div class="row">
-            <div class="col-md-2"></div>
-                <div class="col-md-4 mt-3">
-                    <h1 class="text-center text-sm-start myApt"><strong>Reservations</strong></h1>
-                </div>
-            </div>
-    
-            <div class="box-container">
-                <div class="row gx-5 mb-3 d-flex justify-content-center">
-                <?php foreach($reservations as $reservation){ 
-                    $property_id = $reservation['property_id'];
-                    $property_type = $reservation['property_type'];
-                    $property_name = $reservation['property_name'];
-                    $full_address = $reservation['property_number'] . ', ' . $reservation['street'] . ', ' . $reservation['barangay'] . ', ' . $reservation['city'];
-                    $payment = $reservation['payment_status'];
-                    if($payment===1){
-                        $payment_status = "Paid";
-                    }else{
-                        $payment_status = "Unpaid";
-                    }
-                    $room_type = $reservation['room_type'];
 
-                    $status = $reservation['status'];
-                    if($status===1){
-                        $reservation_status = "Accepted";
-                    } elseif($status===2) {
-                        $reservation_status = "Pending";
-                    } elseif($status===3) {
-                        $reservation_status = "Declined";
-                    } 
-
-                ?>
-                <div class="col-12 col-sm-6 col-xl-8">
-                    <div class="box">
-                    <div class="row"> <!-- DISPLAY IF NO RESERVATIONS -->
-                        <div class="col pt-3 ms-md-4 ps-md-3">
-                            <p class="type"><span><?= $property_type ?></span></p>
-                            <h3 class="name"><i class="fa-solid fa-location-dot"></i> <a href="view.php?<?= $property_id ?>" style="text-decoration: none; color: inherit;"><?= $property_name ?></a> </h3>
-                            <h3 class="address"><?= $full_address ?></h3>
-                            <h6 class="roomStatus"><?= $room_type ?></h6>
-                        </div>
-                    
-    
-                        <div class="col-6 col-md-4">
-                        <div class="col mt-4 mt-md-3 pt-3 pt-md-4">
-                            <p class="statusR text-center"><span><?= $reservation_status ?></span></p>
-                            <h3 class="date text-center"><?= $payment_status ?></h3>
-                        </div>
-                        </div>
-    
-                    </div>
-    
-                    </div>
-                </div>
-                <?php } ?>
-    
-                </div>
-            </div>
           </div>
         </section>
 
-
+        <div class="col extraContainer"></div>
 
     </div>
   
+    <?php
+
+} else {
+?>
+
+    <div class="container-fluid reservationBg">
+        <section class="reservations">
+  
+          <div class="container-md">
+            <div class="row">
+                <div class="col-md-1"></div>
+              <div class="col-md-4">
+                <h1 class="text-center text-sm-start myApt"><strong>Appointments</strong></h1>
+              </div>
+            </div>
+
+            <div class="box-container">
+              <div class="row gx-5 mb-3 d-flex justify-content-center">
+
+                <div class="col-12 col-sm-6 col-xl-8 mt-5 pt-5">
+                  <div class="box">
+                    <div class="row">
+                        <div class="col ms-md-4 ps-md-3 text-center">
+                            <img src="resources/images/icon36.png" class="rounded opacity-50 img-fluid " alt="..." >
+                            <h3 class="noApptYet mt-5">No appointments added, yet</h3>
+                            <h5 class="subtitleNoAppt">You currently have no scheduled property visits </h5>
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+
+            </div>
+
+          </div>
+        </section>
+
+        <div class="col emptyContainer"></div>
+
+
+    </div>
+
+
+<?php } ?>
+
+
       <!-- Featured ends -->
 
       <!-- Modals -->
-      <div class="modal fade modalSection" id="modalConfirm" tabindex="-1">
+      <div class="modal fade modalSection" id="cancelAppointment" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Confirm the reservation</h5>
+              <h5 class="modal-title">Cancel Appointment</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="h6">Confirm room reservation and send an email?</div>
+                        <div class="h6">Are you sure you want to cancel this appointment?</div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-              <button id="yesButton" type="button" class="btn btn-success" data-bs-dismiss="modal">Yes</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <form action="set-appointment" method="POST">
+                <input type="hidden" name="appointment_id" id="appointment-id">
+                <button id="yesButton" name="cancel_appointment" type="submit" class="btn btn-success" data-bs-dismiss="modal">Yes</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
             </div>
           </div>
         </div>
       </div>
 
-            <!-- Modals -->
-            <div class="modal fade modalSection" id="modalDecline" tabindex="-1">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">Decline the reservation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                      <div class="container-fluid">
-                          <div class="row">
-                              <div class="h6">Decline room reservation and send an email?</div>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button id="declineButton" type="button" class="btn btn-success" data-bs-dismiss="modal">Yes</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                  </div>
-                </div>
-              </div>
-            </div>
- 
-
     <!-- Footer -->
 
-    
-      <footer class="site-footer">
-        <div class="container-fluid">
-          <div class="container">
-          <div class="row">
-              <div class="col-sm-12 col-md-8">
-              <h2>APT IBA PA</h2>
-                <div class="row">
-                  <div class="col-sm-12 col-md-8">
-                    <p class="text-justify">
-                      Our platform serves as a comprehensive guide, providing a vast database of dormitories and apartments in the area surrounding AUF. Through our interactive map interface, users can easily navigate and explore different locations, allowing them to make informed decisions based on their preferences and requirements.
-                    </p>
-                  </div>
-                </div>
-              </div>
-  
-              <div class="col-xs-6 col-md-2 me-auto pt-4">
-              <h6>Pages</h6>
-              <ul class="footer-links">
-                  <li><a href="http://scanfcode.com/category/c-language/">Accomodations</a><li>
-                  <li>
-                  <a href="http://scanfcode.com/category/front-end-development/">About Us</a>
-                  </li>
-                  <li>
-                  <a href="http://scanfcode.com/category/back-end-development/">Apply My Property</a>
-              </ul>
-              </div>
-  
-              <div class="col-xs-6 col-md-2 pt-4">
-              <h6>Features</h6>
-              <ul class="footer-links">
-                  <li><a href="http://scanfcode.com/about/">Favorites</a></li>
-                  <li><a href="http://scanfcode.com/contact/">Reserve a Room</a></li>
-                  <li>
-                  <a href="http://scanfcode.com/contribute-at-scanfcode/">Schedule a Visit</a>
-              </ul>
-              </div>
-          </div>
-          <hr />
-          </div>
-          <div class="container">
-          <div class="row">
-              <div class="col-md-8 col-sm-6 col-xs-12">
-              <p class="copyright-text">
-                  Copyright &copy; 2023 All Rights Reserved by
-                  <a href="#">APT IBA PA</a>.
-              </p>
-              </div>
-  
-              <div class="col-md-4 col-sm-6 col-xs-12">
-              <ul class="social-icons">
-                  <li>
-                  <a class="facebook" href="#"><i class="fa fa-facebook"></i></a>
-                  </li>
-                  <li>
-                  <a class="twitter" href="#"><i class="fa fa-twitter"></i></a>
-                  </li>
-                  <li>
-                  <a class="dribbble" href="#"><i class="fa fa-dribbble"></i></a>
-                  </li>
-                  <li>
-                  <a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a>
-                  </li>
-              </ul>
-              </div>
-          </div>
-          </div>
-        </div>
-      </footer>
-      
+    <?php include('footer.php'); ?>
   
       <!-- Footer ends -->
-  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function () {
+        var cancelBtn = $('#cancelBtn');
 
-
-
-    
-
-
+        cancelBtn.on('click', function() {
+            var ApptId = $(this).data('id'); // Retrieve the value of data-id
+            var appointmentId = $('#appointment-id');
+            appointmentId.val(ApptId);
+            $('#cancelAppointment').modal('show');
+        });
+    });
+        
+    </script>
   </body>
 
 
-
-
-<!-- ... Rest of the HTML code ... -->
-
-<script>
-  $(document).ready(function () {
-      // Define variables to store the clicked buttons
-      let clickedConfirmButton = null;
-      let clickedDeclineButton = null;
-  
-      // Listen for click events on the "Confirm for Payment" button
-      $('.btnStatusC').on('click', function () {
-          // Store the clicked "Confirm for Payment" button
-          clickedConfirmButton = $(this);
-      });
-  
-      // Listen for click events on the "Decline" button
-      $('.btnStatusD').on('click', function () {
-          // Store the clicked "Decline" button
-          clickedDeclineButton = $(this);
-      });
-  
-      // Listen for click events on the "Yes" button in the modal
-      $('#yesButton').on('click', function () {
-          // Check if the "Confirm for Payment" button was clicked before
-          if (clickedConfirmButton !== null) {
-              // Get the parent box container element and remove it from the DOM
-              clickedConfirmButton.closest('.col-12').remove();
-              // Reset the clickedConfirmButton variable
-              clickedConfirmButton = null;
-            }
-      });
-  
-      $('#declineButton').on('click', function () {
-          // Check if the "Decline" button was clicked before
-          if (clickedDeclineButton !== null) {
-              // Get the parent box container element and remove it from the DOM
-              clickedDeclineButton.closest('.col-12').remove();
-              // Reset the clickedDeclineButton variable
-              clickedDeclineButton = null;
-          }
-      });
-  });
-      </script>
-      
   <!-- javascript -->
   <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"

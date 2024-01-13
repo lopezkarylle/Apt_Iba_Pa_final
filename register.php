@@ -1,9 +1,10 @@
 <?php 
 include ("init.php");
-include ("session.php");
+// include ("session.php");
+session_start();
 use Models\Auth;
 use Models\User;
-session_start();
+use Models\Log;
 
 try {
     if(isset($_POST['first_name'], $_POST['last_name'], $_POST['contact_number'], $_POST['email'], $_POST['password'])){
@@ -27,8 +28,15 @@ try {
         $register_info->setConnection($connection);
         $register_info->registerUserInfo($user_id, $first_name, $last_name, $contact_number, $status);
 
+        $log_description = $first_name . ' ' . $last_name . ' created an account using ' . $email;
+        $action = 'register';
+        $log = new Log();
+        $log->setConnection($connection);
+        $log->addToLog($user_id, $action, $log_description);
+
         if($user_auth != NULL && $user_id != NULL){
             $_SESSION['user_id'] = $user_id;
+            $_SESSION['user_type'] = 2;
             header('location:index.php');
             exit();
         }
@@ -42,3 +50,6 @@ try {
 catch (Exception $e) {
     
 }
+
+?>
+

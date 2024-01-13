@@ -17,7 +17,27 @@
 	--primary-clr: #f0bf6a;
 	--heading-clr: #dadada;
 	--text-clr: #767a86;
+   
+   --dark-jungle-green: hsl(188, 63%, 7%);
+   --prussian-blue: hsl(200, 69%, 14%);
+   --prussian-pale: hsl(201, 19%, 42%);
+   --raisin-black-1: hsl(227, 29%, 13%);
+   --raisin-black-2: hsl(229, 17%, 19%);
+   --yellow-green: hsl(89, 72%, 45%);
+   --orange-soda: hsl(9, 100%, 62%);
+   --orange-tangy: hsla(9, 100%, 62%, 0.1);
+   --orange-pale: hsl(9, 100%, 73%);
+   --cultured-1: hsl(0, 0%, 93%);
+   --cultured-2: hsl(192, 24%, 96%);
+   --misty-rose: hsl(7, 56%, 91%);
+   --alice-blue: hsl(210, 100%, 97%);
+   --seashell: hsl(8, 100%, 97%);
+   --cadet: hsl(200, 15%, 43%);
+   --white: hsl(0, 0%, 100%);
+   --black: hsl(0, 0%, 0%);
+   --opal: hsl(180, 20%, 62%);
 }
+
 
 *::-webkit-scrollbar-thumb {
    background-color: #232A3D;
@@ -43,43 +63,68 @@ section {
 /* removed from section  max-width: 1200px; */
 
 
+/* Top Navbar Styles - Initially displayed */
+.top-navbar {
+   display: block;
+ }
+ 
+ /* Bottom Navbar Styles - Initially hidden */
+ .mobile-nav {
+   display: none;
+   background: #F1F1F1;
+   position: fixed;
+   bottom: 0;
+   height: 65px;
+   width: 100%;
+   justify-content: space-around;
+   z-index: 999;
+ }
+ 
+ /* Media Query for Screens <576px (Phone View) */
+ @media screen and (max-width: 575px) {
+   /* Hide top navbar and show bottom navbar */
+ 
+   .mobile-nav {
+     display: flex;
+   }
+ }
+ 
 
 
 
 /* Navbar */
 
-.navbarNav .nav-link {
-   background-color: #232A3D;
-   color: #FFF;
-   border-radius: 5px;
+.nav-item img{
+	width: 36px;
+	height: 36px;
+	object-fit: cover;
+	border-radius: 50%;
+	cursor: pointer;
 }
 
-.navbar-nav .nav-item {
-   font-size: 1.5rem;
+#navbarNav li {
+   font-size: 1.6rem;
+   font-weight: 600;
    padding: 1rem;
    border-radius: 5px;
 }
 
-.nav-item .nav-link:hover {
-   padding-left: 1rem;
-   padding-right: 1rem;
 
-}
-
-.nav-item .nav-link:hover {
+#navbarNav li a:hover, #navbarNav li a:focus{
    background-color: #232A3D;
    color: #FFF;
-   border-radius: 5px;
+   border-radius: 8px;
+
 
 }
 
-.d-flex .btn {
-   background-color: #232A3D;
+.signOutbtn .btn {
+   background-color: var(--prussian-blue);
    color: #FFF;
    font-size: 1.5rem;
 }
 
-.d-flex .btn:hover {
-   background-color: #E4E9F7;
-   color: #232A3D;
+.signOutbtn .btn:hover {
+   background-color: var(--orange-soda);
+   color: #E4E9F7;
 }

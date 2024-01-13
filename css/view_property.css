@@ -13,12 +13,17 @@
    --light-bg: #eee;
    	/* Variables for storing colors */
 	--card-clr: #161922;
-	--body-clr: #191d28;
+	--body-clr: #E4E9F7;
 	--primary-clr: #f0bf6a;
 	--heading-clr: #dadada;
 	--text-clr: #767a86;
 
-      
+    --yellow: #FFBD13;
+	--blue: #4383FF;
+	--blue-d-1: #3278FF;
+	--light: #F5F5F5;
+	--grey: #AAA;
+	--shadow: 8px 8px 30px rgba(0,0,0,.05);
    --dark-jungle-green: hsl(188, 63%, 7%);
    --prussian-blue: hsl(200, 69%, 14%);
    --prussian-pale: hsl(201, 19%, 42%);
@@ -52,19 +57,95 @@ html {
 }
 
 body {
-   background-color: var(--cultured-2);
+   background-color: var(--body-clr);
+}
+
+section {
+    padding: 3rem 2rem;
+    margin: 0 auto;
+}
+ 
+/* The Modal (background) / */
+ #imageModal {
+   display: none; 
+   position: fixed; 
+   z-index: 1000; 
+   padding-top: 100px; 
+   left: 0;
+   top: 0;
+   width: 100%; 
+   height: 100%; 
+   overflow: auto; 
+   background-color: rgb(0,0,0); 
+   background-color: rgba(0,0,0,0.9); 
+ }
+ 
+ /* Modal Content (image)  */
+ #contentImg {
+   margin: auto;
+   display: block;
+   width: 30%;
+   max-width: 700px;
+ }
+ 
+ /* Caption of Modal Image  */
+#modalCaption {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 300px;
+  text-align: center;
+  color: #000000;
+  padding: 10px 0;
+}
+
+ /* Add Animation  */
+#contentImg, #caption {
+    -webkit-animation-name: zoom;
+    -webkit-animation-duration: 0.6s;
+    animation-name: zoom;
+    animation-duration: 0.6s;
+  }
+  
+  @-webkit-keyframes zoom {
+    from {-webkit-transform:scale(0)} 
+    to {-webkit-transform:scale(1)}
+  }
+  
+  @keyframes zoom {
+    from {transform:scale(0)} 
+    to {transform:scale(1)}
+  }
+
+/* The Close Button */
+.close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+  .modalConpic {
+    width: 100%;
+  }
 }
 
 section {
    padding: 3rem 2rem;
    margin: 0 auto;
 }
-
-
-
-
-
-
 
 #navbarNav li {
    font-size: 1.6rem;
@@ -81,6 +162,34 @@ section {
 
 }
 
+.top-navbar {
+    display: block;
+  }
+  
+  /* Bottom Navbar Styles - Initially hidden */
+  .mobile-nav {
+    display: none;
+    background: #F1F1F1;
+    position: fixed;
+    bottom: 0;
+    height: 65px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    z-index: 999;
+  }
+  
+  /* Media Query for Screens <576px (Phone View) */
+  @media screen and (max-width: 575px) {
+    /* Hide top navbar and show bottom navbar */
+    .top-navbar {
+      display: none;
+    }
+  
+    .mobile-nav {
+      display: flex;
+    }
+  }
 
 .signOutbtn .btn {
    background-color: #232A3D;
@@ -134,15 +243,63 @@ section {
 
 /* Similar Apartment Section */
 
-.featureHeading {
-   font-size: 5rem;
+.listings .featureHeading {
+   font-size: 4rem;
    font-weight: bold;
    margin-bottom: 20px;
    padding-bottom: 20px;
    position: relative;
-   color: var(ora);
+   color: var(--prussian-blue);
    text-align: center;
+   text-transform: capitalize;
 }
+
+
+.listings .section-title1 {
+   text-align: center;
+ }
+ 
+ .listings .section-title1 h2::before {
+   content: "";
+   position: absolute;
+   display: block;
+   width: 120px;
+   height: 1px;
+   background: #ddd;
+   bottom: 1px;
+   left: calc(50% - 60px);
+ }
+ 
+ .listings .section-title1 h2::after {
+   content: "";
+   position: absolute;
+   display: block;
+   width: 40px;
+   height: 3px;
+   background: var(--orange-pale);
+   bottom: 0;
+   left: calc(50% - 20px);
+ }
+
+.typesOfRooms .box-container {
+    justify-content: center;
+    align-items: center;
+ }
+ 
+ .typesOfRooms .box-container .box {
+    background-color: var(--cultured-2);
+    box-shadow: var(--box-shadow);
+    padding: 2rem;
+    text-align: center;
+    transition: background-color 0.3s;
+    border: none;
+    border-radius: 5px;
+ }
+ 
+ .fa-circle {
+    color: var(--misty-rose);
+ }
+ 
 
   /* SubHeader Titles */
 .listings .statusU span {
@@ -153,8 +310,6 @@ section {
    font-weight: 500;
    border-radius: 25px;
 }
-
-
 
 .listings {
    padding-left: 20px;
@@ -242,9 +397,9 @@ section {
    border-radius: 10px;
 }
 
-.listings .box-container .box:hover .thumb img {
+/* .listings .box-container .box:hover .thumb img {
    transform: scale(1.1);
-}
+} */
 
 .listings .box-container .box .thumb .total-images {
    position: absolute;
@@ -388,7 +543,7 @@ section {
    border-radius: 5px;
    margin-top: 1.5rem;
    padding-top: 1rem;
-   background-color: #E4E9F7;
+   
    color: #232A3D;
    font-size: 1.5rem;
    font-weight: bold;
@@ -405,7 +560,7 @@ section {
 /* Accommodations */
 
 .accomJumbuildings {
-   background: url('../images/header3.png') no-repeat bottom fixed;
+   background: url('../resources/images/header3.png') no-repeat bottom fixed;
    background-size: 100%;
 }
 
@@ -522,9 +677,9 @@ section {
    transition: .2s linear;
 }
 
-.accommodations .box-container .box:hover .thumb img {
+/* .accommodations .box-container .box:hover .thumb img {
    transform: scale(1.1);
-}
+} */
 
 .accommodations .box-container .box .thumb .total-images {
    position: absolute;
@@ -676,6 +831,13 @@ section {
 
 .carousel-container img {
     height: 400px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.carousel-container img:hover {
+   opacity: 0.7;
 }
 
 .carousel-container body{
@@ -703,14 +865,14 @@ section {
 	padding: 10px !important;
 	border-radius: 50%;
 	font-size: 18px !important;
-	background-color: var(--card-clr) !important;
-	color: var(--primary-clr);
+	background-color: var(--prussian-blue) !important;
+	color: var(--orange-soda);
 	cursor: pointer;
 	transition: 0.4s;
 }
 .carousel-container .owl-nav .owl-prev i:hover,
 .owl-nav .owl-next i:hover{
-	background-color: var(--primary-clr) !important;
+	background-color: var(--orange-soda) !important;
 	color: #e9e9e9;
 }
 .carousel-container .owl-dots{
@@ -721,21 +883,40 @@ section {
 	padding: 6px !important;
 }
 .carousel-container .owl-dot.active span{
-	background-color: var(--primary-clr) !important;
+	background-color: var(--orange-soda) !important;
 }
+
+/* Images Card Copyright */
+.item .type {
+    position: absolute;
+    color: white;
+    bottom: 5rem;
+    right: .7rem;
+    z-index: 1;
+}
+
+.item .type span {
+    margin-right: .7rem;
+    padding: .5rem 1.5rem;
+    color: #fff;
+    background-color: #232A3D;
+    font-size: 1.6rem;
+    opacity: 50%;
+}
+
+/*  */
 
 
 
 .viewP .name{
-    font-size: 4rem;
+    font-size: 4.5rem;
     font-weight: 600;
     text-overflow: ellipsis;
-    overflow-x: hidden;
     margin-bottom: .5rem;
 }
 
 .viewP .location{
-    font-size: 1.5rem;
+    font-size: 2rem;
     color: var(--light-color);
  }
 
@@ -746,7 +927,7 @@ section {
 
 .viewP .viewpDescription .description{
     gap: 1.5rem;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: normal;
     margin-top: .5rem;
     text-align: justify;
@@ -801,7 +982,7 @@ section {
 
 .btnViewP,
 .inline-btn {
-   margin-top: 1rem;
+   margin-top: .5rem;
    padding: 1rem 3rem;
    background-color: var(--orange-soda);
    color: var(--white);
@@ -810,6 +991,23 @@ section {
    font-size: 1.8rem;
    text-transform: capitalize;
 }
+
+.btnViewPdisabled {
+   margin-top: .5rem;
+   padding: 1rem 3rem;
+   background-color: var(--orange-pale);
+   color: var(--white);
+   text-align: center;
+   font-size: 1.8rem;
+   text-transform: capitalize;
+}
+
+.btnViewPdisabled {
+    display: block;
+    width: 100%;
+    border-radius: 8px;
+    text-decoration: none;
+ }
 
 .btnViewP:hover,
 .inline-btn:hover {
@@ -822,16 +1020,31 @@ section {
 .btnViewP {
    display: block;
    width: 100%;
-   border-radius: 50px;
+   border-radius: 8px;
    text-decoration: none;
 }
 
 .viewP .btnRating {
-   background-color: #E4E9F7;
+   background-color: transparent;
+   color: #232A3D;
+   font-size: 3rem;
+   font-weight: bold;
+   text-align: center;
+}
+
+.viewP .btnRating .ratingOutOf {
+   color: #232A3D;
+   font-size: 2rem;
+   font-weight: bold;
+   text-align: center;
+   text-transform: lowercase;
+}
+
+.viewP .btnRating .revs {
    color: #232A3D;
    font-size: 1.5rem;
-   font-weight: bold;
-   text-align: start;
+   font-weight: 400;
+   text-align: center;
 }
 
 .viewP .starRating {
@@ -840,8 +1053,14 @@ section {
 
 /* Property Amenities */
 
+.viewP .landlordContact{
+   font-size: 2.5rem;
+   font-weight: 500;
+   margin-bottom: .5rem;
+}
+
 .amenities .name{
-    font-size: 3.3rem;
+    font-size: 2.7rem;
     margin-bottom: .5rem;
 }
 
@@ -871,6 +1090,13 @@ section {
     margin-top: .5rem;
     text-align: justify;
  }
+
+ .amenities .description2{
+   gap: 1.5rem;
+   font-size: 1.5rem;
+   font-weight: normal;
+   margin-top: .5rem;
+}
 
 .amenities .btnBookmark {
     background: transparent;
@@ -931,18 +1157,22 @@ section {
 }
 
 .view-property .details .thumb .big-image img{
-   height: 40rem;
-   width: 100%;
-   object-fit: contain;
-}
-
-.view-property .details .thumb .small-images{
-   display: flex;
-   justify-content: center;
-   gap: 1.5rem;
-   padding-top: 1rem;
-   flex-wrap: wrap;
-}
+    height: 40rem;
+    width: 100%;
+    object-fit: contain;
+    border: 1px solid red;
+ 
+ }
+ 
+ .view-property .details .thumb .small-images{
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    padding-top: 1rem;
+    flex-wrap: wrap;
+    border: 1px solid red;
+ 
+ }
 
 .view-property .details .thumb .small-images img{
    height: 7rem;
@@ -951,10 +1181,10 @@ section {
    cursor: pointer;
    transition: .2s linear;
 }
-
+/* 
 .view-property .details .thumb .small-images img:hover{
    transform: scale(1.1);
-}
+} */
 
 .view-property .details .name{
    font-size: 3.3rem;
@@ -1041,13 +1271,17 @@ section {
 }
 
 .view-property .details .thumb .big-image img{
-   height: auto;
-}
-
-.view-property .details .thumb .small-images img{
-   height: 4rem;
-   width: 6rem;
-}
+    height: auto;
+    z-index: -1;
+ 
+ }
+ 
+ .view-property .details .thumb .small-images img{
+    height: 4rem;
+    width: 6rem;
+    z-index: -1;
+ 
+ }
 
 /* Reviews Section */
 
@@ -1111,8 +1345,31 @@ section {
 .btnReview {
    display: block;
    width: 100%;
-   border-radius: 10px;
+   border-radius: 20px;
    text-decoration: none;
+}
+
+.btnDisabledReview,
+.inline-btn[disabled] {
+   margin-top: 1rem;
+   padding: 1rem 3rem;
+   background-color: var(--orange-pale);
+   color: var(--cultured-2);
+   cursor: not-allowed;
+   opacity: 0.7; /* Adjust the opacity to visually indicate it's disabled */
+   transition: 0.4s;
+   text-align: center;
+   font-size: 1.8rem;
+   display: block;
+   width: 100%;
+   border-radius: 8px;
+   text-decoration: none;
+}
+
+.btnDisabledReview:hover,
+.inline-btn[disabled]:hover {
+   background-color: hsl(9, 13%, 69%) !important;
+   color: var(--cultured-2);
 }
 
 
@@ -1150,10 +1407,11 @@ section {
 }
 
 .testimonials-section .test-card-body .ratings i{
-	font-size: 14px;
+	font-size: 2rem;
 	color: var(--primary-clr);
 	cursor: pointer;
 }
+
 
 .testimonials-section .test-card-body .ratings .num{
 	font-size: 16px;
@@ -1194,8 +1452,8 @@ section {
 	color: var(--cultured-2);
 }
 .testimonials-section .profile-desc span:nth-child(2){
-	font-size: 15px;
-	color: var(--text-clr);
+	font-size: 2rem;
+   color: var(--cultured-2);
 }
 
 .testimonials-section .owl-nav .leftArrow{
@@ -1412,8 +1670,21 @@ section {
        font-weight: 600
     }
  }
- 
 
+ .viewAllGallery{
+   background-color: var(--prussian-blue);
+   border-color: var(--prussian-blue);
+   color: #FFF;
+   font-size: 14px;
+   font-weight: 500;
+   border-radius: 8px;
+   width: 140px;
+}
+
+.viewAllGallery:hover{
+   background-color: var(--orange-soda);
+   border-color: var(--orange-soda);
+}
 
 /* Request a Visit modal */
 
@@ -1422,7 +1693,7 @@ section {
 }
 
 .bgTimeSlots{
-   background: url('../images/header3.png') no-repeat bottom;
+   background: url('../resources/images/header3.png') no-repeat bottom;
    background-size: 100%;
 }
 
@@ -1487,6 +1758,10 @@ section {
    font-weight: 600;
  }
 
+ .modalTimeslots .timeSlots .requestVisitTime:hover{
+    color: var(--orange-soda);
+  }
+
  
 .modalTimeslots .timeSlots .radioVisitTime{
    border: 3px solid;
@@ -1514,7 +1789,7 @@ section {
 }
 
 .bgReserveroom{
-   background: url('../images/header3.png') no-repeat bottom;
+   background: url('../resources/images/header3.png') no-repeat bottom;
    background-size: 100%;
 }
 
@@ -1592,6 +1867,12 @@ label.radio input:checked+div#pickRoomType {
    color: var(--prussian-pale);
 }
 
+.reserveRoomType .reservePriceDetails{
+   font-size: 1.3rem;
+   font-weight: 400;
+   color: var(--prussian-blue);
+}
+
 .reserveRoomType .radioRoomType{
    border: 2px solid;
    border-color: rgb(146, 146, 146);
@@ -1604,46 +1885,76 @@ label.radio input:checked+div#pickRoomType {
    border-radius: 5px;
 }
 
+.reserveBtns{
+   background-color: var(--prussian-blue);
+   border-color: var(--prussian-blue);
+   color: #FFF;
+   border-radius: 8px;
+   font-size: 13px;
+   font-weight: 500;
+}
+.reserveBtns:hover{
+   background-color: var(--orange-soda);
+   border-color: var(--orange-soda);
+}
+
+.btnConfirmDetails{
+   background-color: var(--prussian-blue);
+   border-color: var(--prussian-blue);
+   color: #FFF;
+   border-radius: 8px;
+   font-size: 13px;
+   font-weight: 500;
+}
+.btnConfirmDetails:hover{
+   background-color: var(--orange-soda);
+   border-color: var(--orange-soda);
+}
+.btnConfirmDetails:disabled{
+   background-color:var(--prussian-pale);
+  border-color:var(--prussian-pale);
+}
+
 /* Reserve Details */
 
-.modalReserveDetails{
+.modalPaymentDetails{
    background-color: var(--cultured-2);
 }
 
-.bgReserveDetails{
-   background: url('../images/header3.png') no-repeat bottom;
+.bgPaymentDetails{
+   background: url('../resources/images/header3.png') no-repeat bottom;
    background-size: 100%;
 }
 
-.modalReserveDetails .reserveDormName{
+.modalPaymentDetails .paymentDormName{
    font-size: 35px;
    color: var(--prussian-blue);
    font-weight: 600;
    text-align: center;
 }
 
-.modalReserveDetails .reserveDormAddress{
+.modalPaymentDetails .paymentDormAddress{
    font-size: 14px;
    color: var(--cadet);
    font-weight: 400;
    text-align: center;
 }
 
-.modalReserveDetails .reserveDormType{
+.modalPaymentDetails .paymentDormType{
    font-size: 25px;
    color: var(--prussian-blue);
    font-weight: 600;
    text-align: center;
 }
 
-.modalReserveDetails .reserveDormPrice{
+.modalPaymentDetails .paymentDormPrice{
    font-size: 20px;
    color: var(--prussian-blue);
    font-weight: 600;
    text-align: center;
 }
 
-.modalReserveDetails .reserveDormSlash{
+.modalPaymentDetails .paymentDormSlash{
    font-size: 20px;
    color: var(--prussian-blue);
    font-weight: 600;
@@ -1651,18 +1962,49 @@ label.radio input:checked+div#pickRoomType {
 }
 
 
-.modalReserveDetails .reserveDetailsSlots .reserveDetailsTitle{
+.modalPaymentDetails .paymentDetailsSlots .reserveDetailsTitle{
    font-size: 17px;
    color: var(--cadet);
    font-weight: 500;
 }
 
-.modalReserveDetails .reserveDetailsSlots .reserveDetailsSubtitle{
+.modalPaymentDetails .paymentDetailsSlots .reserveDetailsSubtitle{
    font-size: 19px;
    color: var(--prussian-blue);
    margin-left: 20px;
    font-weight: 600;
 }
+
+.paymentBtns{
+   background-color: var(--prussian-blue);
+   border-radius: 8px;
+   color: white;
+}
+.payBtn{
+   background-color: var(--prussian-blue);
+   border-color: var(--prussian-blue);
+   color: #FFF;
+   border-radius: 8px;
+   font-size: 13px;
+   font-weight: 500;
+}
+.payBtn:hover{
+   background-color: var(--orange-soda);
+   border-color: var(--orange-soda);
+}
+.payBtns{
+   background-color: var(--prussian-blue);
+   border-color: var(--prussian-blue);
+   color: #FFF;
+   border-radius: 8px;
+   font-size: 13px;
+   font-weight: 500;
+}
+.payBtns:hover{
+   background-color: var(--orange-soda);
+   border-color: var(--orange-soda);
+}
+
 
 
 /* Confirmation Details */
@@ -1675,49 +2017,49 @@ label.radio input:checked+div#pickRoomType {
 }
 
 .bgReserveConfirm {
-   background: url('../images/header3.png') no-repeat bottom;
+   background: url('../resources/images/header3.png') no-repeat bottom;
    background-size: 100%;
 }
 
 .modalReserveConfirm .apptGreetings{
-   font-size: 30px;
-   color: var(--prussian-blue);
-   font-weight: 600;
-   text-align: center;
+    font-size: 23px;
+    color: #232A3D;
+    font-weight: 600;
+    text-align: center;
 }
 
 .modalReserveConfirm .apptGreetingsSub{
-   font-size: 16px;
-   color: var(--prussian-blue);
-   font-weight: 600;
-   text-align: center;
+    font-size: 16px;
+    color: #232A3D;
+    font-weight: 600;
+    text-align: center;
 }
 
-.modalReserveConfirm .apptDate{
+/* .modalReserveConfirm .apptDate{
    font-size: 25px;
    color: var(--prussian-blue);
    font-weight: 600;
    text-align: center;
-}
+} */
 
 .modalReserveConfirm .pendingReserveConfirm .pendingDetailsTitle{
-   font-size: 16px;
-   color: var(--prussian-blue);
-   font-weight: 700;
+    font-size: 25px;
+    color: #232A3D;
+    font-weight: 700;
 }
 
 .modalReserveConfirm .pendingReserveConfirm .pendingDetailsSubtitle{
-   font-size: 12px;
-   color: var(--cadet);
+    font-size: 20px;
+    color: #232A3D;
 }
-
+/* 
 .btnConfirmApptGC{
    background-color: var(--orange-soda);
    font-size: 14px;
    font-weight: 500;
    color: white;
    height: 50px;
-}
+} */
 
 .btnConfirmApptGo{
    background-color: var(--prussian-blue);
@@ -1725,16 +2067,17 @@ label.radio input:checked+div#pickRoomType {
    font-weight: 500;
    color: white;
    height: 50px;
+   border-radius: 8px;
 }
-
+/* 
 .btnConfirmApptGC:hover{
    border: 1px solid var(--orange-soda);
    background-color: hsl(9, 98%, 59%);   color: white;
-}
+} */
 
 .btnConfirmApptGo:hover{
    border: 1px solid  var(--prussian-blue);
-   background-color: hsl(199, 77%, 9%);   color: white;
+   background-color: var(--orange-soda);   color:var(--prussian-blue);
 }
 
 
@@ -1758,7 +2101,7 @@ label.radio input:checked+div#pickRoomType {
 }
 
 .bgConfirmDetails{
-   background: url('../images/header3.png') no-repeat bottom;
+   background: url('../resources/images/header3.png') no-repeat bottom;
    background-size: 100%;
 }
 
@@ -1796,7 +2139,7 @@ label.radio input:checked+div#pickRoomType {
 }
 
 .bgSuccessAppt {
-   background: url('../images/header3.png') no-repeat bottom;
+   background: url('../resources/images/header3.png') no-repeat bottom;
    background-size: 100%;
 }
 
@@ -1854,8 +2197,8 @@ label.radio input:checked+div#pickRoomType {
 }
 
 .btnConfirmApptGo:hover{
-   border: 1px solid  var(--prussian-blue);
-   background-color: hsl(199, 77%, 9%);   color: white;
+   border: 1px solid  var(--orange-soda);
+   background-color: var(--orange-soda);  color: var(--prussian-blue);
 }
 
 
@@ -1900,12 +2243,13 @@ label.radio input:checked+div#pickRoomType {
    display: block;
    position: relative;
    font-family: "Poppins", sans-serif;
-   font-size: 16px;
+   font-size: 1.8rem;
    line-height: 24px;
    font-weight: 500;
    padding: 0 30px;
    outline: none;
    cursor: pointer;
+   color: var(--orange-soda);
  }
  
  .faq .faq-list .icon-help {
@@ -1965,13 +2309,13 @@ label.radio input:checked+div#pickRoomType {
    padding-bottom: 30px;
  }
  
- .section-title h2 {
-   font-size: 5rem;
+ .faq .section-title h2 {
+   font-size: 4rem;
    font-weight: bold;
    margin-bottom: 20px;
    padding-bottom: 20px;
    position: relative;
-   color: var(ora);
+   color: var(--prussian-blue);
  }
  
  .section-title h2::before {
@@ -1991,7 +2335,7 @@ label.radio input:checked+div#pickRoomType {
    display: block;
    width: 40px;
    height: 3px;
-   background: #47b2e4;
+   background: var(--orange-pale);
    bottom: 0;
    left: calc(50% - 20px);
  }
@@ -2011,13 +2355,94 @@ label.radio input:checked+div#pickRoomType {
    border-radius: 25px;
 }
 
+/* Add Review Form */
+
+.review-form {
+	background: var(--white);
+	padding: 2rem;
+	max-width: 576px;
+	width: 100%;
+	border-radius: .75rem;
+	box-shadow: var(--shadow);
+	text-align: center;
+}
+.review-form h3, h4 {
+	font-size: 1.6rem;
+	font-weight: 600;
+	margin-bottom: 1rem;
+}
+.review-form .rating {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	grid-gap: .5rem;
+	font-size: 3.5rem;
+	color: var(--yellow);
+	margin-bottom: 2rem;
+}
+.review-form .rating .star {
+	cursor: pointer;
+}
+.review-form .rating .star.active {
+	opacity: 0;
+	animation: animate .5s calc(var(--i) * .1s) ease-in-out forwards;
+}
+
+@keyframes animate {
+	0% {
+		opacity: 0;
+		transform: scale(1);
+	}
+	50% {
+		opacity: 1;
+		transform: scale(1.2);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
 
 
-
-
-
-
-
-
-
-
+.review-form .rating .star:hover {
+	transform: scale(1.1);
+}
+.review-form textarea {
+	width: 100%;
+	background: var(--light);
+   font-size: 1.5rem;
+	padding: 1rem;
+	border-radius: .5rem;
+	border: none;
+	outline: none;
+	resize: none;
+	margin-bottom: .5rem;
+}
+.btn-group {
+	display: flex;
+	grid-gap: .5rem;
+	align-items: center;
+}
+.btn-group .btn {
+	padding: .75rem 1rem;
+	border-radius: .5rem;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	font-size: .875rem;
+	font-weight: 500;
+}
+.btn-group .btn.submit {
+	background: var(--blue);
+	color: var(--white);
+}
+.btn-group .btn.submit:hover {
+	background: var(--blue-d-1);
+}
+.btn-group .btn.cancel {
+	background: var(--white);
+	color: var(--blue);
+}
+.btn-group .btn.cancel:hover {
+	background: var(--light);
+}

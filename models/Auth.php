@@ -88,11 +88,44 @@ class Auth
         }
     }
 
+    public function updateEmail($user_id, $email){
+        try{
+            $sql = "UPDATE apt_users SET email=? WHERE user_id=? AND status=1";
+            
+            $statement = $this->connection->prepare($sql);
+
+			$statement->execute([
+                $email,
+                $user_id
+			]);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+    }
+
+    public function updatePassword($user_id, $password, $salt){
+        try{
+            $sql = "UPDATE apt_users SET password=?, salt=? WHERE user_id=? AND status=1";
+            
+            $statement = $this->connection->prepare($sql);
+
+			$statement->execute([
+                $password,
+                $salt,
+                $user_id
+			]);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+    }
+
+
+
     public function deleteAccount($user_id){
 		try {
 			$sql = 'UPDATE apt_users SET status=0 WHERE user_id=?';
 			$statement = $this->connection->prepare($sql);
-			$statement->execute([
+			return $statement->execute([
 				$user_id
 			]);
 		} catch (Exception $e) {
@@ -100,14 +133,43 @@ class Auth
 		}
     }
 
-    public function resetToken($email, $token){
+    public function resetToken($user_id, $token){
         try {
-             $sql = 'INSERT INTO apt_password_reset_tokens SET email=?, token=?, expiry=DATE_ADD(NOW(), INTERVAL 1 HOUR)';
+             $sql = 'INSERT INTO apt_password_reset_tokens SET user_id=?, token=?, expiry=DATE_ADD(NOW(), INTERVAL 1 HOUR)';
              $statement = $this->connection->prepare($sql);
              return $statement->execute([
-                        $email,
+                        $user_id,
                         $token
                     ]);
+
+        } catch (Exception $e) {
+            echo 'An error occurred: ' . $e->getMessage();
+        }
+    }
+
+    public function getToken($user_id, $token){
+        try {
+            $sql = 'SELECT * FROM apt_password_reset_tokens WHERE user_id=? AND token=?';
+            $statement = $this->connection->prepare($sql);
+            $statement->execute([
+                    $user_id,
+                    $token
+            ]);
+            $row = $statement->fetch();
+            return $row;
+
+		} catch (Exception $e) {
+			error_log($e->getMessage());
+		}
+    }
+
+    public function deleteToken($token){
+        try {
+             $sql = "DELETE FROM apt_password_reset_tokens WHERE token=?";
+             $statement = $this->connection->prepare($sql);
+             return $statement->execute([
+                $token
+            ]);
 
         } catch (Exception $e) {
             echo 'An error occurred: ' . $e->getMessage();

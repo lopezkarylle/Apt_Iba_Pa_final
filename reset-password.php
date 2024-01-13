@@ -1,53 +1,133 @@
 <?php
-// Assuming this is the password reset page
+use Models\Auth;
 
-// Include necessary files and initialize your database connection
+include ("init.php");
+include ("session.php");
+
+try {
+    if (isset($_POST['password']) && isset($_POST['confirm_password'])) {
+        $new_password = $_POST['password'];
+
+        $salt = bin2hex(random_bytes(16));
+        $password = hash('sha256', $new_password . $salt);
+
+        $user = new Auth();
+        $user->setConnection($connection);
+        $user->updatePassword($user_id, $password, $salt);
+        $user->deleteToken($token);
+
+        echo "Password reset successful!";
+        echo "<script>header('location: login.php');</script>";
+    }
+} catch (Exception $e) {
+    echo 'An error occurred: ' . $e->getMessage();
+}
 
 // Check if the reset token and email are provided
-if (isset($_GET['token']) && isset($_GET['email'])) {
+if (isset($_GET['token']) && isset($_GET['id'])) {
     $token = $_GET['token'];
-    $email = $_GET['email'];
+    $user_id = $_GET['id'];
 
-    // Query the database to find a matching token and email
-    $query = "SELECT user_id FROM password_reset_tokens WHERE email = ? AND token = ? AND expiry > NOW()";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute([$email, $token]);
-    $user_id = $stmt->fetchColumn();
+    $check_token = new Auth();
+    $check_token->setConnection($connection);
+    $check_token = $check_token->getToken($user_id, $token);
 
-    if ($user_id) {
-        // Display a form to reset the password
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $new_password = $_POST['new_password'];
+?>
 
-            // Validate and hash the new password
-            // You should implement your own password validation and hashing logic
-            $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Password</title>
+    <link rel="stylesheet" href="css/style-fp.css" />
+    <script src="https://kit.fontawesome.com/2eead9cc17.js" crossorigin="anonymous"></script>
+  
+    
+</head>
+<body>
+<?php if ($check_token) { ?>
+    <div class="wrapper">
+        <div class="container">
+            <div class="title-section">
+                <h2 class="title">
+                    Reset Password
+                </h2>
+                <p class="para">Reset Your Password Here</p>
+            </div>
 
-            // Update the user's password in the database
-            $update_query = "UPDATE users SET password = ? WHERE id = ?";
-            $update_stmt = $pdo->prepare($update_query);
-            $update_stmt->execute([$hashed_password, $user_id]);
+           <form action="" class="from">
+            
 
-            // Invalidate the token by deleting it from the database
-            $delete_query = "DELETE FROM password_reset_tokens WHERE email = ?";
-            $delete_stmt = $pdo->prepare($delete_query);
-            $delete_stmt->execute([$email]);
+            <div class="input-group">
+                <label for="password" class="label-title"> Enter a new password</label>
+                <input type="password" class="new-old" name="password" id="password" placeholder="Enter New Password">
+                <span class="show-hide-btn"><i class="fa fa-eye"></i></span>
+              </div>
+              
+              <div class="input-group">
+                <label for="confirm_password" class="label-title"> Confirm your new password</label>
+                <input type="password" class="new-old" name="confirm_password" id="confirm_password" placeholder="Confirm your password">
+                <span class="show-hide-btn"><i class="fa fa-eye"></i></span>
+              </div>
 
-            echo "Password reset successfully!";
-        }
-        // Display the password reset form
-        else {
-            echo '
-            <form method="POST">
-                <label for="new_password">New Password:</label>
-                <input type="password" id="new_password" name="new_password" required>
-                <button type="submit">Reset Password</button>
-            </form>';
-        }
-    } else {
-        echo "Invalid or expired token.";
-    }
-} else {
-    echo "Invalid request.";
-}
+             
+
+            <div class="input-group">
+                <button class="submit-btn" type="submit">Reset Password</button>
+            </div>
+           </form>
+        </div>
+    </div>
+
+    <script src="js/pass.js"></script>
+<? } else { ?>   
+    <div class="wrapper">
+        <div class="container">
+            <div class="title-section">
+                <h2 class="title">
+                    Invalid or Expired Token
+                </h2>
+                <p class="para">Please try to get a new token</p>
+            </div>
+
+           <form action="login" method="POST" class="from">
+            
+            <div class="input-group">
+                <button class="submit-btn" type="submit">Back to login page</button>
+            </div>
+           </form>
+        </div>
+    </div>
+
+    <script src="pass.js"></script>
+
+    <?php } 
+} else { ?>
+    <div class="wrapper">
+        <div class="container">
+            <div class="title-section">
+                <h2 class="title">
+                    Invalid or Expired Token
+                </h2>
+                <p class="para">Please try to get a new token</p>
+            </div>
+
+           <form action="login" method="POST" class="from">
+            
+            <div class="input-group">
+                <button class="submit-btn" type="submit">Back to login page</button>
+            </div>
+           </form>
+        </div>
+    </div>
+
+    <script src="pass.js"></script>
+<?php } ?>
+</body>
+</html>
+
+<?php 
+
+    
 ?>

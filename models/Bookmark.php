@@ -64,4 +64,23 @@ class Bookmark
             echo 'An error occurred: ' . $e->getMessage();
         }
     }
+
+    public function getSavedProperties($user_id){
+        try {
+            $sql = 'SELECT apt_properties.*, apt_property_details.lowest_rate, apt_property_locations.barangay FROM apt_bookmarks 
+            LEFT JOIN apt_properties ON apt_bookmarks.property_id=apt_properties.property_id
+            LEFT JOIN apt_user_information ON apt_properties.landlord_id=apt_user_information.user_id 
+            LEFT JOIN apt_property_details ON apt_properties.property_id=apt_property_details.property_id 
+            LEFT JOIN apt_property_locations ON apt_properties.property_id=apt_property_locations.property_id
+            WHERE apt_bookmarks.user_id=? AND apt_bookmarks.status=1';
+            $statement = $this->connection->prepare($sql);
+            $statement->execute([
+                $user_id
+            ]);
+            $row = $statement->fetchAll();
+            return $row; 
+        } catch (Exception $e) {
+            echo 'An error occurred: ' . $e->getMessage();
+        }
+    }
 }

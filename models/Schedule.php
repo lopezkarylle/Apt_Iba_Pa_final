@@ -70,14 +70,14 @@ class Schedule
         
 	}
 
-    public function setUnavailable(){
+    public function setUnavailable($property_id, $date, $time){
         try {
             $sql = "INSERT INTO apt_unavailable_slots SET property_id=?, date=?, time=?"; 
 			$statement = $this->connection->prepare($sql);
 			return $statement->execute([
-				$this->getPropertyId(),
-				$this->getDate(),
-                $this->getTime(),
+				$property_id, 
+                $date,
+                $time
 			]);
         } catch (Exception $e) {
             error_log($e->getMessage());

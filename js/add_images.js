@@ -1,4 +1,4 @@
-$(document).ready(function(){
+
     $(".upload-area").click(function(){
         $('#upload-input').trigger('click');
     });
@@ -30,11 +30,11 @@ $(document).ready(function(){
         }
     });
 
-    $(window).click(function(event){
+    $(window).click(function(event){    
         if($(event.target).hasClass('remove-btn')){
             $(event.target).parent().remove();
         } else if($(event.target).parent().hasClass('remove-btn')){
             $(event.target).parent().parent().remove();
         }
     })
-});
+

@@ -4,28 +4,18 @@ use \PDO;
 
 class UserImage
 {
-    protected $image_id;
-    protected $user_id;
-    protected $image_name;
-    protected $image_path;
-    protected $status;
-
-    public function __construct(){
-
-    }
 
     public function setConnection($connection)
 	{
 		$this->connection = $connection;
 	}
 
-    public function addImage($user_id, $image_name, $image_path, $status){
-        $sql = 'INSERT INTO apt_user_images SET user_id=?, image_name=?,image_path=?, status=?';
+    public function addImage($user_id, $image_name, $status){
+        $sql = 'INSERT INTO apt_user_images SET user_id=?, image_name=?, status=?';
 		$statement = $this->connection->prepare($sql);
 		return $statement->execute([
             $user_id,
             $image_name,
-            $image_path,
             $status
         ]);
     }
@@ -41,13 +31,12 @@ class UserImage
 		}
     }
 
-    public function updateImage($user_id, $image_name, $image_path, $status){
+    public function updateImage($user_id, $image_name){
         try {
-			$sql = 'UPDATE apt_user_images SET image_name=?, image_path=? WHERE user_id=?';
+			$sql = 'UPDATE apt_user_images SET image_name=? WHERE user_id=? AND status=1';
 			$statement = $this->connection->prepare($sql);
 			return $statement->execute([
                 $image_name, 
-                $image_path,
                 $user_id, 
             ]);
 		} catch (Exception $e) {
@@ -57,10 +46,10 @@ class UserImage
 
     public function deleteImage($user_id){
         try {
-			$sql = 'UPDATE apt_property_images SET status=2 WHERE user_id=:user_id';
+			$sql = 'UPDATE apt_property_images SET status=0 WHERE user_id=?';
 			$statement = $this->connection->prepare($sql);
 			return $statement->execute([
-                ':user_id' => $user_id,
+                $user_id
             ]);
 		} catch (Exception $e) {
 			error_log($e->getMessage());

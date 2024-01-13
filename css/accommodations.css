@@ -20,12 +20,12 @@
 
    
    --dark-jungle-green: hsl(188, 63%, 7%);
-   --prussian-blue: hsl(200, 69%, 14%);
+   --prussian-blue: #0a2c3d;
    --prussian-pale: hsl(201, 19%, 42%);
    --raisin-black-1: hsl(227, 29%, 13%);
    --raisin-black-2: hsl(229, 17%, 19%);
    --yellow-green: hsl(89, 72%, 45%);
-   --orange-soda: hsl(9, 100%, 62%);
+   --orange-soda: rgb(255, 90, 61);
    --orange-tangy: hsla(9, 100%, 62%, 0.1);
    --orange-pale: hsl(9, 100%, 73%);
    --cultured-1: hsl(0, 0%, 93%);
@@ -53,8 +53,8 @@ html {
 }
 
 body {
-   background-color: var(--body-color);
-}
+    background-color: var(--cultured-2);
+ }
 
 section {
    padding: 3rem 2rem;
@@ -62,43 +62,6 @@ section {
 }
 
 
-
-
-
-
-/* Navbar */
-
-.navbarNav .nav-link {
-   background-color: #232A3D;
-   color: #FFF;
-   border-radius: 5px;
-}
-
-.navbar-nav .nav-item {
-   font-size: 1.5rem;
-   font-weight: 600;
-   padding: 1rem;
-   border-radius: 5px;
-}
-
-
-.nav-item .nav-link:hover, .nav-item .nav-link:focus{
-   background-color: #232A3D;
-   color: #FFF;
-   border-radius: 5px;
-
-}
-
-.signOutbtn .btn {
-   background-color: var(--prussian-blue);
-   color: #FFF;
-   font-size: 1.5rem;
-}
-
-.signOutbtn .btn:hover {
-   background-color: var(--orange-soda);
-   color: #E4E9F7;
-}
 
 .jumbotron {
    background: url('../images/header.png') no-repeat center fixed;
@@ -137,6 +100,132 @@ section {
 
 .form-control {
    font-size: 1.5rem;
+}
+
+/* Menu [mobile] Offcanvas */
+
+.offcanvas-body .row.borderMenu .menuNav{
+   font-weight: 600;
+   font-size: 14px;
+   color: var(--prussian-blue);
+}
+
+.offcanvas-body .row.borderMenu .signOutbtn .btn {
+   background-color: var(--prussian-blue);
+   color: #FFF;
+   font-size: 1.5rem;
+   border-color: transparent;
+}
+
+.offcanvas-body .row.borderMenu .notifdDetails{
+   font-size: 14px;
+   color: grey;
+}
+
+.offcanvas-body .row.borderMenu{
+   border-bottom: 1px solid rgb(190, 190, 190);
+}
+
+.offcanvas-body .row.borderMenu:hover{
+   background-color: hsl(12, 100%, 83%);
+   cursor: pointer;
+}
+/* Off Canvas Messages */
+
+.offcanvas-title{
+   font-size: 14px;
+   font-weight: 600;
+}
+
+.offcanvas-body .btn {
+   color: var(--orange-soda);
+   border-color: var(--orange-soda);
+}
+
+.offcanvas-body .btn:hover {
+   color: var(--white);
+   background-color: var(--orange-soda);
+}
+
+.offcanvas-body .row.borderChat{
+   border-top: 1px solid rgb(190, 190, 190);
+   border-bottom: 1px solid rgb(190, 190, 190);
+}
+
+.offcanvas-body .row.borderChat:hover{
+   background-color: hsl(12, 100%, 83%);
+   cursor: pointer;
+}
+
+.offcanvas-body .row.borderChat .nameChat{
+   font-weight: 600;
+   font-size: 16px;
+   color: var(--prussian-blue);
+}
+
+.offcanvas-body .row.borderChat .messageChat{
+   font-size: 14px;
+   color: grey;
+}
+
+.statusU span {
+   padding: .5rem 3rem;
+   color: var(--orange-soda);
+   background-color: hsla(9, 100%, 62%, 0.1);;
+   font-size: 2rem;
+   font-weight: 500;
+   border-radius: 25px;
+}
+
+.section-bg {
+   background-color: #f3f5fa;
+ }
+ 
+ 
+ .section-title h2 {
+   font-size: 32px;
+   font-weight: bold;
+   text-transform: uppercase;
+   margin-bottom: 20px;
+   padding-bottom: 20px;
+   position: relative;
+   color: var(--prussian-blue);
+ }
+ 
+ .section-title h2::before {
+   content: "";
+   position: absolute;
+   display: block;
+   width: 120px;
+   height: 1px;
+   background: #ddd;
+   bottom: 1px;
+   left: calc(50% - 60px);
+ }
+ 
+ .section-title h2::after {
+   content: "";
+   position: absolute;
+   display: block;
+   width: 40px;
+   height: 3px;
+   background: var(--orange-soda);
+   bottom: 0;
+   left: calc(50% - 20px);
+ }
+ 
+ .section-title p {
+   font-size: 16px;
+   margin-bottom: 0;
+ }
+
+ .statusU span {
+   padding: .5rem 3rem;
+   color: var(--orange-soda);
+   background-color: hsla(9, 100%, 62%, 0.1);;
+   font-size: 2rem;
+   font-weight: 500;
+   border-radius: 25px;
 }
 
 
@@ -312,27 +401,6 @@ section {
    font-size: 1.6rem;
 }
 
-.listings .box-container .box .thumb .save {
-   position: absolute;
-   top: 1rem;
-   right: 1rem;
-   z-index: 1;
-}
-
-.listings .box-container .box .thumb .save button {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: grey;
-   }
-
-
-.listings .box-container .box .thumb .save button:hover {
-   background: transparent;
-   border: none;
-   outline: none;
-   color: var(--primary-clr) !important;
-}
 
 .listings .box-container .box .name {
    font-size: 2rem;
@@ -415,7 +483,7 @@ section {
 .btnView {
    display: block;
    width: 100%;
-   border-radius: 5px;
+   border-radius: 8px;
    text-decoration: none;
 }
 
@@ -425,7 +493,7 @@ section {
    border-radius: 5px;
    margin-top: 1.5rem;
    padding-top: 1rem;
-   background-color: #E4E9F7;
+  
    color: #232A3D;
    font-size: 1.5rem;
    font-weight: bold;
@@ -703,7 +771,13 @@ section {
    padding: 3rem;
    overflow-x: hidden;
    margin-top: 2.2rem;
+   
+  
 }
+
+
+
+
 
 .accommodations .box-container .box .admin {
    display: flex;
@@ -767,13 +841,14 @@ section {
 
 .accommodations .box-container .box .thumb img {
    height: 100%;
+   width: 100%;
    object-fit: cover;
 }
 
-
+/* 
 .accommodations .box-container .box:hover .thumb img {
    transform: scale(1.1);
-}
+} */
 
 .accommodations .box-container .box .thumb .total-rooms-left{
    position: absolute;
@@ -805,85 +880,48 @@ section {
    font-size: 1.6rem;
 }
 
-.accommodations .box-container .box .thumb .save {
-   position: absolute;
-   top: 1rem;
-   right: 1rem;
-   z-index: 1;
+.accommodations .box-container .box {
+    position: relative;
 }
 
-.accommodations .box-container .box .thumb .save button {
-   background-color: rgba(0, 0, 0, .3);
-   color: #fff;
-   padding: .7rem 1rem;
-   font-size: 1.6rem;
-   cursor: pointer;
-}
+.accommodations .box-container .box .save {
+    justify-content: flex-end;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1;
+ }
+ 
+ .accommodations .box-container .box .save button {
+    padding-left: 50px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--orange-pale);
+ }
+ 
+ 
+ .accommodations .box-container .box .save button:hover {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--orange-soda) !important;
+ }
 
-.accommodations .box-container .box .thumb .save button:hover {
-   background-color: var(--main-color);
-}
 
 .accommodations .btnBookmark {
-   background: transparent;
-   margin-top: 1.5rem;
-   border: none;
-   outline: none;
-   color: var(--prussian-pale);
-   
+    padding-left: 50px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--orange-pale);
 }
 
 .accommodations .btnBookmark:hover {
-   background: transparent;
-   border: none;
-   outline: none;
-   color: var(--prussian-blue) !important;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--orange-soda) !important;
 }
-
-
-
-/* 
-
-.btnBookmark {
-   background: transparent;
-   margin-top: 1.3rem;
-   border: none;
-   outline: none;
-   color: grey;
-}
-
-.bookMark{
-   color: #ffffff;
-   font-size: 3rem;
-   text-align: left;
-}
-
-
-
-
-
-.btnBookmark {
-   display: block;
-   border-radius: 5px;
-   margin-top: 1.3rem;
-   font-weight: bold;
-   justify-content: end;
-   text-align: center;
-   background: transparent;
-   
-}
-
-/* .btnBookmark:hover {
-   background-color: rgba(0, 0, 0, 0.3);
-   color: #232A3D;
-   cursor: pointer;
-} 
-
-.bookMark{
-   color: #ffffff;
-   font-size: 3rem;
-   text-align: left;
-} */
 
 .accommodationTitle{
    font-size: 40px;
@@ -913,9 +951,15 @@ section {
 }
 
 .wrapper .btn{
-    color: var(--white);
-    font-size: 0.85rem;
-    background-color: var(--prussian-blue);
+    padding-left: 50px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--orange-pale);
+}
+
+.wrapper .btn.dropdown-btn{
+   padding-right: 40px;
 }
 
 .wrapper .green-label{
@@ -995,6 +1039,7 @@ section {
     font-size: 0.8rem;
     margin: 0;
 }
+
 .tick input{
     position: absolute;
     opacity: 0;
@@ -1012,6 +1057,7 @@ section {
     border: 1px solid #ddd;
     border-radius: 3px;
 }
+
 
 
  .tick:hover input ~ .check {
@@ -1037,6 +1083,12 @@ section {
     border: solid white;
     border-width: 0 3px 3px 0;
     transform: rotate(45deg) scale(2);
+}
+
+/* DROPDOWN BUTTON ACCOMMODAATION */
+.dropdown-menu input[type="checkbox"] {
+   transform: scale(1.5); /* Adjust the scale factor as needed */
+   margin-right: 10px; /* Optional: Add some space between checkbox and label */
 }
  #country{
     font-size: 1.5rem;

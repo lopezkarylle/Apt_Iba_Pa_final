@@ -1,7 +1,7 @@
 <!-- Change appointment time based on selected date -->
 <?php 
-use Models\Schedule; //remove when included in php page
-use Models\Appointment; //remove when included in php page
+use Models\Schedule; 
+use Models\Appointment; 
 
 $property_id = $_SESSION['property_view_id'];
 $disabled_dates = [];
@@ -17,8 +17,6 @@ foreach($date_time as $date_item){
     $disabled_dates[]=$unavailable_date;
   }
 }
-
-//var_dump($disabled_dates);
 
 ?>
 

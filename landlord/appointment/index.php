@@ -89,6 +89,7 @@ $currentTime = new DateTime('now', $timezone);
       
 
 
+
     <!-- Time slots ends -->
 
     

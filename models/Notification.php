@@ -50,15 +50,27 @@ class Notification
         }
     }
 
-    public function markAsRead($notification_id, $user_id, $isRead){
+    public function markAsRead($user_id){
         try {
-             $sql ="UPDATE apt_notifications SET isRead=? WHERE notification_id=? AND user_id=?";
+             $sql ="UPDATE apt_notifications SET isRead=1 WHERE  user_id=?";
              $statement = $this->connection->prepare($sql);
              $statement->execute([
-                $isRead,
-                $notification_id,
                 $user_id
              ]);
+        } catch (Exception $e) {
+            echo 'An error occurred: ' . $e->getMessage();
+        }
+    }
+
+    public function getUnreadNotification($user_id){
+        try {
+            $sql = 'SELECT * FROM apt_notifications WHERE user_id=? AND isRead=0 AND status=1;';
+            $statement = $this->connection->prepare($sql);
+            $statement->execute([
+                $user_id
+            ]);
+            $row = $statement->fetchAll();
+            return $row;
         } catch (Exception $e) {
             echo 'An error occurred: ' . $e->getMessage();
         }

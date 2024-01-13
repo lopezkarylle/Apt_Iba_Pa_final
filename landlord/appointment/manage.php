@@ -98,9 +98,9 @@ if(isset($_POST['set_unavailable'])){
       crossorigin="anonymous"
     ></script>
 
-    <link href="../css/appointments_edit.css" rel="stylesheet" />
-    <link href="../css/all.css" rel="stylesheet" />
-    <link href="../css/dashboard.css" rel="stylesheet" />
+    <link href="css/appointments_edit.css" rel="stylesheet" />
+    <link href="css/all.css" rel="stylesheet" />
+    <link href="css/dashboard.css" rel="stylesheet" />
 
     <!-- Bootstrap Carousel CSS -->
 
@@ -116,15 +116,16 @@ if(isset($_POST['set_unavailable'])){
       integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
       crossorigin="anonymous"
     />
+    
 
     <!-- Date Picker -->
     
-    <link rel="stylesheet" href="../css/datepicker_css/default.css">
-    <link rel="stylesheet" href="../css/datepicker_css/default.date.css">
+    <link rel="stylesheet" href="css/datepicker_css/default.css">
+    <link rel="stylesheet" href="css/datepicker_css/default.date.css">
 
     
     <!-- Style -->
-    <link rel="stylesheet" href="../css/datepicker_css/datepicker.css">
+    <link rel="stylesheet" href="css/datepicker_css/datepicker.css">
 
   </head>
   <body>

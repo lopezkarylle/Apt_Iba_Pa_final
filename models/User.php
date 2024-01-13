@@ -6,20 +6,10 @@ use Exception;
 
 class User 
 {
-    protected $user_id;
-	protected $first_name;
-	protected $last_name;
-	protected $contact_number;
-    protected $user_type;
-    protected $status;
 
     // Database Connection Object
 	protected $connection;
 
-	public function __construct()
-	{
-    
-	}
 
     public function getId() {
         return $this->user_id;
@@ -49,7 +39,7 @@ class User
 
     public function getLandlords(){
 		try {
-			$sql = "SELECT apt_user_information.*, apt_users.*, apt_user_images.image_name, apt_user_images.image_path FROM apt_user_information JOIN apt_users ON apt_user_information.user_id=apt_users.user_id LEFT JOIN apt_user_images ON apt_user_information.user_id=apt_user_images.user_id WHERE apt_user_information.user_type=1 AND apt_user_information.status=1";
+			$sql = "SELECT apt_user_information.*, apt_users.*, apt_user_images.image_name, apt_properties.property_name FROM apt_user_information JOIN apt_users ON apt_user_information.user_id=apt_users.user_id LEFT JOIN apt_user_images ON apt_user_information.user_id=apt_user_images.user_id JOIN apt_properties ON apt_user_information.user_id=apt_properties.landlord_id WHERE apt_user_information.user_type=1 AND apt_user_information.status=1";
 			$data = $this->connection->query($sql)->fetchAll();
 			return $data;
 
@@ -60,7 +50,7 @@ class User
 
     public function getUsers(){
 		try {
-			$sql = "SELECT apt_user_information.*, apt_users.*, apt_user_images.image_name, apt_user_images.image_path FROM apt_user_information JOIN apt_users ON apt_user_information.user_id=apt_users.user_id LEFT JOIN apt_user_images ON apt_user_information.user_id=apt_user_images.user_id WHERE apt_user_information.user_type=2 AND apt_user_information.status=1";
+			$sql = "SELECT apt_user_information.*, apt_users.*, apt_user_images.image_name FROM apt_user_information JOIN apt_users ON apt_user_information.user_id=apt_users.user_id LEFT JOIN apt_user_images ON apt_user_information.user_id=apt_user_images.user_id WHERE apt_user_information.user_type=2 AND apt_user_information.status=1";
 			$data = $this->connection->query($sql)->fetchAll();
 			return $data;
 
@@ -71,7 +61,7 @@ class User
 
     public function getById($user_id){
         try {
-            $sql = 'SELECT apt_user_information.*, apt_users.*, apt_user_images.image_name, apt_user_images.image_path FROM apt_user_information JOIN apt_users ON apt_user_information.user_id=apt_users.user_id LEFT JOIN  apt_user_images ON apt_user_information.user_id=apt_user_images.user_id WHERE apt_user_information.user_id=? AND apt_user_information.status=1';
+            $sql = 'SELECT apt_user_information.*, apt_users.*, apt_user_images.image_name FROM apt_user_information JOIN apt_users ON apt_user_information.user_id=apt_users.user_id LEFT JOIN  apt_user_images ON apt_user_information.user_id=apt_user_images.user_id WHERE apt_user_information.user_id=? AND apt_user_information.status=1';
 			$statement = $this->connection->prepare($sql);
             
 			$statement->execute([
@@ -140,7 +130,7 @@ class User
 		try {
 			$sql = 'UPDATE apt_user_information SET status=0 WHERE user_id=?';
 			$statement = $this->connection->prepare($sql);
-			$statement->execute([
+			return $statement->execute([
 				$user_id
 			]);
 		} catch (Exception $e) {

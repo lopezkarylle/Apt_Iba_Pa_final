@@ -7,16 +7,6 @@ use Exception;
 class Rule 
 {
     protected $property_id;
-	protected $short_term;
-	protected $min_weeks;
-	protected $mix_gender;
-    protected $curfew;
-	protected $from_curfew;
-	protected $to_curfew;
-	protected $cooking;
-    protected $pets;
-	protected $visitors;
-	protected $status;
 
     // Database Connection Object
 	protected $connection;
@@ -80,6 +70,32 @@ class Rule
                 $alcohol, 
                 $smoking, 
                 $status
+			]);
+		} catch (Exception $e) {
+			error_log($e->getMessage());
+		}
+    }
+
+    public function updateRules($property_id, $short_term, $min_weeks, $mix_gender, $curfew, $from_curfew, $to_curfew, $cooking, $pets, $visitors, $from_visit, $to_visit, $alcohol, $smoking){
+        try {
+            //status 1=active, 2=pending, 0=inactive
+			$sql = "UPDATE apt_property_rules SET short_term=?, min_weeks=?, mix_gender=?, curfew=?, from_curfew=?, to_curfew=?, cooking=?, pets=?, visitors=?, from_visit=?, to_visit=?, alcohol=?, smoking=?, WHERE property_id=? AND status=1"; 
+			$statement = $this->connection->prepare($sql);
+			return $statement->execute([
+                $short_term, 
+                $min_weeks, 
+                $mix_gender, 
+                $curfew, 
+                $from_curfew, 
+                $to_curfew, 
+                $cooking, 
+                $pets, 
+                $visitors, 
+                $from_visit, 
+                $to_visit, 
+                $alcohol, 
+                $smoking, 
+                $property_id
 			]);
 		} catch (Exception $e) {
 			error_log($e->getMessage());

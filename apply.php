@@ -3,8 +3,10 @@
 include ("init.php");
 include ("session.php");
 
-$user_id = $_SESSION['user_id'] ?? NULL;
-$current_page = "| Apply Property";
+if(isset($_SESSION['user_id'])){
+    $user_id = $_SESSION['user_id'];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -28,44 +30,50 @@ $current_page = "| Apply Property";
 
         <!-- Vendor Files -->
         <link href="vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/docs/5.0/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+        <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+        <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+        <link rel="manifest" href="/docs/5.0/assets/img/favicons/manifest.json">
+        <link rel="mask-icon" href="/docs/5.0/assets/img/favicons/safari-pinned-tab.svg" color="#7952b3">
+        <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon.ico">
+        <meta name="theme-color" content="#7952b3">
+
+        <link rel="icon" href="resources/favicon/faviconlogo.ico" type="image/x-icon">
+
+
     </head>
+    
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
   <body>
     <!-- Navbar -->
 
-        <?php include('navbar.php') ?>
+    <?php if(isset($user_id)) {
+      include('navbar_logged.php'); 
+
+      } else {
+         include('navbar.php'); 
+        } ?>
+
 
     <!-- Navbar ends -->
-    
-    <!-- Header/Banner starts -->
-
-    <!-- <div class="container-fluid jumbotron p-3">
-      <div class="row mt-3 mt-sm-5 mb-3 ms-5 text-wrap">
-        <div class="col-sm-9" id="headerTitle">
-          <h2>Your Second Home Search Made Easy</h2>
-        </div>
-        <div class="row">
-          <div class="col-sm text-wrap" id="headerDetails">
-            Don’t spend hours online searching for apartments/dorms, with Apt.
-            Iba Pa you’ll find your new home in no time
-          </div>
-        </div>
-        <div class="row mt-5 mb-5">
-          <div class="col-lg-5 text-wrap" id="headerSearch">
-            <form class="d-flex" role="search">
-              <input
-                class="form-control me-2"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button class="btnSearch" type="submit">Search</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div> -->
-
-    <!-- Header/Banner ends-->
+  
 
     <!-- ======= Hero Section ======= -->
     <section id="hero" class="d-flex align-items-center">
@@ -73,14 +81,14 @@ $current_page = "| Apply Property";
         <div class="container">
         <div class="row">
             <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
-            <h1>Better Solution For Your Business</h1>
-            <h2>Join the Apt Iba Pa family and get tenants and earn reliable revenue when you list your property with us, hassle-free!</h2>
-            <div class="d-flex justify-content-center justify-content-lg-start">
+            <h1>Ikaw, Apt. Iba Pa!</h1>
+            <h2>Join and get tenants and earn reliable revenue when you list your property with us! Open your doors and share your space with heart on Apt Iba Pa.  </h2>
+            <div class="d-flex justify-content-center justify-content-lg-start" >
                 <a href="apply-property.php" class="btn-get-started scrollto">Get Started</a>
             </div>
             </div>
             <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="200">
-            <img src="images/hero-img.png" class="img-fluid animated" alt="">
+            <img src="images/hero-banner.png" class="img-fluid animated" alt="">
             </div>
         </div>
         </div>
@@ -92,44 +100,59 @@ $current_page = "| Apply Property";
 
     <!-- ======= Services Section ======= -->
     
-    <section id="services" class="services section-bg">
+    <section id="services" class="services section-bg pt-5 pt-lg-5">
         <div class="container" data-aos="fade-up">
   
           <div class="section-title">
-            <h2>Services</h2>
-            <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+            <p class="statusU text-center"><span>PARA SA BAYAN</span></p>
+            <h2 class="mt-4">Look at the Brighter Side</h2>
+            <p>
+            Make the switch to Apt Iba Pa today and witness the brighter side of property management in the digital age!
+            </p>
           </div>
   
           <div class="row">
             <div class="col-xl-3 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
               <div class="icon-box">
-                <div class="icon"><i class="bx bxl-dribbble"></i></div>
-                <h4><a href="">Lorem Ipsum</a></h4>
-                <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
+                <span class="fa-stack fa-3x mb-2">
+                  <i class="fa-solid fa-circle fa-stack-2x"></i>
+                  <i class="fa-regular fa-magnifying-glass-location fa-stack-1x fa-inverse" style="color: #ff5a3d;"></i>
+                </span>
+                <h4>Increased Visibility</h4>
+                <p>Your property gains exposure to a vast audience of students searching for accommodations near AUF, enhancing your chances of finding tenants quickly.</p>
               </div>
             </div>
   
             <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
               <div class="icon-box">
-                <div class="icon"><i class="bx bx-file"></i></div>
-                <h4><a href="">Sed ut perspici</a></h4>
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
+                <span class="fa-stack fa-3x mb-2">
+                  <i class="fa-solid fa-circle fa-stack-2x"></i>
+                  <i class="fa-regular fa-house-user fa-stack-1x fa-inverse" style="color: #ff5a3d;"></i>
+                </span>
+                <h4>Effective Occupancy</h4>
+                <p>Apt Iba Pa streamlines tenant interactions, making it easy to manage inquiries, appointments, and reservations. You can keep track of all communication in one place.</p>
               </div>
             </div>
   
             <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in" data-aos-delay="300">
               <div class="icon-box">
-                <div class="icon"><i class="bx bx-tachometer"></i></div>
-                <h4><a href="">Magni Dolores</a></h4>
-                <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia</p>
+                <span class="fa-stack fa-3x mb-2">
+                  <i class="fa-solid fa-circle fa-stack-2x"></i>
+                  <i class="fa-regular fa-comment-heart fa-stack-1x fa-inverse" style="color: #ff5a3d;"></i>
+                </span>
+                <h4>User Reviews </h4>
+                <p>Tenants can leave reviews and ratings, helping you build a positive reputation. This encourages trust among future tenants and boosts the appeal of your property.</p>
               </div>
             </div>
   
             <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in" data-aos-delay="400">
               <div class="icon-box">
-                <div class="icon"><i class="bx bx-layer"></i></div>
-                <h4><a href="">Nemo Enim</a></h4>
-                <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
+                <span class="fa-stack fa-3x mb-2">
+                  <i class="fa-solid fa-circle fa-stack-2x"></i>
+                  <i class="fa-solid fa-hand-holding-dollar fa-stack-1x fa-inverse" style="color: #ff5a3d;"></i>
+                </span>
+                <h4>Income Generation </h4>
+                <p>By listing your property on Apt Iba Pa, you open up opportunities for additional income. Whether you're looking to fill vacant units or maximize your property's potential.</p>
               </div>
             </div>
   
@@ -138,6 +161,194 @@ $current_page = "| Apply Property";
         </div>
       </section>
     <!-- End Services Section -->
+
+    <!-- ======= Skills Section ======= -->
+
+    <section id="skills" class="skills" style="background-color: white;">
+        <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <p class="statusU text-center"><span>BAYANIHAN</span></p>
+            <h2 class="mt-3">Need a hand, kabayan? We got You!</h2>
+
+            <p class="subStatusU">Are you ready to take a leap into the future of property management? APT. IBA PA offers a range of benefits that can transform your property's visibility and tenant interactions.
+            </p>
+
+          </div>
+  
+          <div class="row">
+            <div class="col-lg-6 d-flex align-items-center" data-aos="fade-right" data-aos-delay="100">
+              <img src="resources/images/mockup.png" class="img-fluid" alt="">
+            </div>
+            <div class="col-lg-6 pt-4 pt-lg-5 mt-lg-5 content" data-aos="fade-left" data-aos-delay="100">
+              <h3>1. Create an Apt Iba Pa account</h3>
+              <p class="fst-italic">
+                You can do this on their website or through their mobile app, providing essential information like your email and password.
+              </p>
+  
+              <div class="skills-content">
+                <div class="content mt-5">
+                    <p>
+                    If you don't already have one, start by signing up for an account. You can do this on the website or through the mobile app.
+                    </p>
+                  </div>
+              </div>
+  
+            </div>
+          </div>
+  
+        </div>
+    </section>
+
+
+    <section id="skills" class="skills">
+        <div class="container" data-aos="fade-up">
+  
+          <div class="row">
+
+            <div class="col-lg-6 pt-4 pt-lg-5 mt-lg-5 content order-2 order-lg-1" data-aos="fade-left" data-aos-delay="100">
+              <h3>2. Complete Profile and Get Verified!</h3>
+              <p class="fst-italic">
+                Personalize your profile by adding a profile picture and a completing the details. Providing a bit about yourself can help build trust with potential tenants.
+              </p>
+  
+              <div class="skills-content">
+                <div class="content mt-5">
+                    <p>
+                    Fill out your profile information, including a profile picture. Apt Iba Pa may ask you to verify your identity by providing identification and a phone number.
+                    </p>
+                  </div>
+              </div>
+  
+            </div>
+
+                        
+            <div class="col-lg-6 d-flex align-items-center order-1 order-lg-2" data-aos="fade-right" data-aos-delay="100">
+              <img src="resources/images/mockup-2.png" class="img-fluid" alt="">
+            </div>
+
+          </div>
+  
+        </div>
+    </section>
+    
+    <section id="skills" class="skills">
+        <div class="container" data-aos="fade-up">
+  
+          <div class="row">
+            <div class="col-lg-6 d-flex align-items-center" data-aos="fade-right" data-aos-delay="100">
+              <img src="resources/images/mockup-3.png" class="img-fluid" alt="">
+            </div>
+            <div class="col-lg-6 pt-4 pt-lg-5 mt-lg-5 content" data-aos="fade-left" data-aos-delay="100">
+              <h3>3. List your property</h3>
+              <p class="fst-italic">
+                Begin the listing creation process by logging into your Apt Iba Pa account and selecting "Apply My Propety".
+              </p>
+  
+              <div class="skills-content">
+                <div class="content mt-5">
+                    <p>
+                    Provide your property details, set pricing, define house rules and tenant requirements, select amenities, upload photos, and write a captivating title and description.
+                    </p>
+                  </div>
+              </div>
+  
+            </div>
+          </div>
+  
+        </div>
+    </section>
+
+    <section id="skills" class="skills">
+        <div class="container" data-aos="fade-up">
+  
+          <div class="row">
+
+            <div class="col-lg-6 pt-4 pt-lg-5 mt-lg-5 content order-2 order-lg-1" data-aos="fade-left" data-aos-delay="100">
+              <h3>4. Preview and Publish</h3>
+              <p class="fst-italic">
+                Review all your listing information for accuracy and completeness to make your listing reliable and legit to potential tenants.
+              </p>
+  
+              <div class="skills-content">
+                <div class="content mt-5">
+                    <p>
+                    Review your listing to make sure all the information is accurate, and then click "Publish". Wait for the listing to be reviewed and approved by the platform administrators.
+                    </p>
+                  </div>
+              </div>
+  
+            </div>
+
+                        
+            <div class="col-lg-6 d-flex align-items-center order-1 order-lg-2" data-aos="fade-right" data-aos-delay="100">
+              <img src="resources/images/mockup-4.png" class="img-fluid" alt="">
+            </div>
+
+          </div>
+  
+        </div>
+    </section>
+
+    <section id="skills" class="skills">
+        <div class="container" data-aos="fade-up">
+  
+          <div class="row">
+            <div class="col-lg-6 d-flex align-items-center" data-aos="fade-right" data-aos-delay="100">
+              <img src="resources/images/mockup-5.png" class="img-fluid" alt="">
+            </div>
+            <div class="col-lg-6 pt-4 pt-lg-5 mt-lg-5 content" data-aos="fade-left" data-aos-delay="100">
+              <h3>5. Manage Your Listing</h3>
+              <p class="fst-italic">
+                Use your APT. IBA PA dashboard to manage calendar availability (Don't worry! You can also block off dates when you're not available), manage your listing, respond promptly to tenants/potential tenants inquiries, and handle reservation requests.
+              </p>
+  
+              <div class="skills-content">
+                <div class="content mt-5">
+                    <p>
+                    Once your listing is live, you can manage it through your "My Properties" dashboard. Respond promptly to tenants/potential tenants appointments of visits and reservation requests.
+                    </p>
+                  </div>
+              </div>
+  
+            </div>
+          </div>
+  
+        </div>
+    </section>
+
+    <section id="skills" class="skills">
+        <div class="container" data-aos="fade-up">
+  
+          <div class="row">
+
+            <div class="col-lg-6 pt-4 pt-lg-5 mt-lg-5 content order-2 order-lg-1" data-aos="fade-left" data-aos-delay="100">
+              <h3>6. Communicate with Tenants</h3>
+              <p class="fst-italic">
+                Provide a great experience. Be responsive to tenant needs during their inquiries and when needed assistance regarding your property.
+              </p>
+  
+              <div class="skills-content">
+                <div class="content mt-5">
+                    <p>
+                    Stay in touch with tenants, answer their questions, and provide them with information about schedule of visits, house rules, and nearby establishment.
+                    </p>
+                  </div>
+              </div>
+  
+            </div>
+
+                        
+            <div class="col-lg-6 d-flex align-items-center order-1 order-lg-2" data-aos="fade-right" data-aos-delay="100">
+              <img src="resources/images/mockup-6.png" class="img-fluid" alt="">
+            </div>
+
+          </div>
+  
+        </div>
+    </section>
+
+    <!-- End Skills Section -->
 
     <!-- ======= Why Us Section ======= -->
     <section id="why-us" class="why-us section-bg">
@@ -148,37 +359,47 @@ $current_page = "| Apply Property";
             <div class="col-lg-7 d-flex flex-column justify-content-center align-items-stretch  order-2 order-lg-1">
   
               <div class="content">
-                <h3>Eum ipsam laborum deleniti <strong>velit pariatur architecto aut nihil</strong></h3>
+                <h3>You ask, <br> <strong>We answer</strong></h3>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit
+                Have Questions About Applying Your Property to Apt Iba Pa? Here are the commonly asked questions: 
                 </p>
               </div>
   
               <div class="accordion-list">
                 <ul>
                   <li>
-                    <a data-bs-toggle="collapse" class="collapse" data-bs-target="#accordion-list-1"><span>01</span> Non consectetur a erat nam at lectus urna duis? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                    <a data-bs-toggle="collapse" class="collapse" data-bs-target="#accordion-list-1"><span>01</span> Is my property suitable for Apt Iba Pa? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
                     <div id="accordion-list-1" class="collapse show" data-bs-parent=".accordion-list">
                       <p>
-                        Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.
+                        Apt Iba Pa accommodates various types of properties, from dormitories to apartments. Whether you have a single unit or multiple listings, our platform can help you connect with potential tenants.
                       </p>
                     </div>
                   </li>
   
                   <li>
-                    <a data-bs-toggle="collapse" data-bs-target="#accordion-list-2" class="collapsed"><span>02</span> Feugiat scelerisque varius morbi enim nunc? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                    <a data-bs-toggle="collapse" data-bs-target="#accordion-list-2" class="collapsed"><span>02</span>
+                      Do I have to list my property all the time? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
                     <div id="accordion-list-2" class="collapse" data-bs-parent=".accordion-list">
                       <p>
-                        Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
+                        No, you have full control over your property's availability. You can list it year-round, just during the academic year, or for specific periods. It's entirely flexible and adapts to your schedule.
                       </p>
                     </div>
                   </li>
   
                   <li>
-                    <a data-bs-toggle="collapse" data-bs-target="#accordion-list-3" class="collapsed"><span>03</span> Dolor sit amet consectetur adipiscing elit? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                    <a data-bs-toggle="collapse" data-bs-target="#accordion-list-3" class="collapsed"><span>03</span> How much should I interact with tenants? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
                     <div id="accordion-list-3" class="collapse" data-bs-parent=".accordion-list">
                       <p>
-                        Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis
+                        The level of interaction with tenants is up to you. Some property owners prefer minimal contact, providing essential information and assistance as needed, while others may choose to be more hands-on. You can customize your approach to what suits you and your tenants best.
+                      </p>
+                    </div>
+                  </li>
+
+                  <li>
+                    <a data-bs-toggle="collapse" data-bs-target="#accordion-list-4" class="collapsed"><span>04</span> Any tips on being a great Apt Iba Pa property owner? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                    <div id="accordion-list-4" class="collapse" data-bs-parent=".accordion-list">
+                      <p>
+                        Providing a comfortable, clean, and well-maintained property is essential. Respond to tenant inquiries and requests promptly, making their stay as pleasant as possible. While it's not mandatory, adding personal touches like local recommendations or amenities can enhance the tenant experience.
                       </p>
                     </div>
                   </li>
@@ -195,194 +416,224 @@ $current_page = "| Apply Property";
       </section>
     <!-- End Why Us Section -->
 
-    <!-- ======= Skills Section ======= -->
-    <section id="skills" class="skills">
-        <div class="container" data-aos="fade-up">
-  
-          <div class="row">
-            <div class="col-lg-6 d-flex align-items-center" data-aos="fade-right" data-aos-delay="100">
-              <img src="images/skills.png" class="img-fluid" alt="">
-            </div>
-            <div class="col-lg-6 pt-4 pt-lg-0 content" data-aos="fade-left" data-aos-delay="100">
-              <h3>Voluptatem dignissimos provident quasi corporis voluptates</h3>
-              <p class="fst-italic">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </p>
-  
-              <div class="skills-content">
-                <div class="content mt-5">
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit.
-                    </p>
-                  </div>
-              </div>
-  
-            </div>
-          </div>
-  
-        </div>
-      </section><!-- End Skills Section -->
-
-    <!-- ======= Frequently Asked Questions Section ======= -->
-    <section id="faq" class="faq section-bg">
-        <div class="container" data-aos="fade-up">
-  
-          <div class="section-title">
-            <h2>Frequently Asked Questions</h2>
-            <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
-          </div>
-  
-          <div class="faq-list">
-            <ul>
-              <li data-aos="fade-up" data-aos-delay="100">
-                <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" class="collapse" data-bs-target="#faq-list-1">Non consectetur a erat nam at lectus urna duis? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-                <div id="faq-list-1" class="collapse show" data-bs-parent=".faq-list">
-                  <p>
-                    Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.
-                  </p>
-                </div>
-              </li>
-  
-              <li data-aos="fade-up" data-aos-delay="200">
-                <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-2" class="collapsed">Feugiat scelerisque varius morbi enim nunc? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-                <div id="faq-list-2" class="collapse" data-bs-parent=".faq-list">
-                  <p>
-                    Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
-                  </p>
-                </div>
-              </li>
-  
-              <li data-aos="fade-up" data-aos-delay="300">
-                <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-3" class="collapsed">Dolor sit amet consectetur adipiscing elit? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-                <div id="faq-list-3" class="collapse" data-bs-parent=".faq-list">
-                  <p>
-                    Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis
-                  </p>
-                </div>
-              </li>
-  
-              <li data-aos="fade-up" data-aos-delay="400">
-                <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-4" class="collapsed">Tempus quam pellentesque nec nam aliquam sem et tortor consequat? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-                <div id="faq-list-4" class="collapse" data-bs-parent=".faq-list">
-                  <p>
-                    Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in.
-                  </p>
-                </div>
-              </li>
-  
-              <li data-aos="fade-up" data-aos-delay="500">
-                <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-5" class="collapsed">Tortor vitae purus faucibus ornare. Varius vel pharetra vel turpis nunc eget lorem dolor? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-                <div id="faq-list-5" class="collapse" data-bs-parent=".faq-list">
-                  <p>
-                    Laoreet sit amet cursus sit amet dictum sit amet justo. Mauris vitae ultricies leo integer malesuada nunc vel. Tincidunt eget nullam non nisi est sit amet. Turpis nunc eget lorem dolor sed. Ut venenatis tellus in metus vulputate eu scelerisque.
-                  </p>
-                </div>
-              </li>
-  
-            </ul>
-          </div>
-  
-        </div>
-      </section>
-    <!-- End Frequently Asked Questions Section -->
-  
 
 
-    <!-- Info Buttons starts-->
+    
 
-    <div class="container-fluid">
-        <section class="info">
-        <div class="row mt-5 d-flex justify-content-center column-gap-3">
-          <!-- <div class="box-container"> -->
-            <div class="col-12 col-sm-5 col-md-3 text-center infoBtn">
-                <a href="your-link-1" class="infoBtn-inline">
-                <img src="images/icon-17.png" alt="" />
-                <h3 style=" font-size: 1.5rem;">Dormitories and Apartments located in Claro M. Recto</h3>
-                </a>
-            </div>
-            <div class="col-12 col-sm-5 col-md-3 text-center mt-3 mt-lg-0 infoBtn">
-                <a href="your-link-1" class="infoBtn-inline">
-                <img src="images/icon-17.png" alt="" />
-                <h3>Dormitories and Apartments located in Salapungan</h3>
-                </a>
-            </div>
-            <div class="col-12 col-sm-5 col-md-3 text-center mt-3 mt-lg-0 infoBtn">
-                <a href="your-link-1" class="infoBtn-inline">
-                <img src="images/icon-17.png" alt="" />
-                <h3>Dormitories and Apartments located in Lourdes Sur East</h3>
-                </a>
-            </div>
+    
+<!-- <section class="pricing" style="background-color: white;">
+  <div class="container py-3 pricingContainer">
+    <header>
 
-          <!-- </div> -->
-        </section>
+
+      <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <p class="statusU text-center"><span>Pricing</span></p>
+        <h1 class="display-4 fw-normal">Subscription Plans</h1>
+        <p class="fs-5 text-muted">Quickly build an effective pricing table for your potential customers with this Bootstrap example. It’s built with default Bootstrap components and utilities with little customization.</p>
       </div>
-    </div>
-    <!-- Info Buttons ends-->
+    </header>
 
+    <main>
+      <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+        <div class="col d-flex justify-content-center ">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">Free</h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">₱0<small class="text-muted fw-light">/mo</small></h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>10 users included</li>
+                <li>2 GB of storage</li>
+                <li>Email support</li>
+                <li>Help center access</li>
+              </ul>
+              <button type="button" class="w-100 btn btn-lg btn-outline-primary">Sign up for free</button>
+            </div>
+          </div>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">Basic</h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">₱100<small class="text-muted fw-light">/mo</small></h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>20 users included</li>
+                <li>10 GB of storage</li>
+                <li>Priority email support</li>
+                <li>Help center access</li>
+              </ul>
+              <button type="button" class="w-100 btn btn-lg btn-primary">Get started</button>
+            </div>
+          </div>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <div class="card mb-4 rounded-3 shadow-sm border-primary">
+            <div class="card-header py-3 text-white bg-primary border-primary">
+              <h4 class="my-0 fw-normal">Premium</h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">₱150<small class="text-muted fw-light">/mo</small></h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>30 users included</li>
+                <li>15 GB of storage</li>
+                <li>Phone and email support</li>
+                <li>Help center access</li>
+              </ul>
+              <button type="button" class="w-100 btn btn-lg btn-primary">Contact us</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="statusU text-center mt-5"><span>Compare</span></p>
+      <h2 class="display-6 fw-normal text-center mb-4 mt-3">Compare plans</h2>
+
+      <div class="table-responsive">
+        <table class="table text-center">
+          <thead>
+            <tr>
+              <th style="width: 34%;"></th>
+              <th style="width: 22%;">Free</th>
+              <th style="width: 22%;">Basic</th>
+              <th style="width: 22%;">Premium</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row" class="text-start">Public</th>
+              <td><i class="fa-solid fa-location-check fa-2x"width="24" height="24"></i></td>
+              <td><i class="fa-solid fa-location-check fa-2x"width="24" height="24"></i></td>
+              <td><i class="fa-solid fa-location-check fa-2x"width="24" height="24"></i></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">Private</th>
+              <td></td>
+              <td><i class="fa-solid fa-location-check fa-2x"width="24" height="24"></i></td>
+              <td><i class="fa-solid fa-location-check fa-2x"width="24" height="24"></i></td>
+            </tr>
+          </tbody>
+
+          <tbody>
+            <tr>
+              <th scope="row" class="text-start">Permissions</th>
+              <td><i class="fa-solid fa-location-check fa-2x"width="24" height="24"></i></td>
+              <td><i class="fa-solid fa-location-check fa-2x"width="24" height="24"></i></td>
+              <td><i class="fa-solid fa-location-check fa-2x"width="24" height="24"></i></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">Sharing</th>
+              <td></td>
+              <td><i class="fa-solid fa-location-check fa-2x"width="24" height="24"></i></td>
+              <td><i class="fa-solid fa-location-check fa-2x"width="24" height="24"></i></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">Unlimited members</th>
+              <td></td>
+              <td><i class="fa-solid fa-location-check fa-2x"width="24" height="24"></i></td>
+              <td><i class="fa-solid fa-location-check fa-2x"width="24" height="24"></i></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">Extra security</th>
+              <td></td>
+              <td></td>
+              <td><i class="fa-solid fa-location-check fa-2x"width="24" height="24"></i></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+
+  </div>
+</section> -->
+
+    
+  
 
     <!-- offers starts  -->
-        <div class="container-fluid jumbuildings">
-          <section class="offers">
-            <h1 class="offersHeading p-3">Latest Offers</h1>
+        <!-- <div class="container-fluid jumbuildings"> -->
+
+        <!-- <section class="offers section-title" style="background-color: #F2F6F7">
+          <p class="statusU text-center"><span>Offers</span></p>
+            <h2 class="offersHeading text-center p-3">Apt Iba Pa Offers</h2>
 
             <div class="container-md mb-5">
               <div class="box-container">
                 <div class="row">
 
-                  <div class="col-lg-4 p-3">
+                  <div class="col-12 col-sm-6 col-md-4 p-3">
                     <div class="box">
-                      <img src="images/icon-6.png" alt="">
-                      <h3>Online Catalog for Students</h3>
-                      <p>Choose from different spaces, reserve, and schedule
-                      your second home with one click</p>
+                      <span class="fa-stack fa-3x">
+                        <i class="fa-solid fa-circle fa-stack-2x"></i>
+                        <i class="fa-solid fa-1 fa-stack-1x fa-inverse" style="color: #ff5a3d;"></i>
+                      </span>
+                      <div class="row mt-3">
+                        <div class="col-12">
+                          <h3>Create an Apt Iba Pa account</h3>
+                        </div>
+                      </div>
+                      <p>If you don't already have one, start by signing up for an account. You can do this on the website or through the mobile app.</p>
                   </div>
                   </div>
 
-                  <div class="col-lg-4 p-3">
+                  <div class="col-12 col-sm-6 col-md-4 p-3">
                     <div class="box">
-                      <img src="images/icon-7.png" alt="">
-                      <h3>Customer Support</h3>
-                      <p>Ask for help from the team, anytime. 
-                      Just send us a message and get back to you 
-                      immediately.</p>
+                      <span class="fa-stack fa-3x">
+                        <i class="fa-solid fa-circle fa-stack-2x"></i>
+                        <i class="fa-solid fa-2 fa-stack-1x fa-inverse" style="color: #ff5a3d;"></i>
+                      </span>
+                      <h3 class="mt-3">Complete Profile and Get verified</h3>
+                      <p>Fill out your profile information, including a profile picture and a short bio. Apt Iba Pa may ask you to verify your identity by providing identification and a phone number.</p>
                     </div>
                   </div>
 
-                  <div class="col-lg-4 p-3">
+                  <div class="col-12 col-sm-6 col-md-4 p-3">
                     <div class="box">
-                      <img src="images/icon-8.png" alt="">
-                      <h3>A space to call Home</h3>
+                      <span class="fa-stack fa-3x">
+                        <i class="fa-solid fa-circle fa-stack-2x"></i>
+                        <i class="fa-solid fa-3 fa-stack-1x fa-inverse" style="color: #ff5a3d;"></i>
+                      </span>
+                      <h3 class="mt-3">A space to call Home</h3>
                       <p>A place you can call home, somewhere you can
                       work and relax at the same time.</p>
                     </div>
                   </div>
 
-                </div>
 
-                <div class="row">
-
-                  <div class="col-lg-4 p-3">
+                  <div class="col-12 col-sm-6 col-md-4 p-3">
                     <div class="box">
-                      <img src="images/icon-9.png" alt="">
-                      <h3>Built-In Comfort</h3>
+                      <span class="fa-stack fa-3x">
+                        <i class="fa-solid fa-circle fa-stack-2x"></i>
+                        <i class="fa-solid fa-4 fa-stack-1x fa-inverse" style="color: #ff5a3d;"></i>
+                      </span>
+                      <h3 class="mt-3">Built-In Comfort</h3>
                       <p>Functional spaces with amenities that cater to 
                       your basic needs and comfortability.</p>
                     </div>
                   </div>
 
-                  <div class="col-lg-4 p-3">
+                  <div class="col-12 col-sm-6 col-md-4 p-3">
                     <div class="box">
-                      <img src="images/icon-10.png" alt="">
-                      <h3>Well-secured Spaces</h3>
+                      <span class="fa-stack fa-3x">
+                        <i class="fa-solid fa-circle fa-stack-2x"></i>
+                        <i class="fa-solid fa-5 fa-stack-1x fa-inverse" style="color: #ff5a3d;"></i>
+                      </span>
+                      <h3 class="mt-3">Well-secured Spaces</h3>
                       <p>Our homes come with CCTV, caretakers, and security
                       personnel you can rely on for your safety.</p>
                     </div>
                   </div>
 
-                  <div class="col-lg-4 p-3">
+                  <div class="col-12 col-sm-6 col-md-4 p-3">
                     <div class="box">
-                      <img src="images/icon-11.png" alt="">
-                      <h3>Regular Maintenance</h3>
+                      <span class="fa-stack fa-3x">
+                        <i class="fa-solid fa-circle fa-stack-2x"></i>
+                        <i class="fa-solid fa-6 fa-stack-1x fa-inverse" style="color: #ff5a3d;"></i>
+                      </span>
+                      <h3 class="mt-3">Regular Maintenance</h3>
                       <p>Regular maintenance to your spaces that cater to 
                       your basic needs and comfortability.</p>
                     </div>
@@ -393,8 +644,9 @@ $current_page = "| Apply Property";
               </div>
             </div>
             
-          </section>
-        </div>
+        </section> -->
+
+        <!-- </div> -->
 
     <!-- offers section ends -->
 
@@ -402,84 +654,7 @@ $current_page = "| Apply Property";
 
 
 
-
-
-
-
-    <!-- Footer -->
-
-    
-      <footer class="site-footer">
-        <div class="container-fluid">
-          <div class="container">
-          <div class="row">
-              <div class="col-sm-12 col-md-8">
-              <h2>APT IBA PA</h2>
-                <div class="row">
-                  <div class="col-sm-12 col-md-8">
-                    <p class="text-justify">
-                      Our platform serves as a comprehensive guide, providing a vast database of dormitories and apartments in the area surrounding AUF. Through our interactive map interface, users can easily navigate and explore different locations, allowing them to make informed decisions based on their preferences and requirements.
-                    </p>
-                  </div>
-                </div>
-              </div>
-  
-              <div class="col-xs-6 col-md-2 me-auto pt-4">
-              <h6>Pages</h6>
-              <ul class="footer-links">
-                  <li><a href="http://scanfcode.com/category/c-language/">Accomodations</a><li>
-                  <li>
-                  <a href="http://scanfcode.com/category/front-end-development/">About Us</a>
-                  </li>
-                  <li>
-                  <a href="http://scanfcode.com/category/back-end-development/">Apply My Property</a>
-              </ul>
-              </div>
-  
-              <div class="col-xs-6 col-md-2 pt-4">
-              <h6>Features</h6>
-              <ul class="footer-links">
-                  <li><a href="http://scanfcode.com/about/">Favorites</a></li>
-                  <li><a href="http://scanfcode.com/contact/">Reserve a Room</a></li>
-                  <li>
-                  <a href="http://scanfcode.com/contribute-at-scanfcode/">Schedule a Visit</a>
-              </ul>
-              </div>
-          </div>
-          <hr />
-          </div>
-          <div class="container">
-          <div class="row">
-              <div class="col-md-8 col-sm-6 col-xs-12">
-              <p class="copyright-text">
-                  Copyright &copy; 2023 All Rights Reserved by
-                  <a href="#">APT IBA PA</a>.
-              </p>
-              </div>
-  
-              <div class="col-md-4 col-sm-6 col-xs-12">
-              <ul class="social-icons">
-                  <li>
-                  <a class="facebook" href="#"><i class="fa fa-facebook"></i></a>
-                  </li>
-                  <li>
-                  <a class="twitter" href="#"><i class="fa fa-twitter"></i></a>
-                  </li>
-                  <li>
-                  <a class="dribbble" href="#"><i class="fa fa-dribbble"></i></a>
-                  </li>
-                  <li>
-                  <a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a>
-                  </li>
-              </ul>
-              </div>
-          </div>
-          </div>
-        </div>
-      </footer>
-      
-  
-      <!-- Footer ends -->
+<?php include('footer.php'); ?>
   
 
 

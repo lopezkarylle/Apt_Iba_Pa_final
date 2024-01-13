@@ -9,12 +9,17 @@ bookmarkButtons.forEach(function (button) {
 });
 
 function toggleBookmark(button) {
-  if (button.style.color === "var(--prussian-pale)") {
-    button.style.color = "var(--prussian-blue)";
-  } else {
-    button.style.color = "var(--prussian-pale)";
+    // Assuming "fa-solid" is initially present
+    if (button.classList.contains("fa-solid")) {
+      // Remove "fa-solid" and add "fa-regular"
+      button.classList.remove("fa-solid");
+      button.classList.add("fa-regular");
+    } else {
+      // Remove "fa-regular" and add "fa-solid"
+      button.classList.remove("fa-regular");
+      button.classList.add("fa-solid");
+    }
   }
-}
 
 document.querySelectorAll('.view-property .details .thumb .small-images img').forEach(images =>{
   images.onclick = () =>{
